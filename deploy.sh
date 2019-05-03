@@ -34,6 +34,8 @@ mv README.md ../
 
 mv LICENSE ../
 
+echo "开始切换分支到master"
+
 git clean -df
 
 git checkout .
@@ -69,6 +71,8 @@ cd $name
 
 git branch
 
+echo "开始上传到github"
+
 git add .
 
 git commit -m "deploy "`date +"%Y-%m-%d"`
@@ -78,3 +82,5 @@ git push
 cd ../../
 
 rm -rf $tempdir
+
+echo "job done, bye"
