@@ -1,0 +1,6 @@
+Gemfile*
+_site/
+Rakefile
+source/
+travisGemfile
+_config.yml
