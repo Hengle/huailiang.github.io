@@ -4,6 +4,8 @@ require "tmpdir"
 require "bundler/setup"
 require "jekyll"
 
+#bundle exec rake publish
+
 # Change your GitHub reponame
 GITHUB_REPONAME    = "huailiang/huailiang.github.io"
 GITHUB_REPO_BRANCH = "master"
