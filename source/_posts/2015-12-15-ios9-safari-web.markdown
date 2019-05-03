@@ -120,12 +120,12 @@ Slide Over 支持的 App 并不多，不过 Safari 名列其中，这意味着�
 
 在这个模式下，无论横屏还是竖屏，所有的 iPad（包括 Pro）都会把你的网站以 320px 的 viewport 宽度进行渲染，就好像在一个大 iPhone 5 上一样。你可以在 CSS 中通过 media query（媒体查询）探测到这个模式：
 
-```css
+{% highlight csharp %}
 /* iPad Air or iPad Mini */
 (device-width: 768px) and (width: 320px)
 /* iPad Pro */
 (device-width: 1024px) and (width: 320px)
-```
+{% endhighlight %}
 
 ###### Split View（分屏视图）
 
@@ -232,13 +232,13 @@ PiP API（被称为 Presentation Mode API）目前只支持 iOS，它允许我�
 
 举个例子，我们可以在内嵌模式与 PiP 模式中切换：
 
-```js
+{% highlight javascript %}
 video.webkitSetPresentationMode(
     video.webkitPresentationMode === "picture-in-picture" ?
     "inline" :
     "picture-in-picture"
 );
-```
+{% endhighlight %}
 
 我们还可以通过新的 `onwebkitpresentationmodechanged` 事件来检测 Presentation Mode（展示模式）的变化。
 
@@ -249,13 +249,13 @@ iOS 7 与最近的 Mac OS 使用 Backdrop filter（背景滤镜）来模糊背�
 
 iOS 9 上的 Safari 现在支持了来自 Filter Effect v2 spec（滤镜特效第二版规范）的 **backdrop-filter**。比如说，我们可以使用一个半透明的背景并且对其背后的背景使用滤镜：
 
-```css
+{% highlight csharp %}
 header {
    background-color: rgba(255, 255, 255, 0.4);
    -webkit-backdrop-filter: blur(5px);
    backdrop-filter: blur(5px);
 }
-```
+{% endhighlight %}
 
 ![backdrop](http://www.mobilexweb.com/wp-content/uploads/2015/09/backdrop.png)
 
@@ -266,14 +266,14 @@ header {
 
 来看个例子：
 
-```css
+{% highlight csharp %}
 #photo-gallery{
     width: 100%;
     overflow-x: scroll;
     -webkit-scroll-snap-points-x: repeat(100%);
     -webkit-scroll-snap-type: mandatory;
 }
-```
+{% endhighlight %}
 
 > 想要看个跑起来后的例子？笔者为大家准备了 webkit 的官方 [demo](http://www.webkit.org/demos/scroll-snap/)，不过这个属性目前只支持 iOS 9 Safari 哦，并不支持 webview
 
@@ -282,17 +282,17 @@ header {
 
 CSS Supports，包括 CSS `@supports` 与来自 CSS Conditional Rules Module Level 3 spec 的 JavaScript CSS Supports API 都在 iOS 上迎来降临。现在，我们可以针对某个 CSS 属性的特定值的支持情况来编写代码：
 
-```css
+{% highlight csharp %}
 @supports(-webkit-scroll-snap-type: mandatory) {
     /* we use it */
 }
-```
+{% endhighlight %}
 
 同样，使用 JavaScript：
 
-```js
+{% highlight javascript %}
 if (CSS.supports("-webkit-scroll-snap-type", "mandatory")) {}
-```
+{% endhighlight %}
 
 ##### 一些细微的改进
 

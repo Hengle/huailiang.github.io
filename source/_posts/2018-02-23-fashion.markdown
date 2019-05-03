@@ -19,7 +19,7 @@ tags:
 # 提取资源-预处理
 
 ### 第一步： 从fbx中提取部件mesh, 并给mesh赋值一些必要的属性
-``` csharp
+{% highlight csharp %}
 string saveRootPath = "Assets/Resources/Equipments/";
 modelImporter.isReadable = true;
 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
@@ -35,10 +35,10 @@ foreach (SkinnedMeshRenderer smr in smrs)
 }
 modelImporter.isReadable = false;
 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-```
+{% endhighlight %}
 
 ### 第二步： 保存mesh, 并提取出Main Texture,并且保存在本地
-``` csharp
+{% highlight csharp %}
 void SaveMesh(Mesh mesh, Texture2D tex, int profession, string path)
 {
     int uvOffsetX = GetUVOffset(profession, mesh.name, s_CombineConfig);
@@ -57,12 +57,12 @@ void SaveMesh(Mesh mesh, Texture2D tex, int profession, string path)
     }
     AssetDatabase.SaveAssets();
 }
-```
+{% endhighlight %}
 
 ### 第三步： 预处理uv
 根据部件位置序列，设置相应uv, 先确保uv的区间在[0,1]之间，然后u加上部件的索引 uvOffsetX对应每个部位的枚举定义值[1-8], 至于为什么这么处理，我们对在后面shader中使用这些uv信息，拼接时装时会用到。
 
-``` csharp
+{% highlight csharp %}
 void CalculateUV(Mesh mesh, int uvOffsetX)
 {
     if (uvOffsetX >= 0)
@@ -79,10 +79,10 @@ void CalculateUV(Mesh mesh, int uvOffsetX)
         mesh.uv = uv;
     }
 }
-```
+{% endhighlight %}
 
 往往在预处理uv之前，为了减少不必要的计算和内存，也是为了优化，我们会清理掉mesh上可能附带的信息，比如uv2，切线信息。具体的实现如下：
-``` csharp
+{% highlight csharp %}
 void CleanMesh(Mesh mesh)
  {
      mesh.uv2 = null;
@@ -92,7 +92,7 @@ void CleanMesh(Mesh mesh)
      mesh.colors32 = null;
      mesh.tangents = null;
  }
- ```
+{% endhighlight %}
 
  处理好的之后的mesh 确保是干净的，且只有我们想要的信息。如下图所示，只有第一层uv和skin信息，并没有其他冗余的信息。所有都处理好之后，我们可以写批处理脚本，把所有的资源都移到程序所用的工程Rsources目录下。
 
@@ -100,7 +100,7 @@ void CleanMesh(Mesh mesh)
 
  ### 第四步： 预处理Texture
  在Texture提取出来之后，往往是各种预带有各种信息，这时我们还需要写一个类似格式刷工具把项目里所有的texture全部处理一遍。类似这样实现：
-``` csharp
+{% highlight csharp %}
 AssetDatabase.ImportAsset(alphaTexPath, ImportAssetOptions.ForceUpdate);
 TextureImporter alphaTextureImporter = AssetImporter.GetAtPath(alphaTexPath) as TextureImporter;
 if (alphaTextureImporter != null)
@@ -114,7 +114,7 @@ if (alphaTextureImporter != null)
     SetPlatformSetting(alphaTextureImporter, alphaSize);
     AssetDatabase.ImportAsset(alphaTexPath, ImportAssetOptions.ForceUpdate);
 }
-```
+{% endhighlight %}
 
 # 运行时，组装时装
 
@@ -124,7 +124,7 @@ if (alphaTextureImporter != null)
 
 这时游戏中参与光照计算的shader,由八张Texture合并。 Shader针对预处理的uv拼接时装。
 下面代码会在MaskNV函数会在vert Shader中调用，BlendColor函数在frag 函数中调用。
-``` cpp
+{% highlight cpp %}
   #include "CommonHead_Include.cginc"
   inline fixed MaskUV(half2 uv,inout half4 uvMask)
   {
@@ -178,13 +178,13 @@ if (alphaTextureImporter != null)
   	c+= tex2D(_Tex7, i.uv-uvOffset)*i.mask1.w;					
   	return c;
   }
-```
+{% endhighlight %}
 下面一张图展示了根据部件不同的uv（这里在上一步中预处理好），推导了uvmask函数返回值，在frag shader采样Tex2D时使用的Texture。
 
  ![](/img/in-post/post-fashion/fashion4.jpg)
 
 vert shader 所有的计算值都保存在v2f中mask0,mask1两个fixed4寄存器中，v2f声明如下：
-``` cpp
+{% highlight cpp %}
 struct v2f
 {  
 	float4 pos : SV_POSITION;  	
@@ -237,7 +237,7 @@ struct v2f
 #endif
 
 };
-```
+{% endhighlight %}
 
 ### 第二步 c#动态拼接
 - 收集部件
@@ -245,7 +245,7 @@ struct v2f
 - 设置材质
 - 设置texture
 
-```csharp
+{% highlight csharp %}
 SkinnedMeshRenderer skin = null;
 MaterialPropertyBlock mpb = null
 
@@ -292,7 +292,7 @@ for (EPartType part = EPartType.ECombinePartStart; part < EPartType.EMountEnd; +
   mpb.SetTexture(ShaderMgr.GetPartOffset(part), tex);
   skin.SetPropertyBlock(mpb);
 }
-```
+{% endhighlight %}
 
 在设置texture的时候我们使用MaterialPropertyBlock做了优化，更多关于MaterialPropertyBlock的知识，可以参考下面一篇文章：
 [使用MaterialPropertyBlock来替换Material属性操作][i1]

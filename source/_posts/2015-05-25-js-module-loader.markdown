@@ -31,7 +31,7 @@ CommonJS 本质上只是一套规范（API 定义），而 Node.js 采用并实�
 
 让我们看看 Node 中的实现：
 
-```js
+{% highlight javascript %}
 // 由于 Node 原生支持模块的作用域，并不需要额外的 wrapper
 // "as though the module was wrapped in a function"
 
@@ -41,7 +41,7 @@ a.doSomething()         // 等上一句执行完才会执行
 exports.b = function(){ // 暴露 b 函数接口
   // do something
 }
-```
+ {% endhighlight %}
 
 `exports`是一个内置对象，就像`require`是一个内置加载函数一样。如果你希望直接赋值一个完整的对象或者构造函数，覆写`module.exports`就可以了。
 
@@ -90,7 +90,7 @@ CommonJS 前身叫 ServerJS ，**后来希望能更加 COMMON，成为通吃各�
 
 RequireJS 主要解决的还是 CommonJS 同步加载脚本不适合浏览器 这个问题：
 
-```js
+{% highlight javascript %}
 //CommonJS
 
 var Employee = require("types/Employee");
@@ -103,13 +103,13 @@ Programmer.prototype = new Employee();
 
 //如果 require call 是异步的，那么肯定 error
 //因为在执行这句前 Employee 模块肯定来不及加载进来
-```
+{% endhighlight %}
 > As the comment indicates above, if require() is async, this code will not work. However, loading scripts synchronously in the browser kills performance. So, what to do?
 
 所以我们需要 **Function Wrapping** 来获取依赖并且提前通过 script tag 提前加载进来
 
 
-```js
+{% highlight javascript %}
 //AMD Wrapper
 
 define(
@@ -124,28 +124,28 @@ define(
         return Programmer;  //return Constructor
     }
 )
-```
+{% endhighlight %}
 
 当依赖模块非常多时，这种**依赖前置**的写法会显得有点奇怪，所以 AMD 给了一个语法糖， **simplified CommonJS wrapping**，借鉴了 CommonJS 的 require 就近风格，也更方便对 CommonJS 模块的兼容：
 
-```js
+{% highlight javascript %}
 define(function (require) {
     var dependency1 = require('dependency1'),
         dependency2 = require('dependency2');
 
     return function () {};
 });
-```
+{% endhighlight %}
 The AMD loader will parse out the `require('')` calls by using `Function.prototype.toString()`, then internally convert the above define call into this:
 
-```js
+{% highlight javascript %}
 define(['require', 'dependency1', 'dependency2'], function (require) {
     var dependency1 = require('dependency1'),
         dependency2 = require('dependency2');
 
     return function () {};
 });
-```
+{% endhighlight %}
 
 出于`Function.prototype.toString()`兼容性和性能的考虑，最好的做法还是做一次 **optimized build**
 
@@ -157,19 +157,19 @@ AMD 和 CommonJS 的核心争议如下：
 
 Modules/1.0:
 
-```js
+{% highlight javascript %}
 var a = require("./a") // 执行到此时，a.js 才同步下载并执行
-```
+{% endhighlight %}
 
 AMD: （使用 require 的语法糖时）
 
-```js
+{% highlight javascript %}
 define(["require"],function(require)){
     // 在这里，a.js 已经下载并且执行好了
     // 使用 require() 并不是 AMD 的推荐写法
     var a = require("./a") // 此处仅仅是取模块 a 的 exports
 })
-```
+{% endhighlight %}
 
 AMD 里提前下载 a.js 是出于对浏览器环境的考虑，只能采取异步下载，这个社区都认可（Sea.js 也是这么做的）
 
@@ -179,26 +179,26 @@ AMD 里提前下载 a.js 是出于对浏览器环境的考虑，只能采取异�
 
 AMD 推荐的风格并不使用`require`，而是通过参数传入，破坏了**依赖就近**：
 
-```js
+{% highlight javascript %}
 define(["a", "b", "c"],function(a, b, c){
     // 提前申明了并初始化了所有模块
 
     true || b.foo(); //即便根本没用到模块 b，但 b 还是提前执行了。
 })
-```
+{% endhighlight %}
 
 不过，在笔者看来，风格喜好因人而异，主要还是**预执行**和**懒执行**的差异。
 
 另外，require 2.0 也开始思考异步处理**软依赖**（区别于一定需要的**硬依赖**）的问题，提出了这样的方案：
 
-```js
+{% highlight javascript %}
 // 函数体内：
 if(status){
     async(['a'],function(a){
         a.doSomething()
     })
 }
-```
+{% endhighlight %}
 
 ## SeaJS & CMD
 
@@ -223,7 +223,7 @@ CMD 推荐的 Code Style 是使用 CommonJS 风格的 `require`：
 
 * 这个 require 实际上是一个全局函数，用于加载模块，这里实际就是传入而已
 
-```js
+{% highlight javascript %}
 define(function(require, exports) {
 
     // 获取模块 a 的接口
@@ -237,11 +237,11 @@ define(function(require, exports) {
     exports.doSomething = function() {};
 
 });
-```
+{% endhighlight %}
 
 但是你也可以使用 AMD 风格，或者使用 return 来进行模块暴露
 
-```js
+{% highlight javascript %}
 define('hello', ['jquery'], function(require, exports, module) {
 
     // 模块代码...
@@ -253,7 +253,7 @@ define('hello', ['jquery'], function(require, exports, module) {
     };
 
 });
-```
+{% endhighlight %}
 
 
 
@@ -270,7 +270,7 @@ Sea.js 借鉴了 RequireJS 的不少东西，比如将 FlyScript 中的 module.d
 
 看代码：
 
-```js
+{% highlight javascript %}
 // AMD 默认推荐
 
 define(['./a', './b'], function(a, b) {  // 依赖前置，提前执行
@@ -280,9 +280,9 @@ define(['./a', './b'], function(a, b) {  // 依赖前置，提前执行
 
 })
 
-```
+{% endhighlight %}
 
-```js
+{% highlight javascript %}
 // CMD
 
 define(function(require, exports, module) {
@@ -293,7 +293,7 @@ define(function(require, exports, module) {
     var b = require('./b') // 依赖就近，延迟执行
     b.doSomething()
 })
-```
+{% endhighlight %}
 
 
 

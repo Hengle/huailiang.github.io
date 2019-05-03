@@ -18,19 +18,19 @@ Pillow是PIL（Python Imaging Library，Python图像库）的一个分支，提�
 
 安装 Pillow:
 
-``` shell
+{% highlight bash %}
 #Python3
  pip3 install pillow
 
 #python2
   pip install pillow
-```
+{% endhighlight %}
 
 
 通道
 一个图片可以包含一到多个数据通道，如果这些通道具有相同的维数和深度，Pil允许将这些通道进行叠加
 
-```
+{% highlight bash %}
 模式
 1             1位像素，黑和白，存成8位的像素
 L             8位像素，黑白
@@ -41,7 +41,7 @@ CMYK          4×8位像素，颜色隔离
 YCbCr         3×8位像素，彩色视频格式
 I             32位整型像素
 F             32位浮点型像素
-```
+{% endhighlight %}
 
 
 
@@ -49,7 +49,7 @@ F             32位浮点型像素
 
 如获取图片的大小、通道、模式等信息
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image
@@ -72,14 +72,14 @@ print "bans:{0} bboxs:{1} colors:{2}  extremas:{3}".format(bands,bboxs,colors,ex
 pixels = im.getpixel((10,10))
 print "pixels:{0}".format(pixels)
 
-```
+{% endhighlight %}
 
 ### 通道分离与合并
 
 - 变灰处理
 - 提出RGB通道
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image
@@ -90,7 +90,7 @@ gray.show()
 r,g,b=img.split()   #分离三通道
 pic=Image.merge('RGB',(r,g,b)) #合并三通道
 pic.show()
-```
+{% endhighlight %}
 
 
 ### 使用PIL 做图片混合
@@ -101,7 +101,7 @@ pic.show()
 - 将im2合成到im1中，如果其一是透明的， 才能看到结果，不然最终结果只会显示出im2
 
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image
@@ -172,7 +172,7 @@ if __name__ == "__main__":
 	blend(im1,im2,"blend",False)
 	mask(im1,im2,im3,"mask",True)
 
-``` 	
+{% endhighlight %}
 
 
 ### 使用 PIL 做一些美术效果
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 - SMOOTH_MORE - 更柔和
 - SHARPEN - 效果有点像DETAIL
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image
@@ -199,7 +199,7 @@ im = Image.open("png/im1.png")
 filterimg = im.filter(ImageFilter.BLUR)
 filterimg.show()
 
-``` 	
+{% endhighlight %}
 
 ###  批量生成水印图
 
@@ -209,7 +209,7 @@ filterimg.show()
 
 使用字体水印时，图片保存的时候一定要是 png 格式的。
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image, ImageDraw, ImageFont
@@ -252,13 +252,13 @@ if __name__=="__main__":
 		mark_by_font(im,name,font)
 		mark_by_img(im,name,mark)
 
-```
+{% endhighlight %}
 
 ### 负责的像素计算
 
 负责变黑、变亮、灰度处理等
 
-``` Python
+{% highlight python %}
 # coding=utf-8
 
 from PIL import Image
@@ -289,7 +289,7 @@ plt.figure("lena")
 plt.imshow(img,cmap='gray')
 plt.axis('off')
 plt.show()
-```
+{% endhighlight %}
 
 
 结语：有了上面强大的图像功能，我们就能很方便的批量处理大量的图片了，再也不需要美术慢慢的倒腾了。

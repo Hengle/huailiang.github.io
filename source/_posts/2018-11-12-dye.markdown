@@ -29,7 +29,7 @@ tags:
 
 至于颜色混合原码，这里贴出颜色混合的部位核心代码，至于完整的代码，可以去前面贴出的github地址前往下载：
 
-```hlsl
+{% highlight c %}
 
 float3 diffuseColor1 = 
         (_ColorR.rgb * texColor.r * _ColorR.a +
@@ -45,7 +45,7 @@ float uvhigh = 1 - uvlow;
 float3 diffuseColor = diffuseColor1 * uvlow + diffuseColor2 * uvhigh;
 float alpha = (_ColorR.a + _ColorG.a + _ColorB.a) * 0.7 + uvhigh * 0.3;
 
-```
+{% endhighlight %}
 
 
 

@@ -28,7 +28,7 @@ tags:
 
 在VertxSurfShade中我们采样顶点色(appdata_full)来作为vert shader输出的颜色。
 
-```c
+{% highlight cpp %}
 fixed4 _Color;  
 
 struct Input
@@ -46,11 +46,11 @@ void surf (Input IN, inout SurfaceOutput o)
 {
     o.Albedo=IN.vertexColor * _Color;
 }
-```
+{% endhighlight %}
 
 在VertxFragShader中采样顶点色的使用如下：
 
-```c
+{% highlight cpp %}
 CGPROGRAM
 #pragma vertex vert
 
@@ -83,7 +83,7 @@ fixed4 frag (v2f i) : SV_Target {
     return c * _Color;
 }
 ENDCG
-```
+{% endhighlight %}
 
 然后设置关联的render组件里关闭反射光线和接收投射阴影。
 
@@ -91,12 +91,12 @@ ENDCG
 
 
 对应的代码实现如下：
-```csharp
+{% highlight csharp %}
 rend.shadowCastingMode = ShadowCastingMode.Off;
 rend.receiveShadows = false;
 rend.lightProbeUsage = LightProbeUsage.Off;
 rend.reflectionProbeUsage = ReflectionProbeUsage.Off;
-```
+{% endhighlight %}
 
 
 
@@ -104,7 +104,7 @@ rend.reflectionProbeUsage = ReflectionProbeUsage.Off;
 
 绘制文字也不实用nGUI或者uGui使用的组件，而是使用Unity自带的组件TextMesh。我们把TextMesh挂在Hud组件下面，设置好文字大小和对齐方式。对应的代码实现如下：
 
-```csharp
+{% highlight csharp %}
 private void CreateText()
 {
     GameObject go = new GameObject("Name");
@@ -119,13 +119,13 @@ private void CreateText()
     font.anchor = TextAnchor.MiddleCenter;
     font.color = Color.black;
 }
-```
+{% endhighlight %}
 
 ### 控制血条进度
 
 控制血条进度，其实控制的就是顶点1、3、4、6的uv信息。这些顶点的位置在[-x,x] 之间（x=2),我们根据传进来的值在[-2,2]进行差值，算出最终的顶点位置，最后赋值给mesh，来达到控制血条进度的效果。
  
-```csharp   
+{% highlight csharp %}
 public void UpdateHud(float v)
 {
     float val = Mathf.Lerp(-x, x, 1 - v);
@@ -135,7 +135,7 @@ public void UpdateHud(float v)
     vertices[6] = vertices[3];
     filter.mesh.vertices = vertices;
 }
-```
+{% endhighlight %}
 在Unity中运行HudShow， 在Game视图左上角的GUI-Slider调整进度，我们可以发现对应的血条也跟着发生变化。下面查看Drawcall的信息，运行DCShow，我们创建了大量的hud,并控制不同的血条进度和位置，打开Stats面板，我们看见一共只有四个drawcall，除了摄像机固定的两个drawcall,所有的hud通过合批一共只有2个drawcall。
 
 ![](/img/in-post/post-hud/hud-3.jpg)

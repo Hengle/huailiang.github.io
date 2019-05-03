@@ -67,7 +67,7 @@ EPSILON 是一种策略，0.8代表的意思就是我们有80%的概率来选择
 
 首先呢，我们在 Unity 实现 q_learning算法。在后面的章节中，我们将导出包，在 python 中训练，并且通过 Tensorboard，我们观察模型的学习率（alpha）,衰减（gamma）以及生存时间的变化。
 
-```csharp
+{% highlight csharp %}
 
 // greedy police
  float epsilon = 0.9f;
@@ -78,11 +78,11 @@ EPSILON 是一种策略，0.8代表的意思就是我们有80%的概率来选择
  //discount factor
  float gamma = 0.9f;
 
-```
+{% endhighlight %}
 
 首先我们定义 q_learning里面的几个变量值，如上所示，接着我们定义 Q_Table:
 
-```csharp
+{% highlight csharp %}
 
 /// <summary>
 /// Dictionary做二维表，key 是代表的状态，
@@ -102,18 +102,18 @@ public class Row
     /// </summary>
     public float stay;
 }
-```
+{% endhighlight %}
 
 首先呢，我们把鸟position 的 y 坐标取值范围是[-5,5]分为十种种状态，我们定义鸟的状态1-10，由鸟的坐标转换状态。
 
-```cs
+{% highlight csharp %}
 int v = (int)transform.position.y + 5;
 return Mathf.Clamp(v, 0, 10);
-```
+{% endhighlight %}
 
 我们更新 q表通过如下方法实现：
 
-```csharp
+{% highlight csharp %}
 /**
     更新 Q_TABLE
  */
@@ -138,11 +138,11 @@ public void UpdateState(int state, int state_, int rewd, bool action)
         Debug.Log("state:" + state + " rewd:" + rewd + " action:" + action);
     }
 }
-```
+{% endhighlight %}
 
 我们以每15帧一个心跳(Tick), 根据 q_table 做出相应的动作，并且根据公式和 Reward 更新 q_table。
 
-```cs
+{% highlight csharp %}
   /*
    comment: tick time is 15f
     */
@@ -163,11 +163,11 @@ public void UpdateState(int state, int state_, int rewd, bool action)
        last_action = action;
    }
 
-```
+{% endhighlight %}
 
 在训练完成后，我们导出 q_table,在下次加载的时候再导入，我们就可以迁移到别的设备上了。导出的时候，为了方便观察，现在我们到处 csv 结构的，可以直接在 Excel 里看每个状态的 q 值。 由于当前难度较低，我们的状态（state）比较有限, 所以我们存成 csv 这样的。后面随着状态的急速增加，我们考虑使用 protobuff （二进制）的格式来导出。
 
-```cs
+{% highlight csharp %}
 /// <summary>
 /// 导出q_table
 /// </summary>
@@ -215,7 +215,7 @@ private void loadQTable()
     }
 }
 
-```
+{% endhighlight %}
 
 
 难度二：
@@ -228,7 +228,7 @@ private void loadQTable()
 
 我们把 Pillar（柱子）的状态（state）也计算在内，Pillar 一共有五个状态，即我们根据和鸟的相对位置划分五个状态（state）,Bird 的 position x坐标始终为0，移动的是 Pillar, Bird和 Pillar 运动是相对的。如下代码：
 
-```cs
+{% highlight csharp %}
 public int GetPillarMiniState()
 {
     int ret = 0;
@@ -244,10 +244,10 @@ public int GetPillarMiniState()
     return ret * 10;
 }
 
-```
+{% endhighlight %}
 
 Pillar 和Bird 一共组合了9X5=45种状态， 我们在构建 q_table的时候，代码如下：
-```cs
+{% highlight csharp %}
 /// <summary>
 /// Bird [0-9)一共九个状态
 /// Pillar [0-5) 一共5个状态
@@ -284,7 +284,7 @@ public void Build_Q_Table()
         return GameManager.S.mainBird.GetState();
 #endif
     }
-```
+{% endhighlight %}
 
 Reinforcement做选择还是和之前一样，由 epsilon概率来由 q_table 来决定，1-epsilon概率随机决定。
 

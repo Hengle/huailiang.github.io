@@ -32,12 +32,12 @@ Beautiful Soup支持Python标准库中的HTML解析器,还支持一些第三方�
 
   在快速使用中我们添加如下代码：
 
-  ```py
+{% highlight python %}
   print(soup.title)
   print(type(soup.title))
   print(soup.head)
   print(soup.p)
-  ```
+{% endhighlight %}
 
   通过这种soup.标签名 我们就可以获得这个标签的内容
   这里有个问题需要注意，通过这种方式获取标签，如果文档中有多个这样的标签，返回的结果是第一个标签的内容，如上面我们通过soup.p获取p标签，而文档中有多个p标签，但是只返回了第一个p标签内容
@@ -47,17 +47,17 @@ Beautiful Soup支持Python标准库中的HTML解析器,还支持一些第三方�
   当我们通过soup.title.name的时候就可以获得该title标签的名称，即title
 
 - 获取属性
-```py
+{% highlight python %}
 print(soup.p.attrs['name'])
 print(soup.p['name'])
-```
+{% endhighlight %}
   上面两种方式都可以获取p标签的name属性值
 
 - 获取内容
 
-  ```py
+{% highlight python %}
   print(soup.p.string)
-  ```
+{% endhighlight %}
   结果就可以获取第一个p标签的内容：
   The Dormouse's story
 
@@ -65,15 +65,15 @@ print(soup.p['name'])
 
   我们直接可以通过下面嵌套的方式获取
 
-  ```py
+{% highlight python %}
   print(soup.head.title.string)
-  ```
+{% endhighlight %}
 
 
 
 下面代码就是展示了利用 BeautifulSoup 扒取《国家地理》里的精美图片。我们可以设置最大的链接页面 max=5. 所有扒取的图片都存在跟nationalgeographic文件夹下。
 
-```py
+{% highlight python %}
 # coding=utf-8
 
 import os
@@ -129,7 +129,7 @@ if __name__=="__main__":
 	clear()
 	download(URL)
 
-```
+{% endhighlight %}
 
 
 当我们使用urlretrieve下载图片的时候，发现有的图片下载不下来，使用requests.get(url,stream=True)可以比较完整的下载图片。
@@ -140,7 +140,7 @@ if __name__=="__main__":
 
 代码实现类似这样：
 
-``` Python
+{% highlight python %}
 
 import multiprocessing as mp
 import threading as td
@@ -153,7 +153,7 @@ if __name__=="__main__":
 		p=mp.Process(target=download,args=(categorie,))
 		p.start()
     # p.join()
-```
+{% endhighlight %}
 
 在使用多进程的时候，在 for 循环中调用 jion 的时候，发现并不能触发多进程，实际上只有一个进程，另一个进程可能在等待。
 

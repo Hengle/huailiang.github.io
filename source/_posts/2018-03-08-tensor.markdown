@@ -16,9 +16,9 @@ tags:
 
 典型的导入TensorFlow程序的做法如下：
 
-```Python
+{% highlight python %}
 import tensorflow as tf
-```
+{% endhighlight %}
 
 运行这个，可以得到Python下的TensorFlow中的所有类、方法和符号。大多数的文档默认你已经执行了这个。
 
@@ -46,7 +46,7 @@ TensorFlow Core程序是由两个分离的部分组成的：
 
 点的一种形式是常数。像所有TensorFlow常数，它不需要输入，而它会从内部输出一个值。我们可以创建两个点的张量c1和c2，如下所示：
 
-```Python
+{% highlight python %}
 import tensorflow as tf
 import numpy as np
 
@@ -57,7 +57,7 @@ print c1,c2
 """
  输出：Tensor("Const:0", shape=(2,), dtype=float32) Tensor("Const_1:0", shape=(2,), dtype=float32)
 """
-```
+{% endhighlight %}
 
 注意到，它输出的并不是[0.3,2.0]和([1.3,1.2]的值，而是对应的点张量，要通过开启会话，才能直接输出其值。这直接反映了TensorFlow的构建和计算是分离的。
 
@@ -69,9 +69,9 @@ TensorFlow用张量这种数据结构来表示所有的数据.你可以把一个
 阶
 在TensorFlow系统中，张量的维数来被描述为阶.但是张量的阶和矩阵的阶并不是同一个概念.张量的阶（有时是关于如顺序或度数或者是n维）是张量维数的一个数量描述.比如，下面的张量（使用Python中list定义的）就是2阶.
 
-```
+{% highlight json %}
     t = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-```
+{% endhighlight %}
 
 你可以认为一个二阶张量就是我们平常所说的矩阵，一阶张量可以认为是一个向量.对于一个二阶张量你可以用语句t[i, j]来访问其中的任何元素.而对于三阶张量你可以用't[i, j, k]'来访问其中的任何元素.
 
@@ -91,7 +91,7 @@ n	n阶 (自己想想看)	....
 shape [2,3] 表示为数组的意思是第一维有两个元素，第二维有三个元素，如: [[1,2,3],[4,5,6]]
 
 
-```python
+{% highlight python %}
  # 2-D tensor `a`
  a = tf.constant([1, 2, 3, 4, 5, 6], shape=[2, 3]) => [[1. 2. 3.]
                                                        [4. 5. 6.]]
@@ -121,7 +121,7 @@ shape [2,3] 表示为数组的意思是第一维有两个元素，第二维有�
                          [[508 532]
                           [697 730]]]
 
-```
+{% endhighlight %}
 
 tensorflow中有一类在tensor的某一维度上求值的函数，如：
 
@@ -137,7 +137,7 @@ tensorflow中有一类在tensor的某一维度上求值的函数，如：
 
 举例说明：
 
-``` py
+{% highlight python %}
 
 import numpy as np
 import tensorflow as tf
@@ -155,7 +155,7 @@ with tf.Session() as sess:
 	y3_=tf.reduce_max(x_,1)
 	print sess.run(y1_),sess.run(y2_),sess.run(y3_)
 
-```
+{% endhighlight %}
 
 
 首先求平均值，
@@ -168,30 +168,30 @@ tf.reduce_mean(x_, 1) ==> [1.5,  3.5] #
 
 同理，还可用tf.reduce_max()求最大值。
 
-```
+{% highlight bash %}
 #输出结果：
 2.5 [2. 3.] [1.5 3.5]
 4.0 [3. 4.] [2. 4.]
-```
+{% endhighlight %}
 
 ### 会话
 
 接下来的代码就是创建一个Session对象，调用它的run方法。只有这样，才能进行真正的运算。如下所示：
 
-``` Python
+{% highlight python %}
 with tf.Session() as sess:
     print sess.run([c1,c2])
 
 # 输出： [array([0.3, 2. ], dtype=float32), array([1.3, 1.2], dtype=float32)]
 
-```
+{% endhighlight %}
 
 这时，我们就能得到了想象中的两个值。
 
 
 我们可以通过联合多个张量(Tensors)，构建更为复杂的运算。例如，我们可以进行点张量的相加，如下所示：
 
-``` Python
+{% highlight python %}
 import tensorflow as tf
 import numpy as np
 
@@ -204,37 +204,37 @@ with tf.Session() as sess:
     print "op_add rst:{}".format(sess.run(op_add))
 
 # 输出：op_add rst:[1.5999999 3.2      ]
-```
+{% endhighlight %}
 
 ### 占位符(Placeholder)
 
 有些时候，我们不会直接使用常量进行计算，而需要事先创建一个量去表示运算。这时，在TensorFlow中可以采用placeholders的方法。它的本质就是一个占位符，先用placeholder表示进行运算的表达，程序后面在进行“喂值”(feed_dict)。如下所示：
 
-``` Python
+{% highlight python %}
 # placeholder
 x = tf.placeholder(tf.float32)
 y = tf.placeholder(tf.float32)
 op_add = tf.add(x,y)
 
-```
+{% endhighlight %}
 
 
 由上面操作可见，x和y都没有固定的值，它们创建的目的只是为了表示相加这种运算。
 
 如果程序后面需要用到这种运算，我们可以使用feed_dict进行喂值。
 
-``` Python
+{% highlight python %}
 cc =sess.run(op_add,{x:[1.0,2.0,3,4],y:[2,3,4,1]})
 print cc
 # 输出 [3. 5. 7. 5.]
-```
+{% endhighlight %}
 
 
 显然，不同的“喂值”，得出的结果可能也不同。
 
 在基础上，我们可以进行更复杂的操作。我们可以对op_add进行相乘操作。如下所示:
 
-```py
+{% highlight python %}
 
 c1 = tf.constant(0.3,tf.float32)
 c2 = tf.constant(1.3,tf.float32)
@@ -247,7 +247,7 @@ with tf.Session() as sess:
     print "triple rst:{}".format(sess.run(triple))
 
 # 输出：triple rst:4.7999997139
-```
+{% endhighlight %}
 
 当然，要显示最终结果，需要进行回话和喂值。
 
@@ -257,28 +257,28 @@ with tf.Session() as sess:
 
 机器学习中，我们构建模型，TensorFlow中模型有输入有输出，训练中参数会不断更新，这时，我们需要创建变量(Variable)。TensorFlow中，Variable可以将训练参数添加到图中，声明变量时，一般需要声明变量的类型（如：tf.float32）和赋初值。如下所示：
 
-``` Python
+{% highlight python %}
 x = tf.placeholder(tf.float32)
 y = tf.placeholder(tf.float32)
 op_add = tf.add(x,y)
 op_tri = op_add*3
-```
+{% endhighlight %}
 
 这样，我们就成功地创建了变量。从上面例子，我们可以看出placeholder和Variable的区别。当该量是通过训练更新的，我们可以通过Variable创建，当该量是作为模型的输入，我们可以通过placeholder创建。
 
 当然，变量的启动不仅需要开启会话，还要在会话中进行初始化。
 
-``` Python
+{% highlight python %}
 with tf.Session() as sess:
     init = tf.global_variables_initializer()
     sess.run(init)
-```
+{% endhighlight %}
 
 这样，变量才真正地被初始化。
 
 初始化成功之后，我们给模型喂值，
 
-```py
+{% highlight python %}
 W = tf.Variable([1.1],tf.float32)
 b = tf.Variable([-2.1],tf.float32)
 x_train = [1,2,3,4,5,6]
@@ -289,7 +289,7 @@ with tf.Session() as sess:
     sess.run(init)
     print("real vale: {}".format(sess.run(linear_mode,{x:x_train})))
 
-```
+{% endhighlight %}
 
 其实，这里我们构建了一个很简单的线性模型。我们希望该模型能够进行训练优化，然而，我们没有设定训练集的期望值。因此，我们自定义期望值。
 
@@ -297,10 +297,10 @@ with tf.Session() as sess:
 
 代价函数为：cost(x) = sum(linear_model(x) - y)/number of trainset
 
-```py
+{% highlight python %}
 square_details = tf.square(linear_mode- y)
 loss = tf.reduce_sum(square_details)
-```
+{% endhighlight %}
 
 得到了损失函数，我们就可以对模型的准确性进行评估了。
 
@@ -343,7 +343,7 @@ Tensorboard的可视化过程
 
 - 运行整个程序，并在命令行输入运行tensorboard的指令，之后打开web端可查看可视化的结果
 
-```py
+{% highlight python %}
 
 #合并到Summary中  
 merged = tf.merge_all_summaries()  
@@ -353,19 +353,19 @@ writer = tf.train.SummaryWriter("/目录",sess.graph)
 #merged也是需要run的  
 result = sess.run(merged)
 writer.add_summary(result,step)  
-```
+{% endhighlight %}
   ![](/img/in-post/post-tf/tf38.jpeg)
 
 
 
 如果6006端口被占用，会报一下错误：
-```
+{% highlight json %}
 ERROR:tensorflow:Tried to connect to port 6006, but address is in use.
 Tried to connect to port 6006, but address is in use.
-```
+{% endhighlight %}
 
 解决可以使用 --port 指定端口：
 
-``` sh
+{% highlight bash %}
 tensorboard --host=10.10.101.2 --port=6099 --logdir="my_graph"
-```
+{% endhighlight %}

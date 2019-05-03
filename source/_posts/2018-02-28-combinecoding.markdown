@@ -33,7 +33,7 @@ tags:
 
 - 在Unity 新建一个c# 代码，里面内容如下：
 
-``` csharp
+{% highlight csharp %}
 public class TestCPP : MonoBehaviour {
 
 #if UNITY_IPHONE || UNITY_XBOX360
@@ -54,7 +54,7 @@ public class TestCPP : MonoBehaviour {
         GUILayout.EndVertical();
     }
 }
-```
+{% endhighlight %}
 
 Testcpp.cs挂在当前场景随意一个gameobject下，然后在vs中设置新建一个c++ 空项目，属性设置如下图：
 
@@ -64,7 +64,7 @@ Testcpp.cs挂在当前场景随意一个gameobject下，然后在vs中设置新�
 
 c++代码的实现如下：
 
-``` cpp
+{% highlight cpp %}
 #ifndef __Test__
 #define __Test__
 
@@ -77,7 +77,7 @@ __declspec(dllexport) int iAdd(int a,int b)
 
 };
 #endif
-```
+{% endhighlight %}
 
 导出dll,然后copy到unity项目Plugins/x86_x64目录下，点击unity运行按钮，点击GUI Add按钮，这时你可以看到一行log在console串口中，就证明你的c++调用成功了。类似下图：
 
@@ -97,7 +97,7 @@ __declspec(dllexport) int iAdd(int a,int b)
 
 #### 指针传递
 
-``` cpp
+{% highlight cpp %}
 extern "C"
 {
 __declspec(dllexport) int iSub(int* a, int* b)
@@ -106,11 +106,11 @@ __declspec(dllexport) int iSub(int* a, int* b)
 }
 
 }
-```
+{% endhighlight %}
 
   c#主要通过IntPtr去处理的
 
-``` csharp
+{% highlight csharp %}
 #if UNITY_IPHONE || UNITY_XBOX360
 	[DllImport("__Internal")]
 #else
@@ -131,21 +131,21 @@ public void OnGUI
          Debug.Log(a + "-" + b + "=" + rst);
      }
 }
-```
+{% endhighlight %}
 
 
 #### c++反调用c# 使用指针函数（c++）
 
-```cpp
+{% highlight cpp %}
 typedef bool(*SharpCALLBACK)(unsigned char,const char*);
 
 __declspec(dllexport) void iInitCallbackCommand(SharpCALLBACK cb)
 {
 	callback = cb;
 }
-```
+{% endhighlight %}
 
-```csharp
+{% highlight csharp %}
 public delegate void CppDelegate(byte type, IntPtr p);
 
 #if UNITY_IPHONE || UNITY_XBOX360
@@ -166,11 +166,11 @@ public delegate void CppDelegate(byte type, IntPtr p);
         string command = Marshal.PtrToStringAnsi(ptr);
         XDebug.CLog(command);
     }
-```
+{% endhighlight %}
 
 #### 传送结构体
 
-``` cpp
+{% highlight cpp %}
 struct Row
 {
 
@@ -184,9 +184,9 @@ extern "C"
 {
   __declspec(dllexport) void iGetFashionListRow(Row* row);
 }
-```
+{% endhighlight %}
 
-```csharp
+{% highlight csharp %}
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 		public struct RowData {
 			uint itemid;
@@ -203,7 +203,7 @@ extern "C"
 #endif
 static extern void iGetFashionListRowByID(int idx, ref RowData row);
 
-```
+{% endhighlight %}
 
 
 ### 面向对象
@@ -228,11 +228,11 @@ C++互操作也有自动生成接口代码工具，这就是Swig。Swig可以根
 ![](/img/in-post/post-cpp/cpp8.jpg)
 
 命令行配置如下：
-``` shell
+{% highlight bash %}
 echo on
 C:\swigwin-3.0.12\swig.exe -c++ -csharp -outdir $(SolutionDir)..\Assets/SwigTools %(FullPath)
 echo off
-```
+{% endhighlight %}
 这段代码的意思就是调用swig，-c++设置源语言为c++ -csharp代表输出语言为C#，最终的-outdir代表的是C#接口的输出目录，而最后的参数代表的是.cxx文件的输出目录。
 
 然后我们对工程进行编译：
@@ -241,7 +241,7 @@ echo off
 
 我们新建一个c++的类，其中实现代码如下：
 
-```cpp
+{% highlight cpp %}
 #include "Invork.h"
 
 int Invork:: Mul(int a,int b)
@@ -260,7 +260,7 @@ int Invork::Div(int a,int b)
 		return a/b;
 	}
 }
-```
+{% endhighlight %}
 
 编译生成之后会发现我们的c#目录会多出三个文件，如下图所示：
 
@@ -268,7 +268,7 @@ int Invork::Div(int a,int b)
 
 
 在c#里我们这可这样调用c++的东西：
-```csharp
+{% highlight csharp %}
 if (GUI.Button(new Rect(20, 220, 100, 60), "Swig"))
 {
     int c = Invork.Div(4, 2);
@@ -278,7 +278,7 @@ if (GUI.Button(new Rect(20, 220, 100, 60), "Swig"))
     Debug.Log("mul val:" + c);
     ins.Dispose();
 }
-```
+{% endhighlight %}
 
 如果最终你得到如图所示的日志，恭喜你，所有的流程都跑通了。
 ![](/img/in-post/post-cpp/cpp10.jpg)
@@ -306,13 +306,13 @@ include
 
 例如%incude “std_string.i”、%include “std_vector.i”
 
-``` cpp
+{% highlight cpp %}
 namespace std {
 
 %template(BoolVector) vector<bool>;
 
 }
-```
+{% endhighlight %}
 
 使用这样的定义方式，Swig会为我们生成一个名为BoolVector的类型而不是未知类型。我们可以在目标语言中创建C++中的STL并且与C++中的Vector进行互操作。
 
@@ -320,16 +320,16 @@ namespace std {
 
 使用指针
 定义指针的方法如下：
-``` cpp
+{% highlight cpp %}
 %pointer_class(bool, BoolPointer);
-```
+{% endhighlight %}
 通过这个定义我们Swig会为我们生成指针相对应的类，Swig再会生成类似于SWIGTYPE_p_bool这样的未定义类型，而是直接使用BoolPointer，并且我们能够自己在目标语言中申请内存，并且自己对内存进行管理。
 
 使用数组
 定义数组的方法如下。
-``` cpp
+{% highlight cpp %}
 %array_class(unsigned char, UnsignedCharArray);
-```
+{% endhighlight %}
 通过这种方式我们可以导出相应的数组类型。我们可以在目标语言中创建C++中的数组，并且与C++中的数组进行互操作。
 
 关于本节使用的代码都已上传到github，[欢迎下载][i2]

@@ -25,7 +25,7 @@ Jenkins是一个开源软件项目，是基于Java开发的一种持续集成工
 ### 安装 Jenkins
 你可以<a href="https://jenkins.io">点击这里，</a>在官网下载最新的 Jenkins 版本部署在本地。Jenkins默认安装路径：/Applications/Jenkins/jenkins.war。安装完成之后，会自动启动jenkins，打开浏览器，进入网页 localhost:8080。
 
-```shell
+{% highlight bash %}
 # 设置开机自启动
 sudo launchctl load -w /Library/LaunchDaemons/org.jenkins-ci.plist
 # 取消开机自启动
@@ -38,7 +38,7 @@ nohup java -jar jenkins.war &
 nohup java -jar jenkins.war -httpPort=88 &
 # 后台启动(HTTPS)
 nohup java -jar jenkins.war -httpsPort=88 &
-```
+{% endhighlight %}
 
 ![](/img/in-post/post-publish/post-jenkins.jpg)
 
@@ -57,12 +57,12 @@ Jenkins 使用的是Groovy Script，Groovy是一种基于JVM（Java虚拟机）�
 
 下面贴出一些常用的相关的脚本：
 比如说获取时间戳作为 job id:
-``` groovy
+{% highlight groovy %}
   new Date().format("yyyyMMddHHmmss")
-```
+{% endhighlight %}
 
 获取所有的分支：
-``` python
+{% highlight python %}
 def cmd = 'git ls-remote --heads git@git.intra.123u.com:dragon_nest/dragon-nest.git'
 def proc = cmd.execute()
 proc.waitFor()
@@ -86,12 +86,12 @@ if ((m = it =~ /refs\/heads\/(.+?)$/)) {
 
 tags.unique()
 return tags
-```
+{% endhighlight %}
 
 ## Jenkins 与外部交互
 
 通常情况下，我们使用 Shell脚本作为桥梁来连接我们的 web 页面和工程，Jenkins 调用 shell 设置可通过在Jenkins配置选项Build(构建)一栏增加构建步骤选择 Execute Shell 。脚本可以参照下面，
-``` shell
+{% highlight bash %}
 #!/bin/bash
 
 pwd
@@ -110,7 +110,7 @@ elif [ $channel = "debug" ]; then
 else
  echo "There is no such argument"
 fi
-```
+{% endhighlight %}
 
 这样我们再打包机上写相关的 shell脚本，比如说调用 git ，unity,xcodebuild、ant、ftp 相关的命令行，来完成项目对应的流程。当然了，不一定适用 shell 脚本，我们也可以适用 web 表单.下面列出了支持的脚本，相当的丰富。
 
@@ -127,12 +127,12 @@ fi
 
 保存之后，我们在自己的shell的脚本里这样取uid的参数值：
 
-```shell
+{% highlight bash %}
 #!/bin/bash
 
 echo "打包参数 channel is:"${uid}
 
-```
+{% endhighlight %}
 
 
 这里强调一件事，如果你的jenkins执行shell的时候，提示没有权限，可能是安装的方式不对，不妨参考网络上这篇文章：[mac下Jenkins 主目录导致的权限问题][i3]

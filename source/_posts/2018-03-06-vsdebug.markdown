@@ -29,9 +29,9 @@ vs code 还有一个好处是，很多快捷键跟 windows 上的 visual studio�
 
 如果安装成功的话，你在 terminal 上敲下面命令行：
 
-``` shell
+{% highlight bash %}
 dotnet --version
-```
+{% endhighlight %}
 
 运行结果出现下面的提示，证明你的 dotnet 安装成功了。
 
@@ -85,16 +85,16 @@ dotnet --version
 
 这里我们使用dotnet new 命令来生成一个空的 lib 工程，名字叫 helloworld.
 
-``` bash
+{% highlight bash %}
 dotnet new classlib -n "helloworld"
-```
+{% endhighlight %}
 
 然后编译生成 dll 。
 
-```bash
+{% highlight bash %}
 dotnet restore
 dotnet build
-```
+{% endhighlight %}
 
 运行结果如下所示：
 
@@ -109,37 +109,37 @@ dotnet build
 
 首先安装，可以去mono官网去下载最新版本， 下载地址：https://download.mono-project.com/archive/
 
-```bash
+{% highlight bash %}
 msbuild /vershion
-```
+{% endhighlight %}
 运行结果如下所示：
 
 ![](/img/in-post/post-vscode/vs12.jpg)
 
 cd到sln所在的目录，清除历史编译生成的dll,可以使用：
 
-```bash
+{% highlight bash %}
 MSBuild CFClient.sln /t:Clean
-```
+{% endhighlight %}
 
 上面CFClient.sln 是sln的文件名
 
 重新生成新的dll可以使用如下命令：
 
-```bash
+{% highlight bash %}
 
 MSBuild CFClient.sln /t:Rebuild /p:TargetFrameworkVersion=v4.0 /p:Configuration=Debug /p:PostBuildEvent="" /p:TargetFrameworkProfile="Client"
 
-```
+{% endhighlight %}
 
 ![](/img/in-post/post-vscode/vs13.jpg)
 
 更多的使用可以使用命令查看：
 
-```bash
+{% highlight bash %}
 MSBuild /?
 
-```
+{% endhighlight %}
 
 ![](/img/in-post/post-vscode/vs14.jpg)
 
@@ -160,7 +160,7 @@ Unity Shanderlab 代码高亮提示
 配置代码自动换行和保存格式化可以通过点击 Code->Prefences->Settings,
 在右侧栏配置相关的选项，左边是所有可配置选项的说明，下面是我的配置选项。
 
-```
+{% highlight json %}
 {
     "workbench.activityBar.visible": false,
     "window.zoomLevel": -1,
@@ -170,7 +170,7 @@ Unity Shanderlab 代码高亮提示
     "csharpfixformat.style.braces.onSameLine": false,
     "csharp.format.enable": true
 }
-```
+{% endhighlight %}
 
 正所谓好刀不误砍柴功，有了更加强大的编辑器，我们写代码的效率也会相应的提升。
 

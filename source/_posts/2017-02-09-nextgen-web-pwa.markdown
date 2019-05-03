@@ -65,7 +65,7 @@ Web App Manifest，即通过一个清单文件向浏览器暴露 web 应用的�
 
 但是很快，随着越来越多的私有平台通过 `<meta>`/`<link>` 标签来为 web 应用添加「私货」，`<head>` 很快就被塞满了：
 
-```html
+{% highlight json %}
 <!-- Add to homescreen for Safari on iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -90,13 +90,13 @@ Web App Manifest，即通过一个清单文件向浏览器暴露 web 应用的�
 
 <!-- Generic Icon -->
 <link rel="shortcut icon" href="images/touch/touch-icon-57x57.png">
-```
+{% endhighlight %}
 
 显然，这种做法并不优雅：分散又重复的元数据定义多余且难以维持同步，与 html 耦合在一起也加重了浏览器检查元数据未来变动的成本。与此同时，社区里开始出现使用 manifest 文件以中心化地描述元数据的方案，比如 [Chrome Extension、 Chrome Hosted Web Apps (2010)][12] 与 [Firefox OS App Manifest (2011)][13] 使用 JSON；[Cordova][19] 与 [Windows Pinned Site][20] 使用 XML；
 
 2013 年，W3C WebApps 工作组开始对基于 JSON 的 Manifest 进行标准化，于同年年底发布[第一份公开 Working Draft][14]，并逐渐演化成为今天的 W3C Web App Manifest：
 
-```json
+{% highlight javascript %}
 {
   "short_name": "Manifest Sample",
   "name": "Web Application Manifest Sample",
@@ -112,11 +112,13 @@ Web App Manifest，即通过一个清单文件向浏览器暴露 web 应用的�
   "theme_color": "#000",
   "background_color": "#fff",
 }
-```
-```html
+{% endhighlight %}
+
+
+{% highlight json %}
 <!-- document -->
 <link rel="manifest" href="/manifest.json">
-```
+{% endhighlight %}
 
 诸如 `name`、`icons`、`display` 都是我们比较熟悉的，而大部分新增的成员则为 web 应用带来了一系列以前 web 应用想做却做不到（或在之前只能靠 hack）的新特性：
 
@@ -137,13 +139,15 @@ Web App Manifest，即通过一个清单文件向浏览器暴露 web 应用的�
 
 在 Gears API 中，我们通过向 LocalServer 模块提交一个缓存文件清单来实现离线支持：
 
-```javascript
+{% highlight cpp %}
 // Somewhere in your javascript
 var localServer = google.gears.factory.create("bata.localserver");
 var store = localServer.createManagedStore(STORE_NAME);
 store.manifestUrl = "manifest.json"
-```
-```json
+{% endhighlight %}
+
+
+{% highlight javascript %}
 // manifest.json - 假设 JSON 有注释
 {
 　　"betaManifestVersion":　1,
@@ -153,20 +157,21 @@ store.manifestUrl = "manifest.json"
 　　　　{　"url": 　"main.js"}
 　　]
 }
-```
+{% endhighlight %}
 
 是不是感到很熟悉？好像 [HTML5 规范][spec11]中的 Application Cache 也是类似的东西？
 
-```html
+{% highlight json %}
 <html manifest="cache.appcache">
-```
-```
+{% endhighlight %}
+
+{% highlight html %}
 CACHE MANIFEST
 
 CACHE:
 index.html
 main.js
-```
+{% endhighlight %}
 
 是的，Gears 的 LocalServer 就是后来大家所熟知的 App Cache 的前身，大约从 [2008][spec10] 年开始 W3C 就开始尝试将 Gears 进行标准化了；除了 LocalServer，Gears 中用于提供并行计算能力的 WorkerPool 模块与用于提供本地数据库与 SQL 支持的 Database 模块也分别是日后 Web Worker 与 Web SQL Database（后被废弃）的前身。
 
@@ -182,12 +187,12 @@ HTML5 App Cache 作为第二波「让 web 应用离线执行」的尝试，确�
 
 比如说，我们可以给网页 `foo.html` 注册这么一个 Service Worker，它将劫持由 `foo.html` 发起的一切 HTTP 请求，并统统返回未设置 `Content-Type` 的 `Hello World!`：
 
-```javascript
+{% highlight cpp %}
 // sw.js
 self.onfetch = (e) => {
   e.respondWith(new Response('Hello World!'))
 }
-```
+{% endhighlight %}
 
 Service Worker 第一次发布于 2014 年的 Google IO 上，目前已处于 W3C 工作草案的状态。其设计吸取了 Application Cache 的失败经验，作为 web 应用的开发者的你有着完全的控制能力；同时，它还借鉴了 Chrome 多年来在 Chrome Extension 上的设计经验（Chrome Background Pages 与 Chrome Event Pages），采用了基于「事件驱动」的唤醒机制，以大幅节省后台计算的能耗。比如上面的 `fetch` 其实就是会唤醒 Service Worker 的事件之一。
 
@@ -196,7 +201,7 @@ Service Worker 第一次发布于 2014 年的 Google IO 上，目前已处于 W3
 
 除了类似 `fetch` 这样的功能事件外，Service Worker 还提供了一组生命周期事件，包括安装、激活等等。比如，在 Service Worker 的「安装」事件中，我们可以把 web 应用所需要的资源统统预先下载并缓存到 Cache Storage 中去：
 
-```javascript
+{% highlight cpp %}
 // sw.js
 self.oninstall = (e) => {
   e.waitUntil(
@@ -208,11 +213,11 @@ self.oninstall = (e) => {
       ]))
   )
 });
-```
+{% endhighlight %}
 
 这样，当用户离线，网络无法访问时，我们就可以从缓存中启动我们的 web 应用：
 
-```javascript
+{% highlight cpp %}
 //sw.js
 self.onfetch = (e) => {
   const fetched = fetch(e.request)
@@ -222,7 +227,7 @@ self.onfetch = (e) => {
     fetched.catch(_ => cached)
   )
 }
-```
+{% endhighlight %}
 
 可以看出，Service Worker 被设计为一个相对底层（low-level）、高度可编程、子概念众多，也因此异常灵活且强大的 API，故本文只能展示它的冰山一角。出于安全考虑，注册 Service Worker 要求你的 web 应用部署于 HTTPS 协议下，以免利用 Service Worker 的中间人攻击。笔者在今年 GDG 北京的 DevFest 上分享了 [Service Worker 101][b0]，涵盖了 Service Worker 譬如「网络优先」、「缓存优先」、「网络与缓存比赛」这些更复杂的缓存策略、学习资料、以及[示例代码][29]，可以供大家参考。
 
@@ -246,7 +251,7 @@ PWA 推送通知中的「推送」与「通知」，其实使用的是两个不�
 
 在 PWA 中，我们利用 Service Worker 的后台计算能力结合 Push API 对推送事件进行响应，并通过 Notification API 实现通知的发出与处理：
 
-```javascript
+{% highlight cpp %}
 // sw.js
 self.addEventListener('push', event => {
   event.waitUntil(
@@ -264,7 +269,7 @@ self.addEventListener('notificationclose', event => {
   // Do something with the event  
 });
 
-```
+{% endhighlight %}
 
 对于 Push Notification，笔者的几次分享中一直都提的稍微少一些，一是因为 Push API 还处于 Editor Draft 的状态，二是目前浏览器与推送服务间的协议支持还不够成熟：Chrome（与其它基于 Blink 的浏览器）在 Chromium 52 之前只支持基于 Google 私有的 GCM/FCM 服务进行通知推送。不过好消息是，继 Firefox 44 之后，Chrome 52 与 Opera 39 也紧追其后实现了正在由 IETF 进行标准化的 [Web 推送协议（Web Push Protocol）][spec5]。
 

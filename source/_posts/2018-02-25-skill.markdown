@@ -43,7 +43,7 @@ tags:
 
 伤害范围一共分为两种Sector Damage勾选上表示扇形（配置360度就是圆形了）和方形
 扇形和方形的范围计算参照：
-``` csharp
+{% highlight csharp %}
 if (CurrentSkillData.Result[nHotID].Sector_Type)  //扇形
 {
     float m_Theta = 0.01f;
@@ -90,7 +90,7 @@ else  //方形
     Gizmos.DrawLine(br, fr);
 }
 
-```
+{% endhighlight %}
 
 ### Hit 配置技能的打击效果
 可以在hit Dummy 设置一个被打击的对象
@@ -117,7 +117,7 @@ type是被打击的效果
 *图片来源: [huailiang.github.io][i3]*
 
 对应的代码实现
-``` csharp
+{% highlight csharp %}
 protected override void OnInnerGUI()
 {
     for (int i = 0; i < Hoster.SkillData.Fx.Count; i++)
@@ -195,10 +195,10 @@ protected override void OnInnerGUI()
     }
 }
 
-```
+{% endhighlight %}
 
 运行时有一个timer，在指定帧触发回调，不同的逻辑到通过虚函数分发到不同的脚本。
-``` csharp
+{% highlight csharp %}
 void LateUpdate()
 {
     if (_attribute != null) _attribute.UpdateRotation();
@@ -219,7 +219,7 @@ void LateUpdate()
         trigger = null;
     }
 }
-```
+{% endhighlight %}
 
 
 [i1]: http://appleinsider.com/articles/08/10/03/latest_iphone_software_supports_full_screen_web_apps.html

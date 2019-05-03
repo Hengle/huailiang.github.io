@@ -25,15 +25,15 @@ Android平台下，c++代码生成.so库，我们这里主要是使用ndk的方�
 
 你可以到[官网下载NDK][i1], 下载完成之后需要设置一些环境变量：
 
-``` shell
+{% highlight bash %}
 export NDK_HOME=/home/echosea/Desktop/Android/android-ndk-r12
 export PATH=$NDK_HOME:$PATH
-```
+{% endhighlight %}
 
 创建Application.mk和Android.mk文件
 Application.mk文件，可以用来配置编译平台相关内容，它用来指定我们需要基于哪些CPU架构的.so文件，当然你可以配置多个平台：
 
-``` shell
+{% highlight bash %}
 APP_ABI          := armeabi armeabi-v7a x86
 APP_OPTIM         := release
 APP_PLATFORM      := android-8
@@ -46,10 +46,10 @@ APP_STL       := gnustl_static
 APP_CPPFLAGS  := -std=gnu++11 -pthread -frtti -fexceptions
 #-NDEBUG -mfpu=neon -fomit-frame-pointer
  -DNDEBUG  
-```
+{% endhighlight %}
 
 配置Android.mk文件，用来指定源码编译的配置信息，例如工作目录，编译模块的名称，参与编译的文件等，大致内容如下：
-``` shell
+{% highlight bash %}
 # Copyright (C)
 # Author: huailiang.peng
 # Date:	  2017-11-25
@@ -112,7 +112,7 @@ LOCAL_LDLIBS += -llog
 
 include $(BUILD_SHARED_LIBRARY)
 
-```
+{% endhighlight %}
 
 其中
 LOCAL_MODULE表示模块名称
@@ -126,10 +126,10 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 
 不过 build 之前，最好 clean一下，保证环境的纯净。
 
-``` shell
+{% highlight bash %}
 $ ndk-build clean
 $ ndk-build
-```
+{% endhighlight %}
 
 ### Mac下生成Bundle
 
@@ -155,7 +155,7 @@ $ ndk-build
 
 下面借助一段Shell脚本就可以导出和合并生成.a 并且 copy 到 Plugins目录下：
 
-```shell
+{% highlight bash %}
 #
 #	i386｜x86_64 是Mac处理器的指令集，i386是针对intel通用微处理器32架构的。x86_64是针对x86架构的64位处理器 这两个是ios模拟器使用
 #	standard architectures (including 64-bit)(armv7,arm64)
@@ -205,7 +205,7 @@ mv -f libGameCore.a ${path}/Assets/Plugins/iOS/libGameCore.a
 
 echo "done, bye!"
 
-```
+{% endhighlight %}
 
 macos 和 ios 的库都是在xcode 中手动生成的，不符合我们自动化的流程，我们生成版本时，如果中间每次都是手动操作的话，也很容易出错。那有没有一套自动化的流程，既省时，又能保证版本质量呢，答案是肯定的。
 
@@ -219,7 +219,7 @@ MAC默认是没有cmake指令的。要测试你的MAC是否已经装过cmake，�
 
 CMakeLists.txt：
 
-``` c
+{% highlight cpp %}
 cmake_minimum_required(VERSION 3.0.2)
 #project(GameCore)
 
@@ -327,16 +327,16 @@ set_target_properties(GameCore PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUT_PATH}
         )
 
-```
+{% endhighlight %}
 
 
 生成 ios 静态库，还需要配置一个 toolchain文件,你可以在这里[点击下载][i2]。然后使用如下命令，生成 ios 工程：
 
-``` shell
+{% highlight bash %}
 #generate ios project
 cmake -DCMAKE_TOOLCHAIN_FILE=toolchains/ios.toolchain.cmake -DIOS_PLATFORM=iPhoneOS -DCMAKE_OSX_ARCHITECTURES='armv7 armv7s arm64' -GXcode
 
-```
+{% endhighlight %}
 
 好了，到这里就结束了，拿到 xcode 工程，之后使用xcodebuild编译出库，所有的流程都是Shell 在后台帮我们完成了，我们需要做的就是喝咖啡等待最终的结果了。
 

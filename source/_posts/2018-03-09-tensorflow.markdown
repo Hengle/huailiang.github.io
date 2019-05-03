@@ -86,7 +86,7 @@ tags:
 
 就不过多解释了，代码贴出来了：
 
-```py
+{% highlight python %}
 # -*- coding:utf-8 -*-
 import tensorflow as tf
 import numpy as np
@@ -133,7 +133,7 @@ with tf.Session() as sess:
    curr_W,curr_b,currr_loss = sess.run([W,b,loss],feed_dict)
    print("W: %s,b: %s,loss: %s"%(curr_W,curr_b,currr_loss))
    print(sess.run([W,b]))
-```
+{% endhighlight %}
 
 
 经过1000次训练，我们可以从下图的运行结果可以发现 loss 越来越小了，说明我们的模型值越来越精准。准确率接近100%
@@ -150,7 +150,7 @@ with tf.Session() as sess:
 
 
 
-```
+{% highlight bash %}
 运行结果：
 real vale: [-0.9999999   0.10000014  1.2000003   2.3000002   3.4         4.61      ]
 curr loss: 121.132095337
@@ -167,7 +167,7 @@ train step(900) loss:0.018509895
 W: [1.97131],b: [-0.93244034],loss: 0.018509895
 [array([1.97131], dtype=float32), array([-0.93244034], dtype=float32)]
 
-```
+{% endhighlight %}
 
 
 从 tensorboard 上来看，loss 矫正的速度还是挺快的，大概在第200步之后，模型就稳定了。

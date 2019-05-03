@@ -15,7 +15,7 @@ tags:
 
 matplotlib是python上的一个2D绘图库，它可以在夸平台上边出很多高质量的图像。综旨就是让简单的事变得更简单，让复杂的事变得可能。我们可以用matplotlib生成 绘图、直方图、功率谱、柱状图、误差图、散点图等 。详细了解matplotlib,请点击[这里][i2]
 
-```py
+{% highlight python %}
 import matplotlib.pyplot as plt
 import tensorflow as tf   
 import numpy as np
@@ -35,7 +35,7 @@ with tf.Session() as sess:
     encode_img=tf.image.encode_jpeg(img_data)
     with tf.gfile.GFile("tfrecord/img_data.jpg","wb") as f:
     	f.write(encode_img.eval())
-```
+{% endhighlight %}
 
   ![](/img/in-post/post-tf/tf30.jpg)
 
@@ -48,20 +48,20 @@ with tf.Session() as sess:
 -  ResizeMethod.AREA ：面积插值
 
 
-  ```py
+{% highlight python %}
   image_float = tf.image.convert_image_dtype(img_data, tf.float32)
   resized = tf.image.resize_images(image_float, [300, 300], method=0)
   plt.imshow(resized.eval())
   plt.show()
 
-  ```
+{% endhighlight %}
 
   ![](/img/in-post/post-tf/tf31.jpg)
 
 
 
 ### 裁剪
-``` py
+{% highlight python %}
 croped = tf.image.resize_image_with_crop_or_pad(img_data, 100, 100)
 padded = tf.image.resize_image_with_crop_or_pad(img_data, 200, 200)
 plt.imshow(croped.eval())
@@ -69,23 +69,23 @@ plt.show()
 plt.imshow(padded.eval())
 plt.show()
 
-```
+{% endhighlight %}
 
   ![](/img/in-post/post-tf/tf32.jpg)
 
 按照一定的比例裁剪：
-``` py
+{% highlight python %}
 # 截取中间50%的图片
 central_cropped = tf.image.central_crop(img_data, 0.4)
 plt.imshow(central_cropped.eval())
 plt.show()
 
-```
+{% endhighlight %}
   ![](/img/in-post/post-tf/tf33.jpg)
 
 ### 翻转
 
-``` py
+{% highlight python %}
 # 上下翻转
   flipped1 = tf.image.flip_up_down(img_data)
   # 左右翻转
@@ -95,12 +95,12 @@ plt.show()
   # transposed = tf.image.transpose_image(img_data)
   plt.imshow(flipped1.eval())
   plt.show()
-```
+{% endhighlight %}
   ![](/img/in-post/post-tf/tf34.jpg)
 
 ### 修改亮度、对比度
 
-``` py
+{% highlight python %}
 # 将图片的亮度-0.5。
 adjusted = tf.image.adjust_brightness(img_data, -0.5)
 
@@ -124,11 +124,11 @@ adjusted = tf.image.adjust_brightness(img_data, -0.5)
 plt.imshow(adjusted.eval())
 plt.show()
 
-```
+{% endhighlight %}
 
 
 ### 修改色相、
-``` py
+{% highlight python %}
 image_float = tf.image.convert_image_dtype(img_data, tf.float32)
 
 adjusted = tf.image.adjust_hue(image_float, 0.1)
@@ -154,12 +154,12 @@ adjusted = tf.image.adjust_hue(image_float, 0.1)
 plt.imshow(adjusted.eval())
 plt.show()
 
-```
+{% endhighlight %}
 
   ![](/img/in-post/post-tf/tf35.jpg)
 
 ### 图片做标记
-``` py
+{% highlight python %}
 boxes = tf.constant([[[0.05, 0.05, 0.9, 0.7], [0.35, 0.47, 0.5, 0.56]]])
 
 # sample_distorted_bounding_box要求输入图片必须是实数类型。
@@ -182,7 +182,7 @@ print(bbox_for_draw.eval())
 plt.imshow(image_with_box[0].eval())
 plt.show()
 
-```
+{% endhighlight %}
 
   ![](/img/in-post/post-tf/tf36.jpg)
 

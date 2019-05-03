@@ -31,7 +31,7 @@ Unity 大地形研究
 
 二进制记录的内容代码如下：
 
-``` c#
+{% highlight csharp %}
 FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
 BinaryWriter writer = new BinaryWriter(fs);
 
@@ -58,7 +58,7 @@ WriteParts(writer);
 writer.Flush();
 writer.Close();
 fs.Close();
-```
+{% endhighlight %}
 
 ### 分段加载地形和物件。
 
@@ -68,7 +68,7 @@ fs.Close();
 
 类似图片的展示的一样，走进走出collider 的 triger 就会触发地形的加载和卸载，实现过程类似于 Unreal引擎实现的Level Streaming Volume。为了避免玩家在collider边界频繁的走动从而出发频繁的内存的加载和卸载，可以在卸载加载的时候加一定的延时。
 
-``` csharp
+{% highlight csharp %}
 
 private void OnTriggerEnter(Collider other)
 {
@@ -81,7 +81,7 @@ private void OnTriggerExit(Collider other)
     TerrainLoadMgr.sington.UnloadItem(x, y);
 }
 
-```
+{% endhighlight %}
 
 ### 部件的加载
 

@@ -36,24 +36,24 @@ tags:
 iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报此错误，解决方法就是：
 将loslib.c中
 
-```c++
+{% highlight cpp %}
 int stat = system(cmd);
-```
+{% endhighlight %}
 
 改为:
 
-```c++
+{% highlight cpp %}
 int stat = nftw(cmd, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
-```
+{% endhighlight %}
 引入头文件
 
-```c++
+{% highlight cpp %}
 #include <ftw.h>
-```
+{% endhighlight %}
 
 添加方法:
 
-```c++
+{% highlight cpp %}
 int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW     *ftwbuf)
 {
     int rv = remove(fpath);
@@ -64,7 +64,7 @@ int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW
     return rv;
 }
 
-```
+{% endhighlight %}
 
 ftw.h当然这是ios平台才有的头文件，所以你使用同一份代码编译编译Android的时候又会发现此文件找不到，所以可以使用#ifdef IOS 这样的宏区分开来。
 
@@ -76,7 +76,7 @@ ftw.h当然这是ios平台才有的头文件，所以你使用同一份代码编
 
 
 于是将错误的地址进行如下修改：
-```c++
+{% highlight cpp %}
 #ifdef WIN32
 
        lcc = localeconv();   /* set structure containing local decimal point symbol */
@@ -85,7 +85,7 @@ ftw.h当然这是ios平台才有的头文件，所以你使用同一份代码编
 
        decimalpt = '.';
 #endif
-```
+{% endhighlight %}
 
 效果如下：
 
@@ -96,9 +96,9 @@ ftw.h当然这是ios平台才有的头文件，所以你使用同一份代码编
 
 把差异化的东西编译到link文件，然后cmakelist这样配置：
 
-```r
+{% highlight r %}
 configure_file ( ${LUA_SRC_PATH}/luaconf.h.in ${CMAKE_CURRENT_BINARY_DIR}/luaconf.h )
-```
+{% endhighlight %}
 
 
 ## Protobuf
@@ -124,44 +124,46 @@ Lua 导出bytecode
 
 lua使用bytecode 的好处主要有两点：
 
-```
+{% highlight c %}
  a. 二进制文件，为了加密
  b. 编译后的中间件，提升效率
-```
+{% endhighlight %}
 
 那么如何导出bytecode呢？
 
 *  luajit
 
-```
+{% highlight c %}
 a. 进入luajit\LuaJIT-2.0.1\src 目录
 
 b. uajit -b 需要编译的lua文件路径 编译输出文件保存路径
 
-```
+{% endhighlight %}
 
-```shell
+
+
+{% highlight bash %}
 # luajit -b d:\src.lua d:\des.lua
 luajit -b d:\src.lua d:\des.lua
-```
+{% endhighlight %}
 
 * luac (mac下)
 
 
 运行下面命令
 
-``` shell
+{% highlight bash %}
 curl -R -O http://www.lua.org/ftp/lua-5.3.1.tar.gz 
 tar zxf lua-5.3.1.tar.gz 
 cd lua-5.3.1 
 make macosx test
-```
+{% endhighlight %}
 
  安装, 输入以下命令，会要求输入Password: 输入相应密码（你的密码），然后回车就自动安装了
 
-```shell
+{% highlight bash %}
 sudo make install
-```
+{% endhighlight %}
 
  配置编译器 sublime下执行Tools->Build System->New Build System 输入：
 
@@ -174,9 +176,9 @@ sudo make install
 
 
 luac生成bytecode, 使用如下命令：
-```shell
+{% highlight bash %}
 luac -o test.luac test.lua
-```
+{% endhighlight %}
 
 注意：
 

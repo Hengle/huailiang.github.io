@@ -36,7 +36,7 @@ tags:
 
 定义style featur的损失， 方法采用把generator生成的图片和原始输入的style image做差求均值。
 
-```python
+{% highlight python %}
 
 # Image loss.
 self.img_loss_photo = mse_criterion(
@@ -47,7 +47,7 @@ self.img_loss = self.img_loss_photo
 self.feature_loss_photo = abs_criterion(self.output_photo_features, self.input_photo_features)
 self.feature_loss = self.feature_loss_photo
 
-```
+{% endhighlight %}
 
 
 

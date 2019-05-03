@@ -45,9 +45,9 @@ Python的main.py需要做如下设置, from的模块选择的是dqn_environment�
 
 如果你安装了jupyter notebook的话，在terminal,cd到python所在的目录,，然后输入：
 
-```sh
+{% highlight bash %}
 jupyter notebook
-```
+{% endhighlight %}
 之后你可以在notebook里选择main.ipynb，进入主页：
 
 ![](/img/in-post/post-reinforcement/re14.jpg)
@@ -57,7 +57,7 @@ jupyter notebook
 
 eval_net用来训练模型，他的输入端是agent的状态值（state),输出的是得来的action对应的不同状态的数组，我们根据最大的q值选取相应的action
 
-```py
+{% highlight python %}
 def choose_action(self, observation):
     # print observation
     observation = observation[np.newaxis]
@@ -69,12 +69,12 @@ def choose_action(self, observation):
     else:
         action = np.random.randint(0, self.n_actions)
 
-```
+{% endhighlight %}
 
 更新memory，在learn的过程中，我们每步我们都会在q_eval的memory储存信息，只是五步同步一次到q_target。实际运行的时候，在替换q_target之后，小鸟的智能明显提高了。
 
 
-```py
+{% highlight python %}
 def _to_learn(self,j):
      state_ = j["state_"]
      state  = j["state"]
@@ -92,7 +92,7 @@ def _to_learn(self,j):
      if self.step > 20 and self.step % 5 == 0 :
          self.RL.learn()
      self.step=self.step+1
-```
+{% endhighlight %}
 
 而在q_target神经网络的输入端，就是之前跟q_learning一样，包含如下信息：
 
@@ -103,16 +103,16 @@ def _to_learn(self,j):
 
 我们使用的神经网络输出得到的实际值和预估值做平方差再求均值来计算损失函数。
 
-```
+{% highlight python %}
 说明：
 tf.squared_difference(x,y,name=None)
 
 功能：计算(x-y)(x-y)。
 输入：x为张量，可以为`half`,`float32`, `float64`类型。
-```
+{% endhighlight %}
 
 
-```py
+{% highlight python %}
 
 # 计算损失函数  
 with tf.variable_scope('loss'):
@@ -122,18 +122,18 @@ with tf.variable_scope('loss'):
 with tf.variable_scope('train'):
     self._train_op = tf.train.RMSPropOptimizer(self.lr).minimize(self.loss)
 
-```
+{% endhighlight %}
 
 我们可以在若干步之后，打印出loss的变化，实现如下：
 
-```py
+{% highlight python %}
 def plot_cost(self):
      import matplotlib.pyplot as plt
      plt.plot(np.arange(len(self.cost_his)), self.cost_his)
      plt.ylabel('Cost')
      plt.xlabel('training steps')
      plt.show()
-```
+{% endhighlight %}
 
 
 ### 结果
@@ -142,9 +142,9 @@ def plot_cost(self):
 
 在terminal中cd 到对应的python目录，如果游戏已经运行了一段时间了，你可以看到本地多了一个logs的目录，这个本地生成对应的tensorboard的日志文件。
 然后在终端界面输入：
-```sh
+{% highlight bash %}
 tensorboard --logdir=logs/
-```
+{% endhighlight %}
 
 接着在浏览器里输入http://localhost:6006/ 就可以看到我们设置的变量和一些值得变化了：
 

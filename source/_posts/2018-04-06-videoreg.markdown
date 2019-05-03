@@ -53,7 +53,7 @@ OpenCV的作用以前还是小看了，最近网易游戏在GDC发布的AirTest�
 
 而且我们专门写了一个python脚本用来删除那些图片数量较少的名人文件夹：
 
-```python
+{% highlight python %}
 import os
 import shutil
 
@@ -72,7 +72,7 @@ for item in alllist:
 		if cnt<18:
 			 shutil.rmtree(fpath)
 
-````
+{% endhighlight %}
 
 我们的视频素材是从youtube 随便找的一个关于Geoger Bush的演讲视频，貌似清晰度有点问题，不过也不影响我们训练的过程，谁关心呢。
 
@@ -91,7 +91,7 @@ for item in alllist:
 
 项目按文件路径加载图片集，并根据文件夹的名称划给相应的标签, 代码实现如下：
 
-``` py
+{% highlight python %}
 images = []
 labels = []
 def read_path(path_name):    
@@ -128,12 +128,12 @@ def read_path(path_name):
                 else:
                     labels.append(7)                            
                     
-```
+{% endhighlight %}
 
 
 关于CNN网络的搭建，我们借助Keras的代码一共使用了十七层神经网络，统计一共使用了4次卷积，4次激励层，2次池化层，最后还包含全连接层和Dropout层、分类层。对应的代码如下：
 
-```py
+{% highlight python %}
 def build_model(self, dataset, nb_classes=8):
         # 构建一个空的网络模型，它是一个线性堆叠模型，各神经网络层会被顺序添加，专业名称为序贯模型或线性堆叠模型
         self.model = Sequential()
@@ -164,7 +164,7 @@ def build_model(self, dataset, nb_classes=8):
         self.model.add(Dense(nb_classes))  # 17 Dense层
         self.model.add(Activation('softmax'))  # 18 分类层，输出最终结果
 
-```
+{% endhighlight %}
 
 
 我们使用 model.summary() 可以明了的看清神经网络的组织方式：
@@ -174,7 +174,7 @@ def build_model(self, dataset, nb_classes=8):
 
 Keras使用fit方法拟合模型，关于keras的API使用我们这里就不多介绍了，现在已经对应的中文网站出现了，学习起来应该是无压力的。对应到我们的代码就是:
 
-```py
+{% highlight python %}
 
     model.fit(dataset.train_images,
                            dataset.train_labels,
@@ -182,7 +182,7 @@ Keras使用fit方法拟合模型，关于keras的API使用我们这里就不多�
                            nb_epoch = nb_epoch,
                            validation_data = (dataset.valid_images, dataset.valid_labels),
                            shuffle = True)
-```
+{% endhighlight %}
 
 
 最终学习出来的准确率, 有点欠缺人意，哈哈，准确率只达到了96.4%，不过我想也够用了。
