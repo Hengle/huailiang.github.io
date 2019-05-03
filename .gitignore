@@ -1,6 +1,2 @@
-Gemfile*
+.DS_Store
 _site/
-Rakefile
-source/
-travisGemfile
-_config.yml
