@@ -17,6 +17,3 @@ Hey，我是彭怀亮，病毒种，进化程度不明，多出没于博客、�
 Email:peng_huailiang@qq.com
 
 
-
-
-[i1]: deploy: bundle exec rake publish
