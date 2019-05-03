@@ -16,6 +16,8 @@ tags:
 > 如今人工智能大行其道， 其中在图像、影音处理中方法颇多。 本文介绍一种游戏中图像风格转换的例子，训练采用Tensorflow-GAN的方式，运行时在Unity引擎使用compute shader实现了跟tensorflow中一样的前向传播的网络来生成转换后的风格。
 
 
+
+
 ## 训练集
 
 我们在python-tensorflow中实现了一种反向传播网络，我们使用Auto-Encoder替代GAN中Generator，用以生成风格化的图像， 而在Discrimator来鉴别图像。
