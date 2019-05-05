@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Batch 合并Drawcall绘制HUD</title>
-    <meta name="description" content="  hud是游戏中大量使用的元素，一个血条往往只需要很少的表现。在Unity中常用的UI大都是nGUI或者uGUI,因为图文层级交错或者Depth重叠，往往带来不少的Drawcall开销，从而导致游戏性能的开销。这里我们建议使用3D mesh的方式去绘制HUD，从而去优化性能。">
+  <title>Batch 合并Drawcall绘制HUD</title>
+  <meta name="description"
+    content="  hud是游戏中大量使用的元素，一个血条往往只需要很少的表现。在Unity中常用的UI大都是nGUI或者uGUI,因为图文层级交错或者Depth重叠，往往带来不少的Drawcall开销，从而导致游戏性能的开销。这里我们建议使用3D mesh的方式去绘制HUD，从而去优化性能。">
 
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="https://huailiang.github.io/blog/2018/hud/">
-    <link rel="alternate" type="application/rss+xml" title="Huailiang Blog" href="https://huailiang.github.io/feed.xml" />
-  </head>
-
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://huailiang.github.io/blog/2018/hud/">
+  <link rel="alternate" type="application/rss+xml" title="Huailiang Blog"
+    href="https://huailiang.github.io/feed.xml" />
+</head>
   <body>
     <main>
       <header class="site-header">
