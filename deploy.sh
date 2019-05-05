@@ -18,6 +18,12 @@ echo "重新生成_site"
 
 bundle exec jekyll b
 
+if [ $? -ne 0 ]; then
+	echo "sorry, build _site failure, job terminal!"
+    exit 1
+fi
+
+
 cd ../
 
 tempdir=`mktemp -d temp.XXXXXX`
@@ -25,8 +31,6 @@ tempdir=`mktemp -d temp.XXXXXX`
 cp -R $name $tempdir
 
 cd  ${tempdir}/${name}
-
-pwd
 
 mv _site ../
 
