@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>手机游戏画面风格转换</title>
+  <title>手机游戏风格转换</title>
   <meta name="description"
     content="  如今人工智能大行其道， 其中在图像、影音处理中方法颇多。 本文介绍一种游戏中图像风格转换的例子，训练采用Tensorflow-GAN的方式，运行时在Unity引擎使用compute shader实现了跟tensorflow中一样的前向传播的网络来生成转换后的风格。">
 
@@ -50,7 +50,7 @@
 
   <div class="card">
     <header class="post-header">
-      <h1 class="post-title">手机游戏画面风格转换</h1>
+      <h1 class="post-title">手机游戏风格转换</h1>
       <p class="post-meta">May 2, 2019 •
         Huailiang</p>
     </header>
@@ -72,9 +72,9 @@
 
 <p>在训练Genenrator评估其损失函数的时候， generator的图片丢给Discriminator，尽量和真实的风格图片尽量接近，因此我们使其输出的值也要越大。</p>
 
-<p>这里定义content image的内容的损失，方法采用的如<a href="https://arxiv.org/abs/1807.10201">paper</a> 提到maxpooling方式。</p>
+<p>这里定义content image的内容的损失，方法采用的如<a href="https://arxiv.org/abs/1807.10201">paper</a> 均值池化提取特征后， 比较方差的差异。</p>
 
-<p>定义style featur的损失， 方法采用把generator生成的图片和原始输入的style image做差求均值。</p>
+<p>定义style featur的损失， 方法采用把generator生成的图片和原始输入的style image分别带入encoder做绝对值的差。</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Image loss.</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">img_loss_photo</span> <span class="o">=</span> <span class="n">mse_criterion</span><span class="p">(</span>
@@ -85,6 +85,10 @@
 <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss_photo</span> <span class="o">=</span> <span class="n">abs_criterion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_photo_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_photo_features</span><span class="p">)</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss_photo</span></code></pre></div>
 
+<p>Tensorboard 里观察loss的变化：</p>
+
+<p><img src="/img/in-post/post-tf/loss.jpg" alt="" /></p>
+
 <h2 id="运行时">运行时</h2>
 
 <p>在unity中， 我们使用compute shader实现了一套跟TensorFlow中的相同的前向传播网络。 这里只是实现了Encoder和Decoder， 并没有实现Discriminator, 因为只有训练的时候用到了Discriminator.</p>
@@ -93,15 +97,17 @@
 
 <p>由于受限于compute shader的语法， 我们在定义thread group时候， thread的大小不能超过1024，thread-z不能超过64， group的组成是vec3的格式， 而且需要是32或者64的倍数， 因此我们在设计网络的时候，每一个的layer尽量去靠近这些特性， 致使GPU发挥出最大的性能。 （CS5 group thread个数最多是1024， 而CS4最多支持到512，Apple的平台最多支持到CS4，这里需要注意下）。</p>
 
-<p>网络的参数规模如下图所示：</p>
+<p>compute shader里网络的参数规模如下图所示：</p>
 
-<p>Encoder:</p>
+<center class="half">
+    <img src="/img/in-post/post-tf/style3.jpg" height="200" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/in-post/post-tf/style4.jpg" height="200" />
+</center>
 
-<p><img src="/img/in-post/post-tf/style3.jpg" alt="encoder" /></p>
+<p>简化过后的，对应的tensorboard里的版本：</p>
 
-<p>Decoder:</p>
-
-<p><img src="/img/in-post/post-tf/style4.jpg" alt="decoder" /></p>
+<center class="half">
+    <img src="/img/in-post/post-tf/encoder.jpg" height="480" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/in-post/post-tf/decoder.jpg" height="480" />
+</center>
 
 <p>在设计的CNN网络层中， 卷积核大都是3x3的， 所以这里我们定义了一个Matrix3x3.cs在csharp中， 这样给StructureBuffer传递数据的时候，一次性传递过去。</p>
 
