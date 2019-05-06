@@ -9,7 +9,7 @@
   <meta name="description"
     content="  如今人工智能大行其道， 其中在图像、影音处理中方法颇多。 本文介绍一种游戏中图像风格转换的例子，训练采用Tensorflow-GAN的方式，运行时在Unity引擎使用compute shader实现了跟tensorflow中一样的前向传播的网络来生成转换后的风格。">
 
-  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="shortcut icon" href="/img/favicon.ico">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="https://huailiang.github.io/blog/2019/nnstyle/">
   <link rel="alternate" type="application/rss+xml" title="Huailiang Blog"
@@ -129,7 +129,9 @@
 
 <p>为了看出神经网络中的参数整体的相关性， 这里通过工具导出Auto-Encoder每一层里的数据（.bytes 二进制文件）， 然后在unity导入数据。通过Unity-Editor工具，我们对数据HXW前两维的数据生成一张Texture上， 在生成数据之前，我们通过激励函数sigmod, 使全部数据normalized到取件[0,1]之间。 之后，在通过一个slider表示第三维度的数据，通过拖拽slider的进度， 就可以看到不同depth的数据整体相关情况了。</p>
 
-<p><img src="/img/in-post/post-tf/style2.jpg" alt="tool" /></p>
+<center class="half">
+    <img src="/img/in-post/post-tf/style2.jpg" height="480" />
+</center>
 
 <p>我们通过一张图片看到， ganerator前期encoder前期更多的学到的是形状信息， 后期decoder学到的更多的是风格相关的信息。</p>
 

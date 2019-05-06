@@ -5,8 +5,8 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 06 May 2019 10:40:19 +0800</pubDate>
-    <lastBuildDate>Mon, 06 May 2019 10:40:19 +0800</lastBuildDate>
+    <pubDate>Mon, 06 May 2019 11:15:48 +0800</pubDate>
+    <lastBuildDate>Mon, 06 May 2019 11:15:48 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -84,7 +84,9 @@
 
 &lt;p&gt;为了看出神经网络中的参数整体的相关性， 这里通过工具导出Auto-Encoder每一层里的数据（.bytes 二进制文件）， 然后在unity导入数据。通过Unity-Editor工具，我们对数据HXW前两维的数据生成一张Texture上， 在生成数据之前，我们通过激励函数sigmod, 使全部数据normalized到取件[0,1]之间。 之后，在通过一个slider表示第三维度的数据，通过拖拽slider的进度， 就可以看到不同depth的数据整体相关情况了。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/post-tf/style2.jpg&quot; alt=&quot;tool&quot; /&gt;&lt;/p&gt;
+&lt;center class=&quot;half&quot;&gt;
+    &lt;img src=&quot;/img/in-post/post-tf/style2.jpg&quot; height=&quot;480&quot; /&gt;
+&lt;/center&gt;
 
 &lt;p&gt;我们通过一张图片看到， ganerator前期encoder前期更多的学到的是形状信息， 后期decoder学到的更多的是风格相关的信息。&lt;/p&gt;
 
