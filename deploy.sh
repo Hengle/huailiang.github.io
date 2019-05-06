@@ -46,7 +46,7 @@ git checkout .
 
 git checkout master
 
-git pull
+git pull -q
 
 git status -s
 
@@ -82,6 +82,8 @@ git add .
 git commit -m "deploy "`date +"%Y-%m-%d"`
 
 git push
+
+open .
 
 cd ../../
 
