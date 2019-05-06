@@ -81,9 +81,9 @@ git checkout ppo</code></pre></div>
 <p><img src="/img/in-post/post-reinforcement/re21.jpg" alt="" /></p>
 
 <p>损失函数即：<b>loss= -log(prob)*vt</b><br />
-今天我们的目的不是推导此公式是怎么得来的，而是利用此公式，来实现机器学习的目的。若你想详细了解算法详细的推导过程，可以参考<a href="https://blog.csdn.net/qq_30615903/article/details/80747380">这篇文章</a>。</p>
+今天我们的目的不是推导�此公式是怎么得来的，而是利用此公式，来实现机器学习的目的。若你想详细了解算法详细的推导过程，可以参考<a href="https://blog.csdn.net/qq_30615903/article/details/80747380">这篇文章</a>。</p>
 
-<p>通过我们公式可以看到，当奖励（vt）越大的时候，在loss不断减少的情况下，prob发生的几率会越大。反之，奖励（vt)越小的情况，随着梯度，prob发生的机会也越小。</p>
+<p>通过我们公式可以看到，当奖励（vt）越大的时候，在loss不断减少的情况下，prob发生的几率会越大。反之，奖励（vt)越小的情况，随着梯度�，prob发生的机会也越小。</p>
 
 <ul>
   <li><b>PPO</b></li>
@@ -98,7 +98,7 @@ git checkout ppo</code></pre></div>
       <p>Your user agent does not support the HTML5 Video element.</p>
 </video>
 
-<p>官方的paper对ppo有两种实现方式。分别是 KL penalty和Clip的方式。</p>
+<p>官方的paper对ppo�有两种实现方式。分别是 KL penalty和Clip�的方式。</p>
 
 <p><img src="/img/in-post/post-reinforcement/re22.jpg" alt="" /></p>
 
@@ -106,7 +106,7 @@ git checkout ppo</code></pre></div>
 
 <h2 id="purpose">purpose</h2>
 
-<p>此次我们的目的，还是通过机器学习，使游戏中的小鸟宝宝学会飞翔。我们依旧采用unity来表现，而使用python来拟合神经网络，训练数据。二者之间通过socket来实现数据通信。<br />
+<p>�此次我们的目的，还是通过机器学习，�使�游戏中的小鸟宝宝学会飞翔。�我们依旧采用�unity来�表现，而使用python来拟合神经网络，�训练数据。二者之间通过socket来实现数据通信。<br />
 最终实现的效果如下图所示：</p>
 
 <p><img src="/img/in-post/post-reinforcement/re10.gif" alt="" /></p>
@@ -119,7 +119,7 @@ git checkout ppo</code></pre></div>
 
 <p>根据github提供的项目，切到PolicyGradient分支，在根目录找到PolicyGradients文件夹,所有的实现都在里面了。</p>
 
-<p>我们使用两个全连接层（fc1,fc2）设计我们的神经网络，</p>
+<p>我们使用两个全连接层（fc1,fc2）设计我们的�神经网络，</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">&#39;inputs&#39;</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tf_obs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_features</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;observations&quot;</span><span class="p">)</span>
@@ -165,13 +165,13 @@ git checkout ppo</code></pre></div>
   <li><b>PPO</b></li>
 </ul>
 
-<p>根据github提供的项目，切到ppo分支，在根目录找到ppo文件夹,所有的实现都在里面了。这里采用的是官方paper介绍的第二种算法（clip）。看到网络设计上ppo的实现方式很多，有基于连续的，有基于离散的，还有采用多线程来更新网络的参数。</p>
+<p>根据github提供的项目，切到ppo分支，在根目录找到ppo文件夹,所有的实现都在里面了。这里采用的是官方paper介绍的第二种算法（clip）。看到网络设计上ppo的实现方式很多，有基于连续的，有基于离散的�，还有采用多线程来更新网络的�参数。</p>
 
-<p>鉴于我们的设计目的是使小鸟学会飞翔，这里我们的实现方式采用的是离散的方式实现ppo。因为我们小鸟采取的动作就两种（fly or pad）。</p>
+<p>鉴于我们的设计目的是使小鸟学会飞翔，这里我们的实现方式采用的是离散的方式实现ppo。因为我们小鸟采取的动作就两种（fly or pad）。�</p>
 
-<p>根据OpenAI官方的Paper，我们设计我们的网络结构。 由于PPO是基于A3C，又是利用两个网络的接近程度来更新网络中的参数，所以这里至少有三个神经网络，即critic, actor1(pi), actor2(oldpi)。</p>
+<p>根据OpenAI官方的�Paper，我们设计我们的网络结构。 由于PPO是基于A3C，又是利用两个网络的接近程度来更新网络中的参数，所以这里至少有三个神经网络，即critic, actor1(pi), actor2(oldpi)。</p>
 
-<p>我们实现如下：</p>
+<p>我们实现�如下：</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#critic</span>
 <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s">&#39;critic&#39;</span><span class="p">):</span>
@@ -194,7 +194,7 @@ git checkout ppo</code></pre></div>
     <span class="n">params</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">GraphKeys</span><span class="o">.</span><span class="n">GLOBAL_VARIABLES</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">a_prob</span><span class="p">,</span> <span class="n">params</span></code></pre></div>
 
-<p>我们根据pi和old pi之间测差异决定Loss：</p>
+<p>我们根据pi和old pi之间测差异�决定Loss：</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">a_indices</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tfa</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tfa</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pi_prob</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather_nd</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">a_indices</span><span class="p">)</span>   <span class="c"># shape=(None, )</span>
