@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "手机游戏画面风格转换"
+title:      "手机游戏风格转换"
 date:       2019-05-02 03:00:00
 author:     "Huailiang"
 tags:
