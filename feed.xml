@@ -5,14 +5,23 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 06 May 2019 15:27:54 +0800</pubDate>
-    <lastBuildDate>Mon, 06 May 2019 15:27:54 +0800</lastBuildDate>
+    <pubDate>Tue, 07 May 2019 11:27:51 +0800</pubDate>
+    <lastBuildDate>Tue, 07 May 2019 11:27:51 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>手机游戏风格转换</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;如今人工智能大行其道， 其中在图像、影音处理中方法颇多。 本文介绍一种游戏中图像风格转换的例子，训练采用Tensorflow-GAN的方式，运行时在Unity引擎使用compute shader实现了跟tensorflow中一样的前向传播的网络来生成转换后的风格。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这里我们使用GAN的方式训练一套风格转换的网络模型， 并在Unity中使用Compute Shader实现了一套前向传播的网络，对应Tensorflow环境中的Generator。 对应到github地址点击&lt;a href=&quot;https://github.com/huailiang/nnStyle&quot;&gt;这里&lt;/a&gt;, 实现的效果如下图, 转换风格的图像我们通过一张RT渲染到右下角：&lt;/p&gt;
+
+&lt;center class=&quot;half&quot;&gt;
+    &lt;img src=&quot;/img/in-post/post-tf/show.gif&quot; height=&quot;480&quot; /&gt;
+&lt;/center&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;训练集&quot;&gt;训练集&lt;/h2&gt;
@@ -87,8 +96,27 @@
 &lt;center class=&quot;half&quot;&gt;
     &lt;img src=&quot;/img/in-post/post-tf/style2.jpg&quot; height=&quot;480&quot; /&gt;
 &lt;/center&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;我们通过一张图片看到， ganerator前期encoder前期更多的学到的是形状信息， 后期decoder学到的更多的是风格相关的信息。&lt;/p&gt;
+
+&lt;h2 id=&quot;性能分析&quot;&gt;性能分析&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;b&gt;参数规模:&lt;/b&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在导出参数二进制文件到unity中的时候， 我们在python 控制台输出了参数规模大小约88M， 在过滤掉只在训练集里用到的参数， 导出的文件大概是9.7M。 在项目的fast分支， 我们删除了一些不重要的layer， 精简网络之后，参数规模占用23M， 过滤掉只在训练集里用到的参数， 导出的文件大小只有600K多一些了， 相比较于Tensorflow中Checkpoint文件中多达一个多G的参数规模，我们在运行时参数规模精简了1000多倍。（tensorflow checkpoint文件采用了protobuf格式的数据存储，我们这里纯是二进制， 因为protobuf虽然也是二进制， 但是会记一些tag之类的版本兼容相关的信息， 另外tensorflow还会存discriminator的信息，这块实现比较复杂，但只会出现在训练集里）。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;b&gt;帧率:&lt;/b&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当我们使用完整的pix2pixHD去实现的时候， PC上大概能跑3FPS, MAC上大概还不到1FPS。 之后在fast分支， 我们去掉了一些不重要的网络层，PC上大概能跑到29FPS，在文章的效果图里可以看到对应的效果。&lt;/p&gt;
+
+&lt;p&gt;在手机上， 我们对模糊效果的处理，往往为了性能会控制采样点的数量，也就是卷积核的大小。当采样点超过9个的话， 性能相对来说就会有一定的下降。 如果按此来比对基于深度神经网络方式实现的风格转换的做法时，那么这里采样的点岂止9个，即使fast上的实现方式，每个像素的采样规模也是模糊处理的几十倍， 所以帧率低也是有一定道理的。 在fast分支处理的时候， 我们尽量删除了那些depth标记深的layer, 因为cnn的时候要对每一层累加， 归纳reduce算法对于GPU来说，因为要遍历全局，时间复杂度最快也是logn。&lt;/p&gt;
 
 </description>
         <pubDate>Thu, 02 May 2019 11:00:00 +0800</pubDate>
