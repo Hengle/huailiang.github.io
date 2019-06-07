@@ -72,13 +72,13 @@
 
 <p>你可以到<a href="https://developer.android.com/ndk/downloads/index.html">官网下载NDK</a>, 下载完成之后需要设置一些环境变量：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">NDK_HOME</span><span class="o">=</span>/home/echosea/Desktop/Android/android-ndk-r12
-<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$NDK_HOME</span>:<span class="nv">$PATH</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">NDK_HOME</span><span class="o">=</span>/home/echosea/Desktop/Android/android-ndk-r12
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$NDK_HOME</span>:<span class="nv">$PATH</span></code></pre></figure>
 
 <p>创建Application.mk和Android.mk文件<br />
 Application.mk文件，可以用来配置编译平台相关内容，它用来指定我们需要基于哪些CPU架构的.so文件，当然你可以配置多个平台：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">APP_ABI          :<span class="o">=</span> armeabi armeabi-v7a x86
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">APP_ABI          :<span class="o">=</span> armeabi armeabi-v7a x86
 APP_OPTIM         :<span class="o">=</span> release
 APP_PLATFORM      :<span class="o">=</span> android-8
 
@@ -89,11 +89,11 @@ APP_PLATFORM      :<span class="o">=</span> android-8
 APP_STL       :<span class="o">=</span> gnustl_static
 APP_CPPFLAGS  :<span class="o">=</span> -std<span class="o">=</span>gnu++11 -pthread -frtti -fexceptions
 <span class="c">#-NDEBUG -mfpu=neon -fomit-frame-pointer</span>
- -DNDEBUG</code></pre></div>
+ -DNDEBUG  </code></pre></figure>
 
 <p>配置Android.mk文件，用来指定源码编译的配置信息，例如工作目录，编译模块的名称，参与编译的文件等，大致内容如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Copyright (C)</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Copyright (C)</span>
 <span class="c"># Author: huailiang.peng</span>
 <span class="c"># Date:	  2017-11-25</span>
 <span class="c"># Function:	make c++ code to so</span>
@@ -114,23 +114,23 @@ MY_FILES_PATH  :<span class="o">=</span>  <span class="k">$(</span>LOCAL_PATH<sp
 MY_FILES_SUFFIX :<span class="o">=</span> %.cpp %.c
 
 <span class="c"># 递归遍历目录下的所有的文件</span>
-<span class="nv">rwildcard</span><span class="o">=</span><span class="k">$(</span>wildcard <span class="nv">$1$2</span><span class="k">)</span> <span class="k">$(</span>foreach d,<span class="k">$(</span>wildcard <span class="nv">$1</span>*<span class="k">)</span>,<span class="k">$(</span>call rwildcard,<span class="nv">$d</span>/,<span class="nv">$2</span><span class="k">))</span>
+<span class="nv">rwildcard</span><span class="o">=</span><span class="k">$(</span>wildcard <span class="nv">$1$2</span><span class="k">)</span> <span class="k">$(</span>foreach d,<span class="k">$(</span>wildcard <span class="nv">$1</span><span class="k">*)</span>,<span class="k">$(</span>call rwildcard,<span class="nv">$d</span>/,<span class="nv">$2</span><span class="k">))</span>
 
 <span class="c"># 获取相应的源文件</span>
-MY_ALL_FILES :<span class="o">=</span> <span class="k">$(</span>foreach src_path,<span class="k">$(</span>MY_FILES_PATH<span class="k">)</span>, <span class="k">$(</span>call rwildcard,<span class="k">$(</span>src_path<span class="k">)</span>,*.*<span class="k">)</span> <span class="k">)</span>
+MY_ALL_FILES :<span class="o">=</span> <span class="k">$(</span>foreach src_path,<span class="k">$(</span>MY_FILES_PATH<span class="k">)</span>, <span class="k">$(</span>call rwildcard,<span class="k">$(</span>src_path<span class="k">)</span>,<span class="k">*</span>.<span class="k">*)</span> <span class="k">)</span>
 MY_ALL_FILES :<span class="o">=</span> <span class="k">$(</span>MY_ALL_FILES:<span class="k">$(</span>MY_CPP_PATH<span class="k">)</span>/./%<span class="o">=</span><span class="k">$(</span>MY_CPP_PATH<span class="k">)</span>%<span class="k">)</span>
 MY_SRC_LIST  :<span class="o">=</span> <span class="k">$(</span>filter <span class="k">$(</span>MY_FILES_SUFFIX<span class="k">)</span>,<span class="k">$(</span>MY_ALL_FILES<span class="k">))</span>
 MY_SRC_LIST  :<span class="o">=</span> <span class="k">$(</span>MY_SRC_LIST:<span class="k">$(</span>LOCAL_PATH<span class="k">)</span>/%<span class="o">=</span>%<span class="k">)</span>
 
 <span class="c"># 去除字串的重复单词</span>
-define <span class="nv">uniq</span> <span class="o">=</span>
+define uniq <span class="o">=</span>
   <span class="k">$(</span><span class="nb">eval </span>seen :<span class="o">=</span><span class="k">)</span>
   <span class="k">$(</span>foreach _,<span class="nv">$1</span>,<span class="k">$(if</span> <span class="k">$(</span>filter <span class="nv">$_</span>,<span class="k">${</span><span class="nv">seen</span><span class="k">})</span>,,<span class="k">$(</span><span class="nb">eval </span>seen +<span class="o">=</span> <span class="nv">$_</span><span class="k">)))</span>
   <span class="k">${</span><span class="nv">seen</span><span class="k">}</span>
 endef
 
 <span class="c"># 递归遍历获取所有目录</span>
-MY_ALL_DIRS :<span class="o">=</span> <span class="k">$(</span>dir <span class="k">$(</span>foreach src_path,<span class="k">$(</span>MY_FILES_PATH<span class="k">)</span>, <span class="k">$(</span>call rwildcard,<span class="k">$(</span>src_path<span class="k">)</span>,*/<span class="k">)</span> <span class="k">)</span> <span class="k">)</span>
+MY_ALL_DIRS :<span class="o">=</span> <span class="k">$(</span>dir <span class="k">$(</span>foreach src_path,<span class="k">$(</span>MY_FILES_PATH<span class="k">)</span>, <span class="k">$(</span>call rwildcard,<span class="k">$(</span>src_path<span class="k">)</span>,<span class="k">*</span>/<span class="k">)</span> <span class="k">)</span> <span class="k">)</span>
 MY_ALL_DIRS :<span class="o">=</span> <span class="k">$(</span>call uniq,<span class="k">$(</span>MY_ALL_DIRS<span class="k">))</span>
 
 <span class="c"># 赋值给NDK编译系统</span>
@@ -144,7 +144,7 @@ LOCAL_CFLAGS :<span class="o">=</span> -D__ANDROID__
 LOCAL_C_INCLUDES +<span class="o">=</span> <span class="k">$(</span>LOCAL_PATH<span class="k">)</span>/../../
 <span class="c">#LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Eigen-3.2.2   </span>
 <span class="c">#必须从Android.mk配置文件中拿掉对Eigen的直接包含，放到程序代码中用相对路径包含：</span>
-<span class="c"># #include &quot;../../Eigen-3.2.2/Eigen&quot;</span>
+<span class="c"># #include "../../Eigen-3.2.2/Eigen"</span>
 <span class="c"># using namespace Eigen;</span>
 
 <span class="c">#$(warning $(LOCAL_SRC_FILES))</span>
@@ -153,7 +153,7 @@ LOCAL_C_INCLUDES +<span class="o">=</span> <span class="k">$(</span>LOCAL_PATH<s
 <span class="c"># use log system in NDK</span>
 LOCAL_LDLIBS +<span class="o">=</span> -llog
 
-include <span class="k">$(</span>BUILD_SHARED_LIBRARY<span class="k">)</span></code></pre></div>
+include <span class="k">$(</span>BUILD_SHARED_LIBRARY<span class="k">)</span></code></pre></figure>
 
 <p>其中<br />
 LOCAL_MODULE表示模块名称<br />
@@ -167,8 +167,8 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 
 <p>不过 build 之前，最好 clean一下，保证环境的纯净。</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>ndk-build clean
-<span class="nv">$ </span>ndk-build</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>ndk-build clean
+<span class="gp">$ </span>ndk-build</code></pre></figure>
 
 <h3 id="mac下生成bundle">Mac下生成Bundle</h3>
 
@@ -194,7 +194,7 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 
 <p>下面借助一段Shell脚本就可以导出和合并生成.a 并且 copy 到 Plugins目录下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#</span>
 <span class="c">#	i386｜x86_64 是Mac处理器的指令集，i386是针对intel通用微处理器32架构的。x86_64是针对x86架构的64位处理器 这两个是ios模拟器使用</span>
 <span class="c">#	standard architectures (including 64-bit)(armv7,arm64)</span>
 <span class="c">#	Build Active Architecture Only  指定是否只对当前连接设备所支持的指令集编译. 当其值设置为YES，这个属性设置为yes，是为了debug的时候编译速度更快，它只编译当前的architecture版本，而设置为no时，会编译所有的版本</span>
@@ -209,39 +209,39 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 
 <span class="nb">cd </span>tools_proj/IOS/GameCore
 
-<span class="nb">echo</span> <span class="s2">&quot;xcode clean &quot;</span>
+<span class="nb">echo</span> <span class="s2">"xcode clean "</span>
 
 rm -r libGameCore.a
 
 xcodebuild clean
 
-<span class="nb">echo</span> <span class="s2">&quot;xcode build&quot;</span>
+<span class="nb">echo</span> <span class="s2">"xcode build"</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;start build for iphoneos&quot;</span>
-
-<span class="c">#编译 release 版本的.a</span>
-xcodebuild -configuration <span class="s2">&quot;Release&quot;</span> -target GameCore -sdk iphoneos clean build
-
-eho <span class="s2">&quot;start build for simulator&quot;</span>
+<span class="nb">echo</span> <span class="s2">"start build for iphoneos"</span>
 
 <span class="c">#编译 release 版本的.a</span>
-xcodebuild -configuration <span class="s2">&quot;Release&quot;</span> -target GameCore -sdk iphonesimulator clean build
+xcodebuild -configuration <span class="s2">"Release"</span> -target GameCore -sdk iphoneos clean build
 
-<span class="nb">echo</span> <span class="s2">&quot;build success&quot;</span>
+eho <span class="s2">"start build for simulator"</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;merge diff start library&quot;</span>
+<span class="c">#编译 release 版本的.a</span>
+xcodebuild -configuration <span class="s2">"Release"</span> -target GameCore -sdk iphonesimulator clean build
+
+<span class="nb">echo</span> <span class="s2">"build success"</span>
+
+<span class="nb">echo</span> <span class="s2">"merge diff start library"</span>
 
 lipo -create build/Release-iphoneos/libGameCore.a build/Release-iphonesimulator/libGameCore.a -output libGameCore.a
 
 lipo -info libGameCore.a
 
-<span class="nb">echo</span> <span class="s2">&quot;make libGameCore.a success&quot;</span>
+<span class="nb">echo</span> <span class="s2">"make libGameCore.a success"</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;start mv to unity Plugins dir&quot;</span>
+<span class="nb">echo</span> <span class="s2">"start mv to unity Plugins dir"</span>
 
 mv -f libGameCore.a <span class="k">${</span><span class="nv">path</span><span class="k">}</span>/Assets/Plugins/iOS/libGameCore.a
 
-<span class="nb">echo</span> <span class="s2">&quot;done, bye!&quot;</span></code></pre></div>
+<span class="nb">echo</span> <span class="s2">"done, bye!"</span></code></pre></figure>
 
 <p>macos 和 ios 的库都是在xcode 中手动生成的，不符合我们自动化的流程，我们生成版本时，如果中间每次都是手动操作的话，也很容易出错。那有没有一套自动化的流程，既省时，又能保证版本质量呢，答案是肯定的。</p>
 
@@ -254,103 +254,103 @@ mv -f libGameCore.a <span class="k">${</span><span class="nv">path</span><span c
 
 <p>CMakeLists.txt：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">cmake_minimum_required</span><span class="p">(</span><span class="n">VERSION</span> <span class="mf">3.0.2</span><span class="p">)</span>
-<span class="cp">#project(GameCore)</span>
-
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">cmake_minimum_required</span><span class="p">(</span><span class="n">VERSION</span> <span class="mf">3.0.2</span><span class="p">)</span>
+<span class="cp">#project(GameCore)
+</span>
 <span class="n">include_directories</span><span class="p">(</span><span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">})</span>
 
-<span class="n">file</span><span class="p">(</span><span class="n">GLOB_RECURSE</span> <span class="n">source_cpp_files</span> <span class="s">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../XCPP/GameCore/*.cpp&quot;</span><span class="p">)</span>
-<span class="n">file</span><span class="p">(</span><span class="n">GLOB_RECURSE</span> <span class="n">source_c_files</span> <span class="s">&quot;${CMAKE_CURRENT_SOURCE_DIR}/../XCPP/GameCore/*.c&quot;</span><span class="p">)</span>
+<span class="n">file</span><span class="p">(</span><span class="n">GLOB_RECURSE</span> <span class="n">source_cpp_files</span> <span class="s">"${CMAKE_CURRENT_SOURCE_DIR}/../XCPP/GameCore/*.cpp"</span><span class="p">)</span>
+<span class="n">file</span><span class="p">(</span><span class="n">GLOB_RECURSE</span> <span class="n">source_c_files</span> <span class="s">"${CMAKE_CURRENT_SOURCE_DIR}/../XCPP/GameCore/*.c"</span><span class="p">)</span>
 
-<span class="cp"># 设置使用 C++11 标准</span>
-<span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_STANDARD</span> <span class="mi">11</span><span class="p">)</span>
+<span class="cp"># 设置使用 C++11 标准
+</span><span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_STANDARD</span> <span class="mi">11</span><span class="p">)</span>
 <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="n">ON</span><span class="p">)</span>
 
 
-<span class="cp"># 编译 Debug 模式还是 Release 模式</span>
-<span class="n">set</span><span class="p">(</span><span class="n">CMAKE_BUILD_TYPE</span> <span class="n">Release</span><span class="p">)</span>
+<span class="cp"># 编译 Debug 模式还是 Release 模式
+</span><span class="n">set</span><span class="p">(</span><span class="n">CMAKE_BUILD_TYPE</span> <span class="n">Release</span><span class="p">)</span>
 
-<span class="cp"># 根据 OSX、Android、iOS 等不同平台，分别设置不同的配置</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">OSX</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">(</span><span class="s">&quot;is building osx platform&quot;</span><span class="p">)</span>
+<span class="cp"># 根据 OSX、Android、iOS 等不同平台，分别设置不同的配置
+</span><span class="k">if</span> <span class="p">(</span><span class="n">OSX</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">(</span><span class="s">"is building osx platform"</span><span class="p">)</span>
 
     <span class="n">include</span><span class="p">(</span><span class="n">CheckCXXCompilerFlag</span><span class="p">)</span>  
-    <span class="n">CHECK_CXX_COMPILER_FLAG</span><span class="p">(</span><span class="s">&quot;-std=c++11&quot;</span> <span class="n">COMPILER_SUPPORTS_CXX11</span><span class="p">)</span>  
-    <span class="n">CHECK_CXX_COMPILER_FLAG</span><span class="p">(</span><span class="s">&quot;-std=c++0x&quot;</span> <span class="n">COMPILER_SUPPORTS_CXX0X</span><span class="p">)</span>  
+    <span class="n">CHECK_CXX_COMPILER_FLAG</span><span class="p">(</span><span class="s">"-std=c++11"</span> <span class="n">COMPILER_SUPPORTS_CXX11</span><span class="p">)</span>  
+    <span class="n">CHECK_CXX_COMPILER_FLAG</span><span class="p">(</span><span class="s">"-std=c++0x"</span> <span class="n">COMPILER_SUPPORTS_CXX0X</span><span class="p">)</span>  
     <span class="k">if</span><span class="p">(</span><span class="n">COMPILER_SUPPORTS_CXX11</span><span class="p">)</span>  
-            <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">&quot;${CMAKE_CXX_FLAGS} -std=c++11&quot;</span><span class="p">)</span>  
+            <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">"${CMAKE_CXX_FLAGS} -std=c++11"</span><span class="p">)</span>  
     <span class="n">elseif</span><span class="p">(</span><span class="n">COMPILER_SUPPORTS_CXX0X</span><span class="p">)</span>  
-            <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">&quot;${CMAKE_CXX_FLAGS} -std=c++0x&quot;</span><span class="p">)</span>  
+            <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">"${CMAKE_CXX_FLAGS} -std=c++0x"</span><span class="p">)</span>  
     <span class="k">else</span><span class="p">()</span>  
-         <span class="n">message</span><span class="p">(</span><span class="n">STATUS</span> <span class="s">&quot;The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.&quot;</span><span class="p">)</span>  
+         <span class="n">message</span><span class="p">(</span><span class="n">STATUS</span> <span class="s">"The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler."</span><span class="p">)</span>  
     <span class="n">endif</span><span class="p">()</span>  
 
     <span class="n">add_library</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">MODULE</span> <span class="err">$</span><span class="p">{</span><span class="n">source_cpp_files</span><span class="p">}</span> <span class="err">$</span><span class="p">{</span><span class="n">source_c_files</span><span class="p">})</span>
 
-    <span class="cp"># OSX 下面的 Unity 插件要是 GameCore.bundle 格式的</span>
-    <span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span> <span class="n">BUNDLE</span> <span class="n">TRUE</span><span class="p">)</span>
+    <span class="cp"># OSX 下面的 Unity 插件要是 GameCore.bundle 格式的
+</span>    <span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span> <span class="n">BUNDLE</span> <span class="n">TRUE</span><span class="p">)</span>
 
-    <span class="cp"># 设置代码库的输出路径</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">OSX</span><span class="o">/</span><span class="p">)</span>
+    <span class="cp"># 设置代码库的输出路径
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">OSX</span><span class="o">/</span><span class="p">)</span>
 
-    <span class="cp"># 添加编译使用的宏</span>
-    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__MACH__</span><span class="p">)</span>
+    <span class="cp"># 添加编译使用的宏
+</span>    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__MACH__</span><span class="p">)</span>
 
 <span class="n">elseif</span><span class="p">(</span><span class="n">IOS</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">(</span><span class="s">&quot;is building ios platform&quot;</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">(</span><span class="s">"is building ios platform"</span><span class="p">)</span>
 
 	<span class="n">add_library</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">STATIC</span> <span class="err">$</span><span class="p">{</span><span class="n">source_cpp_files</span><span class="p">}</span> <span class="err">$</span><span class="p">{</span><span class="n">source_c_files</span><span class="p">})</span>
 
-    <span class="cp"># 设置编译器, 由于 iOS 和 OSX 使用的是相同的编译器，所以此处设置为 Mac 上的Clang 的路径</span>
-    <span class="cp"># 但是对于 Android 来讲，交叉编译的环境为 NDK 的编译器环境，所以需要对 Android 设置为 NDK 下面的编译器路径。</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_C_COMPILER</span> <span class="n">clang</span><span class="p">)</span>
+    <span class="cp"># 设置编译器, 由于 iOS 和 OSX 使用的是相同的编译器，所以此处设置为 Mac 上的Clang 的路径
+</span>    <span class="cp"># 但是对于 Android 来讲，交叉编译的环境为 NDK 的编译器环境，所以需要对 Android 设置为 NDK 下面的编译器路径。
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_C_COMPILER</span> <span class="n">clang</span><span class="p">)</span>
     <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_COMPILER</span> <span class="n">clang</span><span class="o">++</span><span class="p">)</span>
-    <span class="cp"># bitcode 设置为 NO</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">&quot;${CMAKE_CXX_FLAGS} -fembed-bitcode&quot;</span><span class="p">)</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_C_FLAGS</span> <span class="s">&quot;${CMAKE_C_FLAGS} -fembed-bitcode&quot;</span><span class="p">)</span>
+    <span class="cp"># bitcode 设置为 NO
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_CXX_FLAGS</span> <span class="s">"${CMAKE_CXX_FLAGS} -fembed-bitcode"</span><span class="p">)</span>
+    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_C_FLAGS</span> <span class="s">"${CMAKE_C_FLAGS} -fembed-bitcode"</span><span class="p">)</span>
 
-    <span class="cp"># 最低支持的 iOS 版本</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET</span> <span class="s">&quot;7.1&quot;</span><span class="p">)</span>
+    <span class="cp"># 最低支持的 iOS 版本
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET</span> <span class="s">"7.1"</span><span class="p">)</span>
 
-    <span class="cp"># 支持的指令架构</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_OSX_ARCHITECTURES</span> <span class="s">&quot;armv7 armv7s arm64&quot;</span><span class="p">)</span>
+    <span class="cp"># 支持的指令架构
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_OSX_ARCHITECTURES</span> <span class="s">"armv7 armv7s arm64"</span><span class="p">)</span>
 
-    <span class="cp"># 使用哪个 iOS SDK 进行打包，这里需要注意是对 iPhone 真机打包还是 iPhone 模拟器打包，二者的 SDK 是不同的。</span>
-    <span class="cp"># 我们这里使用的是 iPhone 真机的 SDK。</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_OSX_SYSROOT</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Xcode</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Platforms</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">platform</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">SDKs</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">sdk</span><span class="p">)</span>
+    <span class="cp"># 使用哪个 iOS SDK 进行打包，这里需要注意是对 iPhone 真机打包还是 iPhone 模拟器打包，二者的 SDK 是不同的。
+</span>    <span class="cp"># 我们这里使用的是 iPhone 真机的 SDK。
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">CMAKE_OSX_SYSROOT</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Xcode</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Platforms</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">platform</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">SDKs</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">sdk</span><span class="p">)</span>
 
-    <span class="cp"># 设置代码库的输出路径</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">iOS</span><span class="o">/</span><span class="p">)</span>
+    <span class="cp"># 设置代码库的输出路径
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">iOS</span><span class="o">/</span><span class="p">)</span>
 
-    <span class="cp"># 添加编译使用的宏</span>
-    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__iOS__</span><span class="p">)</span>
+    <span class="cp"># 添加编译使用的宏
+</span>    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__iOS__</span><span class="p">)</span>
 
 <span class="n">elseif</span><span class="p">(</span><span class="n">ANDROID</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">(</span><span class="s">&quot;is building android platform&quot;</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">(</span><span class="s">"is building android platform"</span><span class="p">)</span>
 
     <span class="n">add_library</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">SHARED</span> <span class="err">$</span><span class="p">{</span><span class="n">source_cpp_files</span><span class="p">}</span> <span class="err">$</span><span class="p">{</span><span class="n">source_c_files</span><span class="p">})</span>
 
-    <span class="cp"># 由于 Unity 在 Android 下面对 C++ 只支持 .so 的动态库格式，</span>
-    <span class="cp"># 而如果你用 Mac 机编译时，默认的动态库格式为 .dylib,</span>
-    <span class="cp"># 所以我们需要显示的使用 .so 后缀。</span>
-    <span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span> <span class="n">SUFFIX</span> <span class="s">&quot;.so&quot;</span><span class="p">)</span>
+    <span class="cp"># 由于 Unity 在 Android 下面对 C++ 只支持 .so 的动态库格式，
+</span>    <span class="cp"># 而如果你用 Mac 机编译时，默认的动态库格式为 .dylib,
+</span>    <span class="cp"># 所以我们需要显示的使用 .so 后缀。
+</span>    <span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span> <span class="n">SUFFIX</span> <span class="s">".so"</span><span class="p">)</span>
 
-    <span class="cp"># 设置代码库的输出路径</span>
-    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">Android</span><span class="o">/</span><span class="err">$</span><span class="p">{</span><span class="n">ANDROID_ABI</span><span class="p">}</span><span class="o">/</span><span class="p">)</span>
+    <span class="cp"># 设置代码库的输出路径
+</span>    <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="n">Android</span><span class="o">/</span><span class="err">$</span><span class="p">{</span><span class="n">ANDROID_ABI</span><span class="p">}</span><span class="o">/</span><span class="p">)</span>
 
-    <span class="cp"># 添加编译使用的宏</span>
-    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__ANDROID__</span><span class="p">)</span>
+    <span class="cp"># 添加编译使用的宏
+</span>    <span class="n">ADD_DEFINITIONS</span><span class="p">(</span><span class="o">-</span><span class="n">D__ANDROID__</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">()</span>
-    <span class="n">message</span><span class="p">(</span><span class="s">&quot;warn: unknown platform&quot;</span><span class="p">)</span>
+    <span class="n">message</span><span class="p">(</span><span class="s">"warn: unknown platform"</span><span class="p">)</span>
     <span class="n">message</span><span class="p">(</span><span class="err">$</span><span class="p">{</span><span class="n">CMAKE_SYSTEM</span><span class="p">})</span>
     <span class="n">add_library</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">STATIC</span> <span class="err">$</span><span class="p">{</span><span class="n">source_cpp_files</span><span class="p">}</span> <span class="err">$</span><span class="p">{</span><span class="n">source_c_files</span><span class="p">})</span>
     <span class="n">set</span><span class="p">(</span><span class="n">OUT_PATH</span> <span class="err">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_SOURCE_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">out</span><span class="o">/</span><span class="k">else</span><span class="o">/</span><span class="p">)</span>
 <span class="n">endif</span><span class="p">()</span>
 
 
-<span class="cp"># 设置代码库的输出路径, 对 Debug 和 Release 模式都设置成同一个路径</span>
-<span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span>
+<span class="cp"># 设置代码库的输出路径, 对 Debug 和 Release 模式都设置成同一个路径
+</span><span class="n">set_target_properties</span><span class="p">(</span><span class="n">GameCore</span> <span class="n">PROPERTIES</span>
         <span class="n">LIBRARY_OUTPUT_DIRECTORY</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
         <span class="n">ARCHIVE_OUTPUT_DIRECTORY</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
         <span class="n">LIBRARY_OUTPUT_DIRECTORY_RELEASE</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
@@ -359,12 +359,12 @@ mv -f libGameCore.a <span class="k">${</span><span class="nv">path</span><span c
         <span class="n">ARCHIVE_OUTPUT_DIRECTORY_DEBUG</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
         <span class="n">LIBRARY_OUTPUT_DIRECTORY_RELEASE</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
         <span class="n">ARCHIVE_OUTPUT_DIRECTORY_RELEASE</span> <span class="err">$</span><span class="p">{</span><span class="n">OUT_PATH</span><span class="p">}</span>
-        <span class="p">)</span></code></pre></div>
+        <span class="p">)</span></code></pre></figure>
 
 <p>生成 ios 静态库，还需要配置一个 toolchain文件,你可以在这里<a href="https://github.com/zilongshanren/Box2D-cocos2d-x/blob/master/Box2D/toolchain/">点击下载</a>。然后使用如下命令，生成 ios 工程：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#generate ios project</span>
-cmake -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>toolchains/ios.toolchain.cmake -DIOS_PLATFORM<span class="o">=</span>iPhoneOS -DCMAKE_OSX_ARCHITECTURES<span class="o">=</span><span class="s1">&#39;armv7 armv7s arm64&#39;</span> -GXcode</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#generate ios project</span>
+cmake -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>toolchains/ios.toolchain.cmake -DIOS_PLATFORM<span class="o">=</span>iPhoneOS -DCMAKE_OSX_ARCHITECTURES<span class="o">=</span><span class="s1">'armv7 armv7s arm64'</span> -GXcode</code></pre></figure>
 
 <p>好了，到这里就结束了，拿到 xcode 工程，之后使用xcodebuild编译出库，所有的流程都是Shell 在后台帮我们完成了，我们需要做的就是喝咖啡等待最终的结果了。</p>
 

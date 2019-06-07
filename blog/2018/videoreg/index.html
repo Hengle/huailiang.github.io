@@ -99,10 +99,10 @@
 
 <p>而且我们专门写了一个python脚本用来删除那些图片数量较少的名人文件夹：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
-<span class="n">path</span><span class="o">=</span><span class="s">&quot;/Users/huailiang.peng/Downloads/lfw_funneled/&quot;</span>
+<span class="n">path</span><span class="o">=</span><span class="s">"/Users/huailiang.peng/Downloads/lfw_funneled/"</span>
 <span class="n">alllist</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
 <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">alllist</span><span class="p">)</span>
@@ -113,9 +113,9 @@
 	<span class="k">print</span> <span class="n">fpath</span>
 	<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
 		<span class="n">cnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
-		<span class="k">print</span><span class="p">(</span><span class="s">&quot;{0} len: {1} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">cnt</span><span class="p">)))</span>
+		<span class="k">print</span><span class="p">(</span><span class="s">"{0} len: {1} "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">cnt</span><span class="p">)))</span>
 		<span class="k">if</span> <span class="n">cnt</span><span class="o">&lt;</span><span class="mi">18</span><span class="p">:</span>
-			 <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span></code></pre></div>
+			 <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span></code></pre></figure>
 
 <p>我们的视频素材是从youtube� 随便找的一个关于Geoger Bush的演讲视频，貌似清晰度有点问题，不过也不影响我们训练的过程，谁关心呢。</p>
 
@@ -134,7 +134,7 @@
 
 <p>�项目按文件路径加载图片集，�并根据文件夹的名称划给相应的标签, 代码实现如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">def</span> <span class="nf">read_path</span><span class="p">(</span><span class="n">path_name</span><span class="p">):</span>    
     <span class="k">for</span> <span class="n">dir_item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path_name</span><span class="p">):</span>
@@ -144,63 +144,64 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">full_path</span><span class="p">):</span>    <span class="c">#如果是文件夹，继续递归调用</span>
             <span class="n">read_path</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>   <span class="c">#文件</span>
-            <span class="k">if</span> <span class="n">dir_item</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.jpg&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dir_item</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'.jpg'</span><span class="p">):</span>
                 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>                
                 <span class="n">image</span> <span class="o">=</span> <span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">,</span> <span class="n">IMAGE_SIZE</span><span class="p">)</span>
                 
                 <span class="c">#放开这个代码，可以看到resize_image()函数的实际调用效果</span>
-                <span class="c">#cv2.imwrite(&#39;1.jpg&#39;, image)</span>
+                <span class="c">#cv2.imwrite('1.jpg', image)</span>
                 
                 <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>   
                 <span class="c"># print path_name    </span>
-                <span class="k">if</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Bill_Clinton&quot;</span><span class="p">):</span>  
+                <span class="k">if</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Bill_Clinton"</span><span class="p">):</span>  
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;George_W_Bush&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"George_W_Bush"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Laura_Bush&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Laura_Bush"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Gerhard_Schroeder&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Gerhard_Schroeder"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Junichiro_Koizumi&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Junichiro_Koizumi"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Serena_Williams&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Serena_Williams"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;Tony_Blair&quot;</span><span class="p">):</span>
+                <span class="k">elif</span> <span class="n">path_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"Tony_Blair"</span><span class="p">):</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span></code></pre></div>
+                    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>                            
+                    </code></pre></figure>
 
 <p>关于CNN网络的搭建，我们借助Keras的代码一共使用了十七层神经网络，统计一共使用了4次卷积，4次�激励层，2次池化层，最后还包含全连接层和Dropout层、分类层。对应的代码如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">nb_classes</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">nb_classes</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
         <span class="c"># 构建一个空的网络模型，它是一个线性堆叠模型，各神经网络层会被顺序添加，专业名称为序贯模型或线性堆叠模型</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
 
         <span class="c"># 以下代码将顺序添加CNN网络需要的各层，一个add就是一个网络层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">&#39;same&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>  <span class="c"># 1 2维卷积层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;relu&#39;</span><span class="p">))</span>  <span class="c"># 2 激活函数层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">input_shape</span><span class="p">))</span>  <span class="c"># 1 2维卷积层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'relu'</span><span class="p">))</span>  <span class="c"># 2 激活函数层</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c"># 3 2维卷积层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;relu&#39;</span><span class="p">))</span>  <span class="c"># 4 激活函数层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'relu'</span><span class="p">))</span>  <span class="c"># 4 激活函数层</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>  <span class="c"># 5 池化层</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.25</span><span class="p">))</span>  <span class="c"># 6 Dropout层</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">&#39;same&#39;</span><span class="p">))</span>  <span class="c"># 7  2维卷积层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;relu&#39;</span><span class="p">))</span>  <span class="c"># 8  激活函数层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">'same'</span><span class="p">))</span>  <span class="c"># 7  2维卷积层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'relu'</span><span class="p">))</span>  <span class="c"># 8  激活函数层</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Convolution2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  <span class="c"># 9  2维卷积层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;relu&#39;</span><span class="p">))</span>  <span class="c"># 10 激活函数层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'relu'</span><span class="p">))</span>  <span class="c"># 10 激活函数层</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>  <span class="c"># 11 池化层</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.25</span><span class="p">))</span>  <span class="c"># 12 Dropout层</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">())</span>  <span class="c"># 13 Flatten层</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>  <span class="c"># 14 Dense层,又被称作全连接层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;relu&#39;</span><span class="p">))</span>  <span class="c"># 15 激活函数层</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'relu'</span><span class="p">))</span>  <span class="c"># 15 激活函数层</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>  <span class="c"># 16 Dropout层</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">nb_classes</span><span class="p">))</span>  <span class="c"># 17 Dense层</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;softmax&#39;</span><span class="p">))</span>  <span class="c"># 18 分类层，输出最终结果</span></code></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">'softmax'</span><span class="p">))</span>  <span class="c"># 18 分类层，输出最终结果</span></code></pre></figure>
 
 <p>我们使用 model.summary() 可以明了的看清神经网络的组织方式：</p>
 
@@ -208,12 +209,12 @@
 
 <p>Keras使用fit方法拟合模型，关于keras的API使用我们这里就不多介绍了，现在已经对应的中文网站出现了，学习起来应该是无压力的。对应到我们的代码就是:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">train_images</span><span class="p">,</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">train_images</span><span class="p">,</span>
                            <span class="n">dataset</span><span class="o">.</span><span class="n">train_labels</span><span class="p">,</span>
                            <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">,</span>
                            <span class="n">nb_epoch</span> <span class="o">=</span> <span class="n">nb_epoch</span><span class="p">,</span>
                            <span class="n">validation_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">valid_images</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">valid_labels</span><span class="p">),</span>
-                           <span class="n">shuffle</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span></code></pre></div>
+                           <span class="n">shuffle</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span></code></pre></figure>
 
 <p>最终学习出来的准确率, 有点欠缺人意，哈哈�，准确率只达到了96.4%，不过我想也够用了。</p>
 

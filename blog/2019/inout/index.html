@@ -62,27 +62,29 @@
 
 <p>C\C++ 采取指针机制构建引用传递，所以通常引用传递也称为“指针传递”。Cg 语言中参数传递方式同样分为“值传递”和“引用传递”，但指针机制并不被 GPU 硬件所支持，所以 Cg 语言采用不同的语法修辞符来区别“值传递”和“引用传递”。这些修辞符分别为：</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="nl">in</span><span class="p">:</span> <span class="err">修辞一个形参只是用于输入，进入函数体时被初始化，且该形参值的改变不会影响实参值，这是典型的值传递方式。</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="nl">in:</span> <span class="err">修辞一个形参只是用于输入，进入函数体时被初始化，且该形参值的改变不会影响实参值，这是典型的值传递方式。</span>
 
-<span class="nl">out</span><span class="p">:</span> <span class="err">修辞一个形参只是用于输出的，进入函数体时并没有被初始化，这种类型的形参一般是一个函数的运行结果；</span>
+<span class="n">out</span><span class="o">:</span> <span class="err">修辞一个形参只是用于输出的，进入函数体时并没有被初始化，这种类型的形参一般是一个函数的运行结果；</span>
 
-<span class="nl">inout</span><span class="p">:</span> <span class="err">修辞一个形参既用于输入也用于输出，这是典型的引用传递。</span></code></pre></div>
+<span class="n">inout</span><span class="o">:</span> <span class="err">修辞一个形参既用于输入也用于输出，这是典型的引用传递。</span>
+
+ </code></pre></figure>
 
 <p>于是写了一段测试程序， 只在红色通道上输出uv的u值</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#pragma vertex vert</span>
-<span class="cp">#pragma fragment frag</span>
-
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#pragma vertex vert
+#pragma fragment frag
+</span>
 <span class="k">struct</span> <span class="n">appdata</span>
 <span class="p">{</span>
-	<span class="n">float4</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">POSITION</span><span class="p">;</span>
-	<span class="n">float2</span> <span class="nl">uv</span> <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+	<span class="n">float4</span> <span class="n">vertex</span> <span class="o">:</span> <span class="n">POSITION</span><span class="p">;</span>
+	<span class="n">float2</span> <span class="n">uv</span> <span class="o">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">v2f</span>
 <span class="p">{</span>
-	<span class="n">float2</span> <span class="nl">uv</span> <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
-	<span class="n">float4</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>
+	<span class="n">float2</span> <span class="n">uv</span> <span class="o">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+	<span class="n">float4</span> <span class="n">vertex</span> <span class="o">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="n">v2f</span> <span class="nf">vert</span> <span class="p">(</span><span class="n">appdata</span> <span class="n">v</span><span class="p">)</span>
@@ -93,10 +95,12 @@
 	<span class="k">return</span> <span class="n">o</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">fixed4</span> <span class="nf">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
+<span class="n">fixed4</span> <span class="n">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
 <span class="p">{</span>
 	<span class="k">return</span> <span class="n">fixed4</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span>
+
+ </code></pre></figure>
 
 <p>在unity里运行可以看到的效果如下：</p>
 
@@ -104,17 +108,18 @@
 
 <p>现在代码作如下修改，</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="nf">test</span><span class="p">(</span><span class="n">in</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="nf">test</span><span class="p">(</span><span class="n">in</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
     <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="n">fixed4</span> <span class="nf">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
+<span class="n">fixed4</span> <span class="n">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
 <span class="p">{</span>
     <span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nf">fixed4</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+    <span class="k">return</span> <span class="n">fixed4</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+ </code></pre></figure>
 
 <p>运行结果：</p>
 
@@ -126,21 +131,21 @@
 
 <p>这时我们把test里的in改为out 发现编译器报错， error内容如下：</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">variable</span> <span class="sc">&#39;x&#39;</span> <span class="n">used</span> <span class="n">without</span> <span class="n">having</span> <span class="n">been</span> <span class="n">completely</span> <span class="n">initialized</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">variable</span> <span class="sc">'x'</span> <span class="n">used</span> <span class="n">without</span> <span class="n">having</span> <span class="n">been</span> <span class="n">completely</span> <span class="n">initialized</span></code></pre></figure>
 
 <p>报错提示x没有初始化，于是我们再次修改为test函数如下：</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">test</span><span class="p">(</span><span class="n">out</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">test</span><span class="p">(</span><span class="n">out</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">x</span><span class="o">=</span><span class="mf">0.2</span><span class="p">;</span>
+    <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">2</span><span class="p">;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="n">fixed4</span> <span class="nf">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
+<span class="n">fixed4</span> <span class="n">frag</span> <span class="p">(</span><span class="n">v2f</span> <span class="n">i</span><span class="p">)</span> <span class="o">:</span> <span class="n">SV_Target</span>
 <span class="p">{</span>
     <span class="n">test</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nf">fixed4</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+    <span class="k">return</span> <span class="n">fixed4</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>error消除，此时test需要给x一个初始化的值，而且test此时并没有返回值，运行的结果也传递给外部。运行效果如下，</p>
 
@@ -148,10 +153,10 @@
 
 <p>接着测试inout，此时去掉test的x的初始值，作如下修改：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">test</span><span class="p">(</span><span class="n">inout</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">void</span> <span class="nf">test</span><span class="p">(</span><span class="n">inout</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>运行结果如下图：</p>
 

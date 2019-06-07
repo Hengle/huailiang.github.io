@@ -85,26 +85,26 @@
   <li>在Unity 新建一个c# 代码，里面内容如下：</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">TestCPP</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">TestCPP</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
 
-<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360</span>
-<span class="na">	[DllImport(&quot;__Internal&quot;)]</span>
-<span class="cp">#else</span>
-<span class="na">    [DllImport(&quot;GameCore&quot;)]</span>
-<span class="cp">#endif</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iAdd</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360
+</span>	<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"__Internal"</span><span class="p">)]</span>
+<span class="cp">#else
+</span>    <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"GameCore"</span><span class="p">)]</span>
+<span class="cp">#endif
+</span>    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iAdd</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
 
     <span class="k">public</span> <span class="k">void</span> <span class="nf">OnGUI</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">GUILayout</span><span class="p">.</span><span class="n">BeginVertical</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Cal-Add&quot;</span><span class="p">))</span>
+        <span class="n">GUILayout</span><span class="p">.</span><span class="nf">BeginVertical</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="nf">Button</span><span class="p">(</span><span class="s">"Cal-Add"</span><span class="p">))</span>
         <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="n">iAdd</span><span class="p">(</span><span class="m">8</span><span class="p">,</span> <span class="m">7</span><span class="p">);</span>
-            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;8+7=&quot;</span> <span class="p">+</span> <span class="n">i</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="nf">iAdd</span><span class="p">(</span><span class="m">8</span><span class="p">,</span> <span class="m">7</span><span class="p">);</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"8+7="</span> <span class="p">+</span> <span class="n">i</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="n">GUILayout</span><span class="p">.</span><span class="n">EndVertical</span><span class="p">();</span>
+        <span class="n">GUILayout</span><span class="p">.</span><span class="nf">EndVertical</span><span class="p">();</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>Testcpp.cs挂在当前场景随意一个gameobject下，然后在vs中设置新建一个c++ 空项目，属性设置如下图：</p>
 
@@ -114,10 +114,10 @@
 
 <p>c++代码的实现如下：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#ifndef __Test__</span>
-<span class="cp">#define __Test__</span>
-
-<span class="k">extern</span> <span class="s">&quot;C&quot;</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#ifndef __Test__
+#define __Test__
+</span>
+<span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
 <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">int</span> <span class="n">iAdd</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
@@ -125,7 +125,7 @@
 <span class="p">}</span>
 
 <span class="p">};</span>
-<span class="cp">#endif</span></code></pre></div>
+<span class="cp">#endif</span></code></pre></figure>
 
 <p>导出dll,然后copy到unity项目Plugins/x86_x64目录下，点击unity运行按钮，点击GUI Add按钮，这时你可以看到一行log在console串口中，就证明你的c++调用成功了。类似下图：</p>
 
@@ -144,71 +144,71 @@
 
 <h4 id="指针传递">指针传递</h4>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">extern</span> <span class="s">&quot;C&quot;</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
 <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">int</span> <span class="n">iSub</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span><span class="o">*</span> <span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">return</span> <span class="o">*</span><span class="n">a</span> <span class="o">-</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>c#主要通过IntPtr去处理的</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cp">#if UNITY_IPHONE || UNITY_XBOX360</span>
-<span class="na">	[DllImport(&quot;__Internal&quot;)]</span>
-<span class="cp">#else</span>
-<span class="na">    [DllImport(&quot;Core&quot;)]</span>
-<span class="cp">#endif</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iSub</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">x</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">y</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cp">#if UNITY_IPHONE || UNITY_XBOX360
+</span>	<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"__Internal"</span><span class="p">)]</span>
+<span class="cp">#else
+</span>    <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"Core"</span><span class="p">)]</span>
+<span class="cp">#endif
+</span>    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iSub</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">x</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">y</span><span class="p">);</span>
 
 <span class="k">public</span> <span class="k">void</span> <span class="n">OnGUI</span>
 <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">GUI</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="k">new</span> <span class="n">Rect</span><span class="p">(</span><span class="m">20</span><span class="p">,</span> <span class="m">120</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span> <span class="m">60</span><span class="p">),</span> <span class="s">&quot;Sub&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">GUI</span><span class="p">.</span><span class="nf">Button</span><span class="p">(</span><span class="k">new</span> <span class="nf">Rect</span><span class="p">(</span><span class="m">20</span><span class="p">,</span> <span class="m">120</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span> <span class="m">60</span><span class="p">),</span> <span class="s">"Sub"</span><span class="p">))</span>
      <span class="p">{</span>
          <span class="kt">int</span> <span class="n">a</span> <span class="p">=</span> <span class="m">8</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
-         <span class="n">IntPtr</span> <span class="n">p1</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="n">AllocCoTaskMem</span><span class="p">(</span><span class="n">Marshal</span><span class="p">.</span><span class="n">SizeOf</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
-         <span class="n">Marshal</span><span class="p">.</span><span class="n">StructureToPtr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-         <span class="n">IntPtr</span> <span class="n">p2</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="n">AllocCoTaskMem</span><span class="p">(</span><span class="n">Marshal</span><span class="p">.</span><span class="n">SizeOf</span><span class="p">(</span><span class="n">b</span><span class="p">));</span>
-         <span class="n">Marshal</span><span class="p">.</span><span class="n">StructureToPtr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-         <span class="kt">int</span> <span class="n">rst</span> <span class="p">=</span> <span class="n">iSub</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
-         <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">a</span> <span class="p">+</span> <span class="s">&quot;-&quot;</span> <span class="p">+</span> <span class="n">b</span> <span class="p">+</span> <span class="s">&quot;=&quot;</span> <span class="p">+</span> <span class="n">rst</span><span class="p">);</span>
+         <span class="n">IntPtr</span> <span class="n">p1</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="nf">AllocCoTaskMem</span><span class="p">(</span><span class="n">Marshal</span><span class="p">.</span><span class="nf">SizeOf</span><span class="p">(</span><span class="n">a</span><span class="p">));</span>
+         <span class="n">Marshal</span><span class="p">.</span><span class="nf">StructureToPtr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+         <span class="n">IntPtr</span> <span class="n">p2</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="nf">AllocCoTaskMem</span><span class="p">(</span><span class="n">Marshal</span><span class="p">.</span><span class="nf">SizeOf</span><span class="p">(</span><span class="n">b</span><span class="p">));</span>
+         <span class="n">Marshal</span><span class="p">.</span><span class="nf">StructureToPtr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+         <span class="kt">int</span> <span class="n">rst</span> <span class="p">=</span> <span class="nf">iSub</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
+         <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="n">a</span> <span class="p">+</span> <span class="s">"-"</span> <span class="p">+</span> <span class="n">b</span> <span class="p">+</span> <span class="s">"="</span> <span class="p">+</span> <span class="n">rst</span><span class="p">);</span>
      <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <h4 id="c反调用c-使用指针函数c">c++反调用c# 使用指针函数（c++）</h4>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="nf">bool</span><span class="p">(</span><span class="o">*</span><span class="n">SharpCALLBACK</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">SharpCALLBACK</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
 
 <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">void</span> <span class="n">iInitCallbackCommand</span><span class="p">(</span><span class="n">SharpCALLBACK</span> <span class="n">cb</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="n">callback</span> <span class="o">=</span> <span class="n">cb</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CppDelegate</span><span class="p">(</span><span class="kt">byte</span> <span class="n">type</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">p</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CppDelegate</span><span class="p">(</span><span class="kt">byte</span> <span class="n">type</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">p</span><span class="p">);</span>
 
-<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360</span>
-<span class="na">	[DllImport(&quot;__Internal&quot;)]</span>
-<span class="cp">#else</span>
-<span class="na">    [DllImport(&quot;GameCore&quot;)]</span>
-<span class="cp">#endif</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">iInitCallbackCommand</span><span class="p">(</span><span class="n">CppDelegate</span> <span class="n">cb</span><span class="p">);</span>
+<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360
+</span>	<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"__Internal"</span><span class="p">)]</span>
+<span class="cp">#else
+</span>    <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"GameCore"</span><span class="p">)]</span>
+<span class="cp">#endif
+</span>    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">iInitCallbackCommand</span><span class="p">(</span><span class="n">CppDelegate</span> <span class="n">cb</span><span class="p">);</span>
 
     <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Init</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">iInitCallbackCommand</span><span class="p">(</span><span class="n">OnInitCallback</span><span class="p">);</span>
+        <span class="nf">iInitCallbackCommand</span><span class="p">(</span><span class="n">OnInitCallback</span><span class="p">);</span>
     <span class="p">}</span>
 
-<span class="na">    [MonoPInvokeCallback(typeof(CppDelegate))]</span>
+    <span class="p">[</span><span class="nf">MonoPInvokeCallback</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">CppDelegate</span><span class="p">))]</span>
     <span class="k">static</span> <span class="k">void</span> <span class="nf">OnInitCallback</span><span class="p">(</span><span class="kt">byte</span> <span class="n">t</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">ptr</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">command</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="n">PtrToStringAnsi</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-        <span class="n">XDebug</span><span class="p">.</span><span class="n">CLog</span><span class="p">(</span><span class="n">command</span><span class="p">);</span>
-    <span class="p">}</span></code></pre></div>
+        <span class="kt">string</span> <span class="n">command</span> <span class="p">=</span> <span class="n">Marshal</span><span class="p">.</span><span class="nf">PtrToStringAnsi</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+        <span class="n">XDebug</span><span class="p">.</span><span class="nf">CLog</span><span class="p">(</span><span class="n">command</span><span class="p">);</span>
+    <span class="p">}</span></code></pre></figure>
 
 <h4 id="传送结构体">传送结构体</h4>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Row</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Row</span>
 <span class="p">{</span>
 
 	<span class="n">uint</span> <span class="n">itemid</span><span class="p">;</span>
@@ -217,26 +217,26 @@
 	<span class="kt">int</span> <span class="n">profession</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="k">extern</span> <span class="s">&quot;C&quot;</span>
+<span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
   <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">void</span> <span class="n">iGetFashionListRow</span><span class="p">(</span><span class="n">Row</span><span class="o">*</span> <span class="n">row</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="na">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="na">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]</span>
 		<span class="k">public</span> <span class="k">struct</span> <span class="nc">RowData</span> <span class="p">{</span>
 			<span class="kt">uint</span> <span class="n">itemid</span><span class="p">;</span>
-<span class="na">			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]</span>
+			<span class="p">[</span><span class="nf">MarshalAs</span><span class="p">(</span><span class="n">UnmanagedType</span><span class="p">.</span><span class="n">ByValTStr</span><span class="p">,</span> <span class="n">SizeConst</span> <span class="p">=</span> <span class="m">64</span><span class="p">)]</span>
 			<span class="kt">string</span> <span class="n">itemname</span><span class="p">;</span>
 			<span class="kt">int</span> <span class="n">equippos</span><span class="p">;</span>
 			<span class="kt">int</span> <span class="n">profession</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360</span>
-<span class="na">		[DllImport(&quot;__Internal&quot;)]</span>
-<span class="cp">#else</span>
-<span class="na">		[DllImport(&quot;GameCore&quot;)]</span>
-<span class="cp">#endif</span>
-<span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">iGetFashionListRowByID</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="k">ref</span> <span class="n">RowData</span> <span class="n">row</span><span class="p">);</span></code></pre></div>
+<span class="cp">#if UNITY_IPHONE || UNITY_XBOX360
+</span>		<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"__Internal"</span><span class="p">)]</span>
+<span class="cp">#else
+</span>		<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"GameCore"</span><span class="p">)]</span>
+<span class="cp">#endif
+</span><span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">iGetFashionListRowByID</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="k">ref</span> <span class="n">RowData</span> <span class="n">row</span><span class="p">);</span></code></pre></figure>
 
 <h3 id="面向对象">面向对象</h3>
 
@@ -260,9 +260,9 @@
 
 <p>命令行配置如下：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo </span>on
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo </span>on
 C:<span class="se">\s</span>wigwin-3.0.12<span class="se">\s</span>wig.exe -c++ -csharp -outdir <span class="k">$(</span>SolutionDir<span class="k">)</span>..<span class="se">\A</span>ssets/SwigTools %<span class="o">(</span>FullPath<span class="o">)</span>
-<span class="nb">echo </span>off</code></pre></div>
+<span class="nb">echo </span>off</code></pre></figure>
 
 <p>这段代码的意思就是调用swig，-c++设置源语言为c++ -csharp代表输出语言为C#，最终的-outdir代表的是C#接口的输出目录，而最后的参数代表的是.cxx文件的输出目录。</p>
 
@@ -272,8 +272,8 @@ C:<span class="se">\s</span>wigwin-3.0.12<span class="se">\s</span>wig.exe -c++ 
 
 <p>我们新建一个c++的类，其中实现代码如下：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &quot;Invork.h&quot;</span>
-
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include "Invork.h"
+</span>
 <span class="kt">int</span> <span class="n">Invork</span><span class="o">::</span> <span class="n">Mul</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
@@ -289,7 +289,7 @@ C:<span class="se">\s</span>wigwin-3.0.12<span class="se">\s</span>wig.exe -c++ 
 	<span class="p">{</span>
 		<span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">;</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>编译生成之后会发现我们的c#目录会多出三个文件，如下图所示：</p>
 
@@ -297,15 +297,15 @@ C:<span class="se">\s</span>wigwin-3.0.12<span class="se">\s</span>wig.exe -c++ 
 
 <p>在c#里我们这可这样调用c++的东西：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">if</span> <span class="p">(</span><span class="n">GUI</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="k">new</span> <span class="n">Rect</span><span class="p">(</span><span class="m">20</span><span class="p">,</span> <span class="m">220</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span> <span class="m">60</span><span class="p">),</span> <span class="s">&quot;Swig&quot;</span><span class="p">))</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">if</span> <span class="p">(</span><span class="n">GUI</span><span class="p">.</span><span class="nf">Button</span><span class="p">(</span><span class="k">new</span> <span class="nf">Rect</span><span class="p">(</span><span class="m">20</span><span class="p">,</span> <span class="m">220</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span> <span class="m">60</span><span class="p">),</span> <span class="s">"Swig"</span><span class="p">))</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">c</span> <span class="p">=</span> <span class="n">Invork</span><span class="p">.</span><span class="n">Div</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">2</span><span class="p">);</span>
-    <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;div val:&quot;</span> <span class="p">+</span> <span class="n">c</span><span class="p">);</span>
-    <span class="n">Invork</span> <span class="n">ins</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Invork</span><span class="p">();</span>
-    <span class="n">c</span> <span class="p">=</span> <span class="n">ins</span><span class="p">.</span><span class="n">Mul</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
-    <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;mul val:&quot;</span> <span class="p">+</span> <span class="n">c</span><span class="p">);</span>
-    <span class="n">ins</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
-<span class="p">}</span></code></pre></div>
+    <span class="kt">int</span> <span class="n">c</span> <span class="p">=</span> <span class="n">Invork</span><span class="p">.</span><span class="nf">Div</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">2</span><span class="p">);</span>
+    <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"div val:"</span> <span class="p">+</span> <span class="n">c</span><span class="p">);</span>
+    <span class="n">Invork</span> <span class="n">ins</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Invork</span><span class="p">();</span>
+    <span class="n">c</span> <span class="p">=</span> <span class="n">ins</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
+    <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"mul val:"</span> <span class="p">+</span> <span class="n">c</span><span class="p">);</span>
+    <span class="n">ins</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>如果最终你得到如图所示的日志，恭喜你，所有的流程都跑通了。<br />
 <img src="/img/in-post/post-cpp/cpp10.jpg" alt="" /></p>
@@ -333,11 +333,11 @@ module代表的是当前.i模板所在的模块，相对应的，该.i文件也�
 
 <p>例如%incude “std_string.i”、%include “std_vector.i”</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="n">std</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="n">std</span> <span class="p">{</span>
 
 <span class="o">%</span><span class="k">template</span><span class="p">(</span><span class="n">BoolVector</span><span class="p">)</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>使用这样的定义方式，Swig会为我们生成一个名为BoolVector的类型而不是未知类型。我们可以在目标语言中创建C++中的STL并且与C++中的Vector进行互操作。</p>
 
@@ -346,14 +346,14 @@ module代表的是当前.i模板所在的模块，相对应的，该.i文件也�
 <p>使用指针<br />
 定义指针的方法如下：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">pointer_class</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">BoolPointer</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">pointer_class</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">BoolPointer</span><span class="p">);</span></code></pre></figure>
 
 <p>通过这个定义我们Swig会为我们生成指针相对应的类，Swig再会生成类似于SWIGTYPE_p_bool这样的未定义类型，而是直接使用BoolPointer，并且我们能够自己在目标语言中申请内存，并且自己对内存进行管理。</p>
 
 <p>使用数组<br />
 定义数组的方法如下。</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">array_class</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span> <span class="n">UnsignedCharArray</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">array_class</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span> <span class="n">UnsignedCharArray</span><span class="p">);</span></code></pre></figure>
 
 <p>通过这种方式我们可以导出相应的数组类型。我们可以在目标语言中创建C++中的数组，并且与C++中的数组进行互操作。</p>
 

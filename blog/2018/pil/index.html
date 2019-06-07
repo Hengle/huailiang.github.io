@@ -66,17 +66,17 @@
 
 <p>安装 Pillow:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#Python3</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#Python3</span>
  pip3 install pillow
 
 <span class="c">#python2</span>
-  pip install pillow</code></pre></div>
+  pip install pillow</code></pre></figure>
 
 <p>通道<br />
 一个图片可以包含一到多个数据通道，如果这些通道具有相同的维数和深度，Pil允许将这些通道进行叠加</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">模式
-<span class="m">1</span>             1位像素，黑和白，存成8位的像素
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">模式
+1             1位像素，黑和白，存成8位的像素
 L             8位像素，黑白
 P             8位像素，使用调色板映射到任何其他模式
 RGB           3×8位像素，真彩
@@ -84,17 +84,17 @@ RGBA          4×8位像素，真彩+透明通道
 CMYK          4×8位像素，颜色隔离
 YCbCr         3×8位像素，彩色视频格式
 I             32位整型像素
-F             32位浮点型像素</code></pre></div>
+F             32位浮点型像素</code></pre></figure>
 
 <h3 id="获取图片的基本信息">获取图片的基本信息</h3>
 
 <p>如获取图片的大小、通道、模式等信息</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 
-<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im1.png&quot;</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im1.png"</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span>
 
 <span class="c"># getbands() - 显示该图像的所有通道，返回一个tuple</span>
@@ -106,11 +106,11 @@ F             32位浮点型像素</code></pre></div>
 <span class="c"># getextrema() - 获取图像中每个通道的像素最小和最大值,是一个tuple类型</span>
 <span class="n">extremas</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">getextrema</span><span class="p">()</span>
 
-<span class="k">print</span> <span class="s">&quot;bans:{0} bboxs:{1} colors:{2}  extremas:{3}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bands</span><span class="p">,</span><span class="n">bboxs</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span><span class="n">extremas</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">"bans:{0} bboxs:{1} colors:{2}  extremas:{3}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bands</span><span class="p">,</span><span class="n">bboxs</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span><span class="n">extremas</span><span class="p">)</span>
 
 <span class="c"># getpixel() - 获取该坐标</span>
 <span class="n">pixels</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">getpixel</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="k">print</span> <span class="s">&quot;pixels:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span></code></pre></div>
+<span class="k">print</span> <span class="s">"pixels:{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span></code></pre></figure>
 
 <h3 id="通道分离与合并">通道分离与合并</h3>
 
@@ -119,16 +119,16 @@ F             32位浮点型像素</code></pre></div>
   <li>提出RGB通道</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="n">img</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;png/im1.jpg&#39;</span><span class="p">)</span>  <span class="c">#打开图像</span>
-<span class="n">gray</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">)</span>   <span class="c">#转换成灰度</span>
+<span class="n">img</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'png/im1.jpg'</span><span class="p">)</span>  <span class="c">#打开图像</span>
+<span class="n">gray</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">'L'</span><span class="p">)</span>   <span class="c">#转换成灰度</span>
 <span class="n">gray</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>   <span class="c">#分离三通道</span>
-<span class="n">pic</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s">&#39;RGB&#39;</span><span class="p">,(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">))</span> <span class="c">#合并三通道</span>
-<span class="n">pic</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">pic</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s">'RGB'</span><span class="p">,(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">))</span> <span class="c">#合并三通道</span>
+<span class="n">pic</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <h3 id="使用pil-做图片混合">使用PIL 做图片混合</h3>
 
@@ -142,7 +142,7 @@ F             32位浮点型像素</code></pre></div>
   </li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -150,7 +150,7 @@ F             32位浮点型像素</code></pre></div>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
-<span class="n">destdir</span><span class="o">=</span><span class="s">&quot;post&quot;</span>
+<span class="n">destdir</span><span class="o">=</span><span class="s">"post"</span>
 
 <span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
 	<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">destdir</span><span class="p">):</span>
@@ -159,7 +159,7 @@ F             32位浮点型像素</code></pre></div>
 <span class="k">def</span> <span class="nf">resize</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">):</span>
 	<span class="k">if</span> <span class="n">_im1</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">_im2</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
 		<span class="n">_im2</span> <span class="o">=</span> <span class="n">_im2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">_im1</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;im1 im2 size not equal, force resize im2 as im1 size&quot;</span><span class="p">)</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">"im1 im2 size not equal, force resize im2 as im1 size"</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">_im2</span>
 
 <span class="k">def</span> <span class="nf">composite</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">,</span><span class="n">_dest</span><span class="p">,</span><span class="n">_show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -169,11 +169,11 @@ F             32位浮点型像素</code></pre></div>
 		<span class="n">_im2</span><span class="o">=</span><span class="n">resize</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">)</span>
 		<span class="k">print</span> <span class="n">_im1</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">_im2</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">_show</span>
 		<span class="n">newim</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">)</span>
-		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">&quot;.png&quot;</span><span class="p">)</span>
+		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">".png"</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">_show</span> <span class="p">:</span>
 			<span class="n">newim</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-	<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">(</span><span class="s">&quot;composite err:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">massge</span><span class="p">))</span>
+	<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">(</span><span class="s">"composite err:{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">massge</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">blend</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">,</span><span class="n">_dest</span><span class="p">,</span><span class="n">_show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -181,36 +181,36 @@ F             32位浮点型像素</code></pre></div>
 	<span class="k">try</span><span class="p">:</span>
 	 	<span class="n">_im2</span><span class="o">=</span><span class="n">resize</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">)</span>
 		<span class="n">newim</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">blend</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
-		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">&quot;.png&quot;</span><span class="p">)</span>
+		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">".png"</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">_show</span><span class="p">:</span>
 			<span class="n">newim</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-	<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;blend err,with arg:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+	<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">"blend err,with arg:{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="n">_im1</span><span class="p">,</span><span class="n">_im2</span><span class="p">,</span><span class="n">_mask</span><span class="p">,</span><span class="n">_dest</span><span class="p">,</span><span class="n">_show</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	composite可以使用另外一个图片作为蒙板(mask)，所有的这三张图片必须具备相同的尺寸，mask图片的模式可以为“1”，“L”，“RGBA”</span>
-<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="s">"""
+	composite可以使用另外一个图片作为蒙板(mask)，所有的这三张图片必须具备相同的尺寸，mask图片的模式可以为“1”，“L”，“RGBA”
+	"""</span>
 	<span class="k">try</span><span class="p">:</span>
 		<span class="n">_im2</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">)</span>
 		<span class="n">_mask</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">_mask</span><span class="p">)</span>
 		<span class="n">newim</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">composite</span><span class="p">(</span><span class="n">_im2</span><span class="p">,</span><span class="n">_im1</span><span class="p">,</span><span class="n">_mask</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">_show</span><span class="p">:</span>
 			<span class="n">newim</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">&quot;.png&quot;</span><span class="p">)</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;mask {0} finish &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_dest</span><span class="p">))</span>
-	<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-		<span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;mask err:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+		<span class="n">newim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">destdir</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">_dest</span><span class="o">+</span><span class="s">".png"</span><span class="p">)</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">"mask {0} finish "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_dest</span><span class="p">))</span>
+	<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">"mask err:{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
 	<span class="n">init</span><span class="p">();</span>
-	<span class="n">im1</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im1.png&quot;</span><span class="p">)</span>
-	<span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im2.png&quot;</span><span class="p">)</span>
-	<span class="n">im3</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im3.png&quot;</span><span class="p">)</span>
-	<span class="n">composite</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="s">&quot;composite&quot;</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
-	<span class="n">blend</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="s">&quot;blend&quot;</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
-	<span class="n">mask</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="n">im3</span><span class="p">,</span><span class="s">&quot;mask&quot;</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
+	<span class="n">im1</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im1.png"</span><span class="p">)</span>
+	<span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im2.png"</span><span class="p">)</span>
+	<span class="n">im3</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im3.png"</span><span class="p">)</span>
+	<span class="n">composite</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="s">"composite"</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span>
+	<span class="n">blend</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="s">"blend"</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
+	<span class="n">mask</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="n">im3</span><span class="p">,</span><span class="s">"mask"</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
 
 <h3 id="使用-pil-做一些美术效果">使用 PIL 做一些美术效果</h3>
 
@@ -228,14 +228,14 @@ F             32位浮点型像素</code></pre></div>
   <li>SHARPEN - 效果有点像DETAIL</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageFilter</span>
 
-<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im1.png&quot;</span><span class="p">)</span>
-<span class="n">filterimg</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ImageFilter</span><span class="o">.</span><span class="n">BLUR</span><span class="p">)</span>
-<span class="n">filterimg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im1.png"</span><span class="p">)</span>
+<span class="n">filterimg</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">ImageFilter</span><span class="o">.</span><span class="n">BLUR</span><span class="p">)</span>
+<span class="n">filterimg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <h3 id="批量生成水印图">批量生成水印图</h3>
 
@@ -245,53 +245,53 @@ F             32位浮点型像素</code></pre></div>
 
 <p>使用字体水印时，图片保存的时候一定要是 png 格式的。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
 <span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span><span class="nn">os</span>
 
 <span class="n">size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span><span class="mi">128</span>
-<span class="n">outdir</span> <span class="o">=</span> <span class="s">&quot;jp_mark/&quot;</span>
+<span class="n">outdir</span> <span class="o">=</span> <span class="s">"jp_mark/"</span>
 
 
 <span class="c"># 制作字体水印</span>
 <span class="k">def</span> <span class="nf">mark_by_font</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">fnt</span><span class="p">):</span>
-	<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;RGBA&#39;</span><span class="p">)</span>
-	<span class="n">txt</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">&#39;RGBA&#39;</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+	<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">'RGBA'</span><span class="p">)</span>
+	<span class="n">txt</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">'RGBA'</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
 	<span class="n">d</span><span class="o">=</span><span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
-	<span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">txt</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="n">txt</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="s">&quot;cnBlogs&quot;</span><span class="p">,</span><span class="n">font</span><span class="o">=</span><span class="n">fnt</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
+	<span class="n">d</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">txt</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="n">txt</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="s">"cnBlogs"</span><span class="p">,</span><span class="n">font</span><span class="o">=</span><span class="n">fnt</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">))</span>
 	<span class="n">out</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span>
 	<span class="c"># out.show()</span>
-	<span class="n">out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outdir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;.png&quot;</span><span class="p">)</span>
-	<span class="k">print</span> <span class="s">&quot;mark_by_font:&quot;</span><span class="o">+</span><span class="n">name</span>
+	<span class="n">out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outdir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">".png"</span><span class="p">)</span>
+	<span class="k">print</span> <span class="s">"mark_by_font:"</span><span class="o">+</span><span class="n">name</span>
 
 <span class="c"># 制作图片水印</span>
 <span class="k">def</span> <span class="nf">mark_by_img</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">mark</span><span class="p">):</span>
 	<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">ROTATE_270</span><span class="p">)</span>  <span class="c">#顺时针旋转</span>
-	<span class="n">layer</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">&#39;RGBA&#39;</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+	<span class="n">layer</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">'RGBA'</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
 	<span class="n">layer</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">mark</span><span class="p">,</span> <span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">140</span><span class="p">,</span><span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">140</span><span class="p">))</span>
 	<span class="n">out</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">composite</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span><span class="n">im</span><span class="p">,</span><span class="n">layer</span><span class="p">)</span>
-	<span class="n">out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outdir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;.jpg&quot;</span><span class="p">)</span>
-	<span class="k">print</span> <span class="s">&quot;mark_by_img:&quot;</span><span class="o">+</span><span class="n">name</span>
+	<span class="n">out</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outdir</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">".jpg"</span><span class="p">)</span>
+	<span class="k">print</span> <span class="s">"mark_by_img:"</span><span class="o">+</span><span class="n">name</span>
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-	<span class="n">mark</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/logo.gif&quot;</span><span class="p">)</span>
-	<span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s">&quot;/Library/Fonts/Arial Bold.ttf&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
+	<span class="n">mark</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/logo.gif"</span><span class="p">)</span>
+	<span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s">"/Library/Fonts/Arial Bold.ttf"</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 	<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
 			<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
 
-	<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;jp/*.jpg&quot;</span><span class="p">):</span>
-		<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">"jp/*.jpg"</span><span class="p">):</span>
+		<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
 		<span class="nb">file</span><span class="p">,</span><span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
-		<span class="n">name</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">name</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 		<span class="n">mark_by_font</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">font</span><span class="p">)</span>
-		<span class="n">mark_by_img</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">mark</span><span class="p">)</span></code></pre></div>
+		<span class="n">mark_by_img</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">mark</span><span class="p">)</span></code></pre></figure>
 
 <h3 id="负责的像素计算">负责的像素计算</h3>
 
 <p>负责变黑、变亮、灰度处理等</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -299,15 +299,15 @@ F             32位浮点型像素</code></pre></div>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 
-<span class="n">destdir</span><span class="o">=</span><span class="s">&quot;post&quot;</span>
+<span class="n">destdir</span><span class="o">=</span><span class="s">"post"</span>
 <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">56</span><span class="p">,</span><span class="mi">56</span><span class="p">)</span>
-<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;png/im1.png&quot;</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"png/im1.png"</span><span class="p">)</span>
 
-<span class="n">c</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">c</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c"># 也可以用 np.asarray(im) 区别是 np.array() 是深拷贝，np.asarray() 是浅拷贝</span>
-<span class="n">img</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">))</span>
+<span class="n">img</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">'L'</span><span class="p">))</span>
 
 <span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span>
 <span class="c"># for i in range(rows):</span>
@@ -317,10 +317,10 @@ F             32位浮点型像素</code></pre></div>
 <span class="c">#         else:</span>
 <span class="c">#             img[i,j]=1</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s">&quot;lena&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s">"lena"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p>结语：有了上面强大的图像功能，我们就能很方便的批量处理大量的图片了，再也不需要美术慢慢的倒腾了。</p>
 

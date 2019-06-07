@@ -83,14 +83,14 @@
 
 <p>定义style featur的损失， 方法采用把generator生成的图片和原始输入的style image分别带入encoder做绝对值的差。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Image loss.</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># Image loss.</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">img_loss_photo</span> <span class="o">=</span> <span class="n">mse_criterion</span><span class="p">(</span>
     <span class="n">transformer_block</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_photo</span><span class="p">),</span> <span class="n">transformer_block</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_photo</span><span class="p">))</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">img_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_loss_photo</span>
 
 <span class="c"># Features loss.</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss_photo</span> <span class="o">=</span> <span class="n">abs_criterion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_photo_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_photo_features</span><span class="p">)</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">feature_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss_photo</span></code></pre></div>
+<span class="bp">self</span><span class="o">.</span><span class="n">feature_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_loss_photo</span></code></pre></figure>
 
 <p>Tensorboard 里观察loss的变化：</p>
 

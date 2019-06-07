@@ -73,18 +73,18 @@
 <h3 id="安装-jenkins">安装 Jenkins</h3>
 <p>你可以<a href="https://jenkins.io">点击这里，</a>在官网下载最新的 Jenkins 版本部署在本地。Jenkins默认安装路径：/Applications/Jenkins/jenkins.war。安装完成之后，会自动启动jenkins，打开浏览器，进入网页 localhost:8080。</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 设置开机自启动</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># 设置开机自启动</span>
 sudo launchctl load -w /Library/LaunchDaemons/org.jenkins-ci.plist
 <span class="c"># 取消开机自启动</span>
 sudo launchctl unload -w /Library/LaunchDaemons/org.jenkins-ci.plist
 <span class="c"># 手动启动</span>
 Java -jar jenkins.war
 <span class="c"># 后台启动(默认端口)</span>
-nohup java -jar jenkins.war <span class="p">&amp;</span>
+nohup java -jar jenkins.war &amp;
 <span class="c"># 后台启动(指定端口)</span>
-nohup java -jar jenkins.war -httpPort<span class="o">=</span><span class="m">88</span> <span class="p">&amp;</span>
+nohup java -jar jenkins.war -httpPort<span class="o">=</span>88 &amp;
 <span class="c"># 后台启动(HTTPS)</span>
-nohup java -jar jenkins.war -httpsPort<span class="o">=</span><span class="m">88</span> <span class="p">&amp;</span></code></pre></div>
+nohup java -jar jenkins.war -httpsPort<span class="o">=</span>88 &amp;</code></pre></figure>
 
 <p><img src="/img/in-post/post-publish/post-jenkins.jpg" alt="" /></p>
 
@@ -104,16 +104,16 @@ nohup java -jar jenkins.war -httpsPort<span class="o">=</span><span class="m">88
 <p>下面贴出一些常用的相关的脚本：<br />
 比如说获取时间戳作为 job id:</p>
 
-<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="k">new</span> <span class="nf">Date</span><span class="o">().</span><span class="na">format</span><span class="o">(</span><span class="s2">&quot;yyyyMMddHHmmss&quot;</span><span class="o">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-groovy" data-lang="groovy">  <span class="k">new</span> <span class="nf">Date</span><span class="o">().</span><span class="na">format</span><span class="o">(</span><span class="s2">"yyyyMMddHHmmss"</span><span class="o">)</span></code></pre></figure>
 
 <p>获取所有的分支：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">cmd</span> <span class="o">=</span> <span class="s">&#39;git ls-remote --heads git@git.intra.123u.com:dragon_nest/dragon-nest.git&#39;</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">cmd</span> <span class="o">=</span> <span class="s">'git ls-remote --heads git@git.intra.123u.com:dragon_nest/dragon-nest.git'</span>
 <span class="k">def</span> <span class="nf">proc</span> <span class="o">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 <span class="n">proc</span><span class="o">.</span><span class="n">waitFor</span><span class="p">()</span>
 
 <span class="k">if</span> <span class="p">(</span> <span class="n">proc</span><span class="o">.</span><span class="n">exitValue</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
- <span class="n">println</span> <span class="s">&quot;Error, ${proc.err.text}&quot;</span>
+ <span class="n">println</span> <span class="s">"Error, ${proc.err.text}"</span>
  <span class="k">return</span>
 <span class="p">}</span>
 
@@ -130,30 +130,30 @@ nohup java -jar jenkins.war -httpsPort<span class="o">=</span><span class="m">88
 <span class="p">}</span>
 
 <span class="n">tags</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="k">return</span> <span class="n">tags</span></code></pre></div>
+<span class="k">return</span> <span class="n">tags</span></code></pre></figure>
 
 <h2 id="jenkins-与外部交互">Jenkins 与外部交互</h2>
 
 <p>通常情况下，我们使用 Shell脚本作为桥梁来连接我们的 web 页面和工程，Jenkins 调用 shell 设置可通过在Jenkins配置选项Build(构建)一栏增加构建步骤选择 Execute Shell 。脚本可以参照下面，</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
 
 <span class="nb">pwd</span>
-&gt; /tmp/dn.log
+<span class="gp">&gt; </span>/tmp/dn.log
 
 <span class="c">#source ~/.bash_profile &gt;/dev/null 2&gt;1</span>
-<span class="nb">echo</span> <span class="s2">&quot;start build android, kind:&quot;</span><span class="k">${</span><span class="nv">channel</span><span class="k">}</span><span class="s2">&quot;branch:&quot;</span><span class="k">${</span><span class="nv">branch</span><span class="k">}</span>
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span> <span class="o">]</span><span class="p">;</span><span class="k">then</span>
- bash /var/Shells/android_test.sh
-<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">&quot;publish&quot;</span> <span class="o">]</span><span class="p">;</span><span class="k">then</span>
- bash /var/Shells/android_publish.sh
-<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">&quot;release&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
- bash /var/Shells/android_release.sh
-<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">&quot;debug&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
- bash /var/Shells/android_debug.sh
-<span class="k">else</span>
- <span class="nb">echo</span> <span class="s2">&quot;There is no such argument&quot;</span>
-<span class="k">fi</span></code></pre></div>
+<span class="nb">echo</span> <span class="s2">"start build android, kind:"</span><span class="k">${</span><span class="nv">channel</span><span class="k">}</span><span class="s2">"branch:"</span><span class="k">${</span><span class="nv">branch</span><span class="k">}</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">"test"</span> <span class="o">]</span>;<span class="k">then
+ </span>bash /var/Shells/android_test.sh
+<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">"publish"</span> <span class="o">]</span>;<span class="k">then
+ </span>bash /var/Shells/android_publish.sh
+<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">"release"</span> <span class="o">]</span>; <span class="k">then
+ </span>bash /var/Shells/android_release.sh
+<span class="k">elif</span> <span class="o">[</span> <span class="nv">$channel</span> <span class="o">=</span> <span class="s2">"debug"</span> <span class="o">]</span>; <span class="k">then
+ </span>bash /var/Shells/android_debug.sh
+<span class="k">else
+ </span><span class="nb">echo</span> <span class="s2">"There is no such argument"</span>
+<span class="k">fi</span></code></pre></figure>
 
 <p>这样我们再打包机上写相关的 shell脚本，比如说调用 git ，unity,xcodebuild、ant、ftp 相关的命令行，来完成项目对应的流程。当然了，不一定适用 shell 脚本，我们也可以适用 web 表单.下面列出了支持的脚本，相当的丰富。</p>
 
@@ -168,9 +168,9 @@ nohup java -jar jenkins.war -httpsPort<span class="o">=</span><span class="m">88
 
 <p>保存之后，我们在自己的shell的脚本里这样取uid的参数值：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;打包参数 channel is:&quot;</span><span class="k">${</span><span class="nv">uid</span><span class="k">}</span></code></pre></div>
+<span class="nb">echo</span> <span class="s2">"打包参数 channel is:"</span><span class="k">${</span><span class="nv">uid</span><span class="k">}</span></code></pre></figure>
 
 <p>这里强调一件事，如果你的jenkins执行shell的时候，提示没有权限，可能是安装的方式不对，不妨参考网络上这篇文章：<a href="https://www.jianshu.com/p/dc6f3fea7aa9">mac下Jenkins 主目录导致的权限问题</a></p>
 

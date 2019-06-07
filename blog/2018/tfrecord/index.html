@@ -62,11 +62,11 @@
 
 <p>matplotlib是python上的一个2D绘图库，它可以在夸平台上边出很多高质量的图像。综旨就是让简单的事变得更简单，让复杂的事变得可能。我们可以用matplotlib生成 绘图、直方图、功率谱、柱状图、误差图、散点图等 。详细了解matplotlib,请点击<a href="http://blog.csdn.net/qq_31192383/article/details/53977822">这里</a></p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>   
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="n">image_raw_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gfile</span><span class="o">.</span><span class="n">FastGFile</span><span class="p">(</span><span class="s">&quot;img/tiger/1351742906_31b427fb23.jpg&quot;</span><span class="p">,</span><span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">image_raw_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gfile</span><span class="o">.</span><span class="n">FastGFile</span><span class="p">(</span><span class="s">"img/tiger/1351742906_31b427fb23.jpg"</span><span class="p">,</span><span class="s">'rb'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
     <span class="n">img_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">decode_jpeg</span><span class="p">(</span><span class="n">image_raw_data</span><span class="p">)</span>
@@ -74,13 +74,13 @@
     <span class="k">print</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">get_shape</span><span class="p">())</span>
 
     <span class="k">print</span> <span class="n">img_data</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
     <span class="n">img_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
     <span class="n">encode_img</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">encode_jpeg</span><span class="p">(</span><span class="n">img_data</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">gfile</span><span class="o">.</span><span class="n">GFile</span><span class="p">(</span><span class="s">&quot;tfrecord/img_data.jpg&quot;</span><span class="p">,</span><span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    	<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">encode_img</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span></code></pre></div>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">gfile</span><span class="o">.</span><span class="n">GFile</span><span class="p">(</span><span class="s">"tfrecord/img_data.jpg"</span><span class="p">,</span><span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    	<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">encode_img</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf30.jpg" alt="" /></p>
 
@@ -94,50 +94,50 @@
   <li>ResizeMethod.AREA ：面积插值</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">image_float</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="n">image_float</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
   <span class="n">resized</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_images</span><span class="p">(</span><span class="n">image_float</span><span class="p">,</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">resized</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">resized</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf31.jpg" alt="" /></p>
 
 <h3 id="裁剪">裁剪</h3>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">croped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_image_with_crop_or_pad</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">croped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_image_with_crop_or_pad</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">padded</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_image_with_crop_or_pad</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">croped</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">croped</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">padded</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">padded</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf32.jpg" alt="" /></p>
 
 <p>按照一定的比例裁剪：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 截取中间50%的图片</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 截取中间50%的图片</span>
 <span class="n">central_cropped</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">central_crop</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">central_cropped</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">central_cropped</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf33.jpg" alt="" /></p>
 
 <h3 id="翻转">翻转</h3>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 上下翻转</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 上下翻转</span>
   <span class="n">flipped1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flip_up_down</span><span class="p">(</span><span class="n">img_data</span><span class="p">)</span>
   <span class="c"># 左右翻转</span>
   <span class="c">#flipped2 = tf.image.flip_left_right(img_data)</span>
 
   <span class="c">#对角线翻转</span>
   <span class="c"># transposed = tf.image.transpose_image(img_data)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">flipped1</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">flipped1</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf34.jpg" alt="" /></p>
 
 <h3 id="修改亮度对比度">修改亮度、对比度</h3>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 将图片的亮度-0.5。</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># 将图片的亮度-0.5。</span>
 <span class="n">adjusted</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">adjust_brightness</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="c"># 将图片的亮度+0.5</span>
@@ -157,12 +157,12 @@
 
 <span class="c"># 在最终输出前，将实数取值截取到0-1范围内。</span>
 <span class="c"># adjusted = tf.clip_by_value(adjusted, 0.0, 1.0)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">adjusted</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">adjusted</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <h3 id="修改色相">修改色相、</h3>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">image_float</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">image_float</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
 <span class="n">adjusted</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">adjust_hue</span><span class="p">(</span><span class="n">image_float</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 <span class="c"># adjusted = tf.image.adjust_hue(image_float, 0.3)</span>
@@ -184,14 +184,14 @@
 
 <span class="c"># 在最终输出前，将实数取值截取到0-1范围内。</span>
 <span class="c"># adjusted = tf.clip_by_value(adjusted, 0.0, 1.0)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">adjusted</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">adjusted</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf35.jpg" alt="" /></p>
 
 <h3 id="图片做标记">图片做标记</h3>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">boxes</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([[[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.47</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">]]])</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">boxes</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([[[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.47</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">]]])</span>
 
 <span class="c"># sample_distorted_bounding_box要求输入图片必须是实数类型。</span>
 <span class="n">image_float</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
@@ -200,8 +200,8 @@
     <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">image_float</span><span class="p">),</span> <span class="n">bounding_boxes</span><span class="o">=</span><span class="n">boxes</span><span class="p">,</span> <span class="n">min_object_covered</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 
 <span class="c"># 截取后的图片</span>
-<span class="n">distorted_image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">image_float</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">distorted_image</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
+<span class="n">distorted_image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="nb">slice</span><span class="p">(</span><span class="n">image_float</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">distorted_image</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c"># 在原图上用标注框画出截取的范围。由于原图的分辨率较大（2673x1797)，生成的标注框</span>
@@ -209,9 +209,9 @@
 <span class="n">image_small</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_images</span><span class="p">(</span><span class="n">image_float</span><span class="p">,</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="mi">267</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">batchced_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">image_small</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">draw_bounding_boxes</span><span class="p">(</span><span class="n">batchced_img</span><span class="p">,</span> <span class="n">bbox_for_draw</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">bbox_for_draw</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_with_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">())</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<span class="k">print</span><span class="p">(</span><span class="n">bbox_for_draw</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_with_box</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
 <p><img src="/img/in-post/post-tf/tf36.jpg" alt="" /></p>
 

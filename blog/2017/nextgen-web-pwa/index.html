@@ -110,66 +110,66 @@
 <p><img src="/img/in-post/post-nextgen-web-pwa/ios2-a2hs.gif" alt="" /><br />
 <em>图片来源: <a href="http://appleinsider.com/articles/08/10/03/latest_iphone_software_supports_full_screen_web_apps.html">appleinsider.com</a></em></p>
 
-<p>但是很快，随着越来越多的私有平台通过 <code>&lt;meta&gt;</code>/<code>&lt;link&gt;</code> 标签来为 web 应用添加「私货」，<code>&lt;head&gt;</code> 很快就被塞满了：</p>
+<p>但是很快，随着越来越多的私有平台通过 <code class="highlighter-rouge">&lt;meta&gt;</code>/<code class="highlighter-rouge">&lt;link&gt;</code> 标签来为 web 应用添加「私货」，<code class="highlighter-rouge">&lt;head&gt;</code> 很快就被塞满了：</p>
 
-<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;!--</span> <span class="err">Add</span> <span class="err">to</span> <span class="err">homescreen</span> <span class="err">for</span> <span class="err">Safari</span> <span class="err">on</span> <span class="err">iOS</span> <span class="err">--&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;apple-mobile-web-app-capable&quot;</span> <span class="err">content=</span><span class="s2">&quot;yes&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;apple-mobile-web-app-status-bar-style&quot;</span> <span class="err">content=</span><span class="s2">&quot;black&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;apple-mobile-web-app-title&quot;</span> <span class="err">content=</span><span class="s2">&quot;Lighten&quot;</span><span class="err">&gt;</span>
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Add</span><span class="w"> </span><span class="err">to</span><span class="w"> </span><span class="err">homescreen</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">Safari</span><span class="w"> </span><span class="err">on</span><span class="w"> </span><span class="err">iOS</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"apple-mobile-web-app-capable"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"yes"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"apple-mobile-web-app-status-bar-style"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"black"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"apple-mobile-web-app-title"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"Lighten"</span><span class="err">&gt;</span><span class="w">
 
-<span class="err">&lt;!--</span> <span class="err">Add</span> <span class="err">to</span> <span class="err">homescreen</span> <span class="err">for</span> <span class="err">Chrome</span> <span class="err">on</span> <span class="err">Android</span> <span class="err">--&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;mobile-web-app-capable&quot;</span> <span class="err">content=</span><span class="s2">&quot;yes&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;mate</span> <span class="err">name=</span><span class="s2">&quot;theme-color&quot;</span> <span class="err">content=</span><span class="s2">&quot;#000000&quot;</span><span class="err">&gt;</span>
+</span><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Add</span><span class="w"> </span><span class="err">to</span><span class="w"> </span><span class="err">homescreen</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">Chrome</span><span class="w"> </span><span class="err">on</span><span class="w"> </span><span class="err">Android</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"mobile-web-app-capable"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"yes"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;mate</span><span class="w"> </span><span class="err">name=</span><span class="s2">"theme-color"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"#000000"</span><span class="err">&gt;</span><span class="w">
 
-<span class="err">&lt;!--</span> <span class="err">Icons</span> <span class="err">for</span> <span class="err">iOS</span> <span class="err">and</span> <span class="err">Android</span> <span class="err">Chrome</span> <span class="err">M</span><span class="mi">31</span><span class="err">~M</span><span class="mi">38</span> <span class="err">--&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;apple-touch-icon-precomposed&quot;</span> <span class="err">sizes=</span><span class="s2">&quot;144x144&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/apple-touch-icon-144x144-precomposed.png&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;apple-touch-icon-precomposed&quot;</span> <span class="err">sizes=</span><span class="s2">&quot;114x114&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/apple-touch-icon-114x114-precomposed.png&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;apple-touch-icon-precomposed&quot;</span> <span class="err">sizes=</span><span class="s2">&quot;72x72&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/apple-touch-icon-72x72-precomposed.png&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;apple-touch-icon-precomposed&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/apple-touch-icon-57x57-precomposed.png&quot;</span><span class="err">&gt;</span>
+</span><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Icons</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">iOS</span><span class="w"> </span><span class="err">and</span><span class="w"> </span><span class="err">Android</span><span class="w"> </span><span class="err">Chrome</span><span class="w"> </span><span class="err">M</span><span class="mi">31</span><span class="err">~M</span><span class="mi">38</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"apple-touch-icon-precomposed"</span><span class="w"> </span><span class="err">sizes=</span><span class="s2">"144x144"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/apple-touch-icon-144x144-precomposed.png"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"apple-touch-icon-precomposed"</span><span class="w"> </span><span class="err">sizes=</span><span class="s2">"114x114"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/apple-touch-icon-114x114-precomposed.png"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"apple-touch-icon-precomposed"</span><span class="w"> </span><span class="err">sizes=</span><span class="s2">"72x72"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/apple-touch-icon-72x72-precomposed.png"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"apple-touch-icon-precomposed"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/apple-touch-icon-57x57-precomposed.png"</span><span class="err">&gt;</span><span class="w">
 
-<span class="err">&lt;!--</span> <span class="err">Icon</span> <span class="err">for</span> <span class="err">Android</span> <span class="err">Chrome,</span> <span class="err">recommended</span> <span class="err">--&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;shortcut icon&quot;</span> <span class="err">sizes=</span><span class="s2">&quot;196x196&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/touch-icon-196x196.png&quot;</span><span class="err">&gt;</span>
+</span><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Icon</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">Android</span><span class="w"> </span><span class="err">Chrome,</span><span class="w"> </span><span class="err">recommended</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"shortcut icon"</span><span class="w"> </span><span class="err">sizes=</span><span class="s2">"196x196"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/touch-icon-196x196.png"</span><span class="err">&gt;</span><span class="w">
 
-<span class="err">&lt;!--</span> <span class="err">Tile</span> <span class="err">icon</span> <span class="err">for</span> <span class="err">Win</span><span class="mi">8</span> <span class="err">(</span><span class="mi">144</span><span class="err">x</span><span class="mi">144</span> <span class="err">+</span> <span class="err">tile</span> <span class="err">color)</span> <span class="err">--&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;msapplication-TileImage&quot;</span> <span class="err">content=</span><span class="s2">&quot;images/touch/ms-touch-icon-144x144-precomposed.png&quot;</span><span class="err">&gt;</span>
-<span class="err">&lt;meta</span> <span class="err">name=</span><span class="s2">&quot;msapplication-TileColor&quot;</span> <span class="err">content=</span><span class="s2">&quot;#3372DF&quot;</span><span class="err">&gt;</span>
+</span><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Tile</span><span class="w"> </span><span class="err">icon</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">Win</span><span class="mi">8</span><span class="w"> </span><span class="err">(</span><span class="mi">144</span><span class="err">x</span><span class="mi">144</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="err">tile</span><span class="w"> </span><span class="err">color)</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"msapplication-TileImage"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"images/touch/ms-touch-icon-144x144-precomposed.png"</span><span class="err">&gt;</span><span class="w">
+</span><span class="err">&lt;meta</span><span class="w"> </span><span class="err">name=</span><span class="s2">"msapplication-TileColor"</span><span class="w"> </span><span class="err">content=</span><span class="s2">"#3372DF"</span><span class="err">&gt;</span><span class="w">
 
-<span class="err">&lt;!--</span> <span class="err">Generic</span> <span class="err">Icon</span> <span class="err">--&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;shortcut icon&quot;</span> <span class="err">href=</span><span class="s2">&quot;images/touch/touch-icon-57x57.png&quot;</span><span class="err">&gt;</span></code></pre></div>
+</span><span class="err">&lt;!--</span><span class="w"> </span><span class="err">Generic</span><span class="w"> </span><span class="err">Icon</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"shortcut icon"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"images/touch/touch-icon-57x57.png"</span><span class="err">&gt;</span></code></pre></figure>
 
 <p>显然，这种做法并不优雅：分散又重复的元数据定义多余且难以维持同步，与 html 耦合在一起也加重了浏览器检查元数据未来变动的成本。与此同时，社区里开始出现使用 manifest 文件以中心化地描述元数据的方案，比如 <a href="https://developer.chrome.com/extensions/manifest" title="Chrome Apps Manifest">Chrome Extension、 Chrome Hosted Web Apps (2010)</a> 与 <a href="https://developer.mozilla.org/en-US/docs/Archive/Firefox_OS/Firefox_OS_apps/Building_apps_for_Firefox_OS/Manifest" title="Firefox OS App Manifest">Firefox OS App Manifest (2011)</a> 使用 JSON；<a href="http://cordova.apache.org/docs/en/6.x/config_ref/index.html" title="Config.xml - Apache Cordova">Cordova</a> 与 <a href="https://msdn.microsoft.com/en-us/library/dn320426%28v=vs.85%29.aspx" title="Browser configuration schema reference - MSDN">Windows Pinned Site</a> 使用 XML；</p>
 
 <p>2013 年，W3C WebApps 工作组开始对基于 JSON 的 Manifest 进行标准化，于同年年底发布<a href="https://www.w3.org/TR/2013/WD-appmanifest-20131217/" title="Manifest for web apps and bookmarks - First Public Working Draft">第一份公开 Working Draft</a>，并逐渐演化成为今天的 W3C Web App Manifest：</p>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
-  <span class="s2">&quot;short_name&quot;</span><span class="o">:</span> <span class="s2">&quot;Manifest Sample&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;Web Application Manifest Sample&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;icons&quot;</span><span class="o">:</span> <span class="p">[{</span>
-      <span class="s2">&quot;src&quot;</span><span class="o">:</span> <span class="s2">&quot;launcher-icon-2x.png&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;sizes&quot;</span><span class="o">:</span> <span class="s2">&quot;96x96&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;image/png&quot;</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
+  <span class="s2">"short_name"</span><span class="err">:</span> <span class="s2">"Manifest Sample"</span><span class="p">,</span>
+  <span class="s2">"name"</span><span class="err">:</span> <span class="s2">"Web Application Manifest Sample"</span><span class="p">,</span>
+  <span class="s2">"icons"</span><span class="err">:</span> <span class="p">[{</span>
+      <span class="s2">"src"</span><span class="p">:</span> <span class="s2">"launcher-icon-2x.png"</span><span class="p">,</span>
+      <span class="s2">"sizes"</span><span class="p">:</span> <span class="s2">"96x96"</span><span class="p">,</span>
+      <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"image/png"</span>
    <span class="p">}],</span>
-  <span class="s2">&quot;scope&quot;</span><span class="o">:</span> <span class="s2">&quot;/sample/&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;start_url&quot;</span><span class="o">:</span> <span class="s2">&quot;/sample/index.html&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;display&quot;</span><span class="o">:</span> <span class="s2">&quot;standalone&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;orientation&quot;</span><span class="o">:</span> <span class="s2">&quot;landscape&quot;</span>
-  <span class="s2">&quot;theme_color&quot;</span><span class="o">:</span> <span class="s2">&quot;#000&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;background_color&quot;</span><span class="o">:</span> <span class="s2">&quot;#fff&quot;</span><span class="p">,</span>
-<span class="p">}</span></code></pre></div>
+  <span class="s2">"scope"</span><span class="err">:</span> <span class="s2">"/sample/"</span><span class="p">,</span>
+  <span class="s2">"start_url"</span><span class="err">:</span> <span class="s2">"/sample/index.html"</span><span class="p">,</span>
+  <span class="s2">"display"</span><span class="err">:</span> <span class="s2">"standalone"</span><span class="p">,</span>
+  <span class="s2">"orientation"</span><span class="err">:</span> <span class="s2">"landscape"</span>
+  <span class="s2">"theme_color"</span><span class="err">:</span> <span class="s2">"#000"</span><span class="p">,</span>
+  <span class="s2">"background_color"</span><span class="err">:</span> <span class="s2">"#fff"</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;!--</span> <span class="err">document</span> <span class="err">--&gt;</span>
-<span class="err">&lt;link</span> <span class="err">rel=</span><span class="s2">&quot;manifest&quot;</span> <span class="err">href=</span><span class="s2">&quot;/manifest.json&quot;</span><span class="err">&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;!--</span><span class="w"> </span><span class="err">document</span><span class="w"> </span><span class="err">--&gt;</span><span class="w">
+</span><span class="err">&lt;link</span><span class="w"> </span><span class="err">rel=</span><span class="s2">"manifest"</span><span class="w"> </span><span class="err">href=</span><span class="s2">"/manifest.json"</span><span class="err">&gt;</span></code></pre></figure>
 
-<p>诸如 <code>name</code>、<code>icons</code>、<code>display</code> 都是我们比较熟悉的，而大部分新增的成员则为 web 应用带来了一系列以前 web 应用想做却做不到（或在之前只能靠 hack）的新特性：</p>
+<p>诸如 <code class="highlighter-rouge">name</code>、<code class="highlighter-rouge">icons</code>、<code class="highlighter-rouge">display</code> 都是我们比较熟悉的，而大部分新增的成员则为 web 应用带来了一系列以前 web 应用想做却做不到（或在之前只能靠 hack）的新特性：</p>
 
 <ul>
-  <li><code>scope</code>：定义了 web 应用的浏览作用域，比如作用域外的 URL 就会打开浏览器而不会在当前 PWA 里继续浏览。</li>
-  <li><code>start_url</code>：定义了一个 PWA 的入口页面。比如说你添加 <a href="https://huangxuan.me" title="Hux Blog">Hux Blog</a> 的任何一个文章到主屏，从主屏打开时都会访问 <a href="https://huangxuan.me" title="Hux Blog">Hux Blog</a> 的主页。</li>
-  <li><code>orientation</code>：终于，我们可以锁定屏幕旋转了（喜极而泣…）</li>
-  <li><code>theme_color</code>/<code>background_color</code>：主题色与背景色，用于配置一些可定制的操作系统 UI 以提高用户体验，比如 Android 的状态栏、任务栏等。</li>
+  <li><code class="highlighter-rouge">scope</code>：定义了 web 应用的浏览作用域，比如作用域外的 URL 就会打开浏览器而不会在当前 PWA 里继续浏览。</li>
+  <li><code class="highlighter-rouge">start_url</code>：定义了一个 PWA 的入口页面。比如说你添加 <a href="https://huangxuan.me" title="Hux Blog">Hux Blog</a> 的任何一个文章到主屏，从主屏打开时都会访问 <a href="https://huangxuan.me" title="Hux Blog">Hux Blog</a> 的主页。</li>
+  <li><code class="highlighter-rouge">orientation</code>：终于，我们可以锁定屏幕旋转了（喜极而泣…）</li>
+  <li><code class="highlighter-rouge">theme_color</code>/<code class="highlighter-rouge">background_color</code>：主题色与背景色，用于配置一些可定制的操作系统 UI 以提高用户体验，比如 Android 的状态栏、任务栏等。</li>
 </ul>
 
-<p>这个清单的成员还有很多，比如用于声明「对应原生应用」的 <code>related_applications</code> 等等，本文就不一一列举了。作为 PWA 的「户口本」，承载着 web 应用与操作系统集成能力的重任，Web App Manifest 还将在日后不断扩展，以满足 web 应用高速演化的需要。</p>
+<p>这个清单的成员还有很多，比如用于声明「对应原生应用」的 <code class="highlighter-rouge">related_applications</code> 等等，本文就不一一列举了。作为 PWA 的「户口本」，承载着 web 应用与操作系统集成能力的重任，Web App Manifest 还将在日后不断扩展，以满足 web 应用高速演化的需要。</p>
 
 <h3 id="service-worker"><a href="https://w3c.github.io/ServiceWorker/" title="Service Worker">Service Worker</a></h3>
 
@@ -179,30 +179,30 @@
 
 <p>在 Gears API 中，我们通过向 LocalServer 模块提交一个缓存文件清单来实现离线支持：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// Somewhere in your javascript</span>
-<span class="n">var</span> <span class="n">localServer</span> <span class="o">=</span> <span class="n">google</span><span class="p">.</span><span class="n">gears</span><span class="p">.</span><span class="n">factory</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;bata.localserver&quot;</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// Somewhere in your javascript
+</span><span class="n">var</span> <span class="n">localServer</span> <span class="o">=</span> <span class="n">google</span><span class="p">.</span><span class="n">gears</span><span class="p">.</span><span class="n">factory</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">"bata.localserver"</span><span class="p">);</span>
 <span class="n">var</span> <span class="n">store</span> <span class="o">=</span> <span class="n">localServer</span><span class="p">.</span><span class="n">createManagedStore</span><span class="p">(</span><span class="n">STORE_NAME</span><span class="p">);</span>
-<span class="n">store</span><span class="p">.</span><span class="n">manifestUrl</span> <span class="o">=</span> <span class="s">&quot;manifest.json&quot;</span></code></pre></div>
+<span class="n">store</span><span class="p">.</span><span class="n">manifestUrl</span> <span class="o">=</span> <span class="s">"manifest.json"</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// manifest.json - 假设 JSON 有注释</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// manifest.json - 假设 JSON 有注释</span>
 <span class="p">{</span>
-<span class="err">　　</span><span class="s2">&quot;betaManifestVersion&quot;</span><span class="o">:</span><span class="err">　</span><span class="mi">1</span><span class="p">,</span>
-<span class="err">　　</span><span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="err">　</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-<span class="err">　　</span><span class="s2">&quot;entries&quot;</span><span class="o">:</span><span class="err">　</span><span class="p">[</span><span class="err">　</span>
-<span class="err">　　　　</span><span class="p">{</span><span class="err">　</span><span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="err">　</span><span class="s2">&quot;index.html&quot;</span><span class="p">},</span>
-<span class="err">　　　　</span><span class="p">{</span><span class="err">　</span><span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="err">　</span><span class="s2">&quot;main.js&quot;</span><span class="p">}</span>
+<span class="err">　　</span><span class="s2">"betaManifestVersion"</span><span class="err">:　</span><span class="mi">1</span><span class="p">,</span>
+<span class="err">　　</span><span class="s2">"version"</span><span class="err">:</span> <span class="err">　</span><span class="s2">"1.0"</span><span class="p">,</span>
+<span class="err">　　</span><span class="s2">"entries"</span><span class="err">:　</span><span class="p">[</span><span class="err">　</span>
+<span class="err">　　　　</span><span class="p">{</span><span class="err">　</span><span class="s2">"url"</span><span class="err">:</span> <span class="err">　</span><span class="s2">"index.html"</span><span class="p">},</span>
+<span class="err">　　　　</span><span class="p">{</span><span class="err">　</span><span class="s2">"url"</span><span class="err">:</span> <span class="err">　</span><span class="s2">"main.js"</span><span class="p">}</span>
 <span class="err">　　</span><span class="p">]</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>是不是感到很熟悉？好像 <a href="https://www.w3.org/TR/2011/WD-html5-20110525/offline.html" title="HTML5 5.6 Offline Web Applications">HTML5 规范</a>中的 Application Cache 也是类似的东西？</p>
 
-<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;html</span> <span class="err">manifest=</span><span class="s2">&quot;cache.appcache&quot;</span><span class="err">&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="err">&lt;html</span><span class="w"> </span><span class="err">manifest=</span><span class="s2">"cache.appcache"</span><span class="err">&gt;</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html">CACHE MANIFEST
+<figure class="highlight"><pre><code class="language-html" data-lang="html">CACHE MANIFEST
 
 CACHE:
 index.html
-main.js</code></pre></div>
+main.js</code></pre></figure>
 
 <p>是的，Gears 的 LocalServer 就是后来大家所熟知的 App Cache 的前身，大约从 <a href="https://www.w3.org/TR/offline-webapps/" title="Offline Web Applications">2008</a> 年开始 W3C 就开始尝试将 Gears 进行标准化了；除了 LocalServer，Gears 中用于提供并行计算能力的 WorkerPool 模块与用于提供本地数据库与 SQL 支持的 Database 模块也分别是日后 Web Worker 与 Web SQL Database（后被废弃）的前身。</p>
 
@@ -215,43 +215,43 @@ main.js</code></pre></div>
 <p><img src="/img/in-post/post-nextgen-web-pwa/sw-sw.png" alt="" /><br />
 <em>Service Worker 就像一个运行在客户端的代理</em></p>
 
-<p>比如说，我们可以给网页 <code>foo.html</code> 注册这么一个 Service Worker，它将劫持由 <code>foo.html</code> 发起的一切 HTTP 请求，并统统返回未设置 <code>Content-Type</code> 的 <code>Hello World!</code>：</p>
+<p>比如说，我们可以给网页 <code class="highlighter-rouge">foo.html</code> 注册这么一个 Service Worker，它将劫持由 <code class="highlighter-rouge">foo.html</code> 发起的一切 HTTP 请求，并统统返回未设置 <code class="highlighter-rouge">Content-Type</code> 的 <code class="highlighter-rouge">Hello World!</code>：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js</span>
-<span class="n">self</span><span class="p">.</span><span class="n">onfetch</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">respondWith</span><span class="p">(</span><span class="k">new</span> <span class="n">Response</span><span class="p">(</span><span class="err">&#39;</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">&#39;</span><span class="p">))</span>
-<span class="p">}</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js
+</span><span class="n">self</span><span class="p">.</span><span class="n">onfetch</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="n">e</span><span class="p">.</span><span class="n">respondWith</span><span class="p">(</span><span class="k">new</span> <span class="n">Response</span><span class="p">(</span><span class="err">'</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="err">'</span><span class="p">))</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>Service Worker 第一次发布于 2014 年的 Google IO 上，目前已处于 W3C 工作草案的状态。其设计吸取了 Application Cache 的失败经验，作为 web 应用的开发者的你有着完全的控制能力；同时，它还借鉴了 Chrome 多年来在 Chrome Extension 上的设计经验（Chrome Background Pages 与 Chrome Event Pages），采用了基于「事件驱动」的唤醒机制，以大幅节省后台计算的能耗。比如上面的 <code>fetch</code> 其实就是会唤醒 Service Worker 的事件之一。</p>
+<p>Service Worker 第一次发布于 2014 年的 Google IO 上，目前已处于 W3C 工作草案的状态。其设计吸取了 Application Cache 的失败经验，作为 web 应用的开发者的你有着完全的控制能力；同时，它还借鉴了 Chrome 多年来在 Chrome Extension 上的设计经验（Chrome Background Pages 与 Chrome Event Pages），采用了基于「事件驱动」的唤醒机制，以大幅节省后台计算的能耗。比如上面的 <code class="highlighter-rouge">fetch</code> 其实就是会唤醒 Service Worker 的事件之一。</p>
 
 <p><img src="/img/in-post/post-nextgen-web-pwa/sw-lifecycle.png" alt="" /><br />
 <em>Service Worker 的生命周期</em></p>
 
-<p>除了类似 <code>fetch</code> 这样的功能事件外，Service Worker 还提供了一组生命周期事件，包括安装、激活等等。比如，在 Service Worker 的「安装」事件中，我们可以把 web 应用所需要的资源统统预先下载并缓存到 Cache Storage 中去：</p>
+<p>除了类似 <code class="highlighter-rouge">fetch</code> 这样的功能事件外，Service Worker 还提供了一组生命周期事件，包括安装、激活等等。比如，在 Service Worker 的「安装」事件中，我们可以把 web 应用所需要的资源统统预先下载并缓存到 Cache Storage 中去：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js</span>
-<span class="n">self</span><span class="p">.</span><span class="n">oninstall</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js
+</span><span class="n">self</span><span class="p">.</span><span class="n">oninstall</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="n">e</span><span class="p">.</span><span class="n">waitUntil</span><span class="p">(</span>
-    <span class="n">caches</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="err">&#39;</span><span class="n">installation</span><span class="err">&#39;</span><span class="p">)</span>
+    <span class="n">caches</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="err">'</span><span class="n">installation</span><span class="err">'</span><span class="p">)</span>
       <span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="n">cache</span> <span class="o">=&gt;</span>  <span class="n">cache</span><span class="p">.</span><span class="n">addAll</span><span class="p">([</span>
-        <span class="err">&#39;</span><span class="p">.</span><span class="o">/</span><span class="err">&#39;</span><span class="p">,</span>
-        <span class="err">&#39;</span><span class="p">.</span><span class="o">/</span><span class="n">styles</span><span class="p">.</span><span class="n">css</span><span class="err">&#39;</span><span class="p">,</span>
-        <span class="err">&#39;</span><span class="p">.</span><span class="o">/</span><span class="n">script</span><span class="p">.</span><span class="n">js</span><span class="err">&#39;</span>
+        <span class="err">'</span><span class="p">.</span><span class="o">/</span><span class="err">'</span><span class="p">,</span>
+        <span class="err">'</span><span class="p">.</span><span class="o">/</span><span class="n">styles</span><span class="p">.</span><span class="n">css</span><span class="err">'</span><span class="p">,</span>
+        <span class="err">'</span><span class="p">.</span><span class="o">/</span><span class="n">script</span><span class="p">.</span><span class="n">js</span><span class="err">'</span>
       <span class="p">]))</span>
   <span class="p">)</span>
-<span class="p">});</span></code></pre></div>
+<span class="p">});</span></code></pre></figure>
 
 <p>这样，当用户离线，网络无法访问时，我们就可以从缓存中启动我们的 web 应用：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">//sw.js</span>
-<span class="n">self</span><span class="p">.</span><span class="n">onfetch</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">//sw.js
+</span><span class="n">self</span><span class="p">.</span><span class="n">onfetch</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">const</span> <span class="n">fetched</span> <span class="o">=</span> <span class="n">fetch</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">request</span><span class="p">)</span>
   <span class="k">const</span> <span class="n">cached</span> <span class="o">=</span> <span class="n">caches</span><span class="p">.</span><span class="n">match</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">request</span><span class="p">)</span>
 
   <span class="n">e</span><span class="p">.</span><span class="n">respondWith</span><span class="p">(</span>
     <span class="n">fetched</span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="n">_</span> <span class="o">=&gt;</span> <span class="n">cached</span><span class="p">)</span>
   <span class="p">)</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>可以看出，Service Worker 被设计为一个相对底层（low-level）、高度可编程、子概念众多，也因此异常灵活且强大的 API，故本文只能展示它的冰山一角。出于安全考虑，注册 Service Worker 要求你的 web 应用部署于 HTTPS 协议下，以免利用 Service Worker 的中间人攻击。笔者在今年 GDG 北京的 DevFest 上分享了 <a href="https://huangxuan.me/2016/11/20/sw-101-gdgdf/">Service Worker 101</a>，涵盖了 Service Worker 譬如「网络优先」、「缓存优先」、「网络与缓存比赛」这些更复杂的缓存策略、学习资料、以及<a href="https://github.com/Huxpro/sw-101-gdgdf">示例代码</a>，可以供大家参考。</p>
 
@@ -260,34 +260,34 @@ main.js</code></pre></div>
 
 <p>你也可以尝试在支持 PWA 的浏览器中访问笔者的博客 <a href="https://huangxuan.me" title="Hux Blog">Hux Blog</a>，感受 Service Worker 的实际效果：所有访问过的页面都会被缓存并允许在离线环境下继续访问，所有未访问过的页面则会在离线环境下展示一个自定义的离线页面。</p>
 
-<p>在笔者看来，<strong>Service Worker 对 PWA 的重要性相当于 <code>XMLHTTPRequest</code> 之于 Ajax，媒体查询（Media Query）之于响应式设计，是支撑 PWA 作为「下一代 web 应用模型」的最核心技术。</strong>由于 Service Worker 可以与包括 Indexed DB、Streams 在内的大部分 DOM 无关 API 进行交互，它的潜力简直无可限量。笔者几乎可以断言，Service Worker 将在未来十年里成为 web 客户端技术工程化的兵家必争之地，带来「离线优先（Offline-first）」的架构革命。</p>
+<p>在笔者看来，<strong>Service Worker 对 PWA 的重要性相当于 <code class="highlighter-rouge">XMLHTTPRequest</code> 之于 Ajax，媒体查询（Media Query）之于响应式设计，是支撑 PWA 作为「下一代 web 应用模型」的最核心技术。</strong>由于 Service Worker 可以与包括 Indexed DB、Streams 在内的大部分 DOM 无关 API 进行交互，它的潜力简直无可限量。笔者几乎可以断言，Service Worker 将在未来十年里成为 web 客户端技术工程化的兵家必争之地，带来「离线优先（Offline-first）」的架构革命。</p>
 
 <h3 id="push-notification">Push Notification</h3>
 
 <p>PWA 推送通知中的「推送」与「通知」，其实使用的是两个不同但又相得益彰的 API：</p>
 
-<p><a href="https://notifications.spec.whatwg.org/" title="Notification API">Notification API</a> 相信大家并不陌生，它负责所有与通知本身相关的机制，比如通知的权限管理、向操作系统发起通知、通知的类型与音效，以及提供通知被点击或关闭时的回调等等，目前国内外的各大网站（尤其在桌面端）都有一定的使用。Notification API 最早应该是在 <a href="https://www.html5rocks.com/en/tutorials/notifications/quick/" title="Using the Notification API">2010</a> 年前后由 Chromium 提出<a href="http://www.chromium.org/developers/design-documents/desktop-notifications/api-specification" title="API Specification - The Chromium Projects">草案</a>以 <code>webkitNotifications</code> 前缀方式实现；随着 2011 年进入标准化；2012 年在 Safari 6（Mac OSX 10.8+）上获得支持；2015 年 Notification API 成为 <a href="https://www.w3.org/TR/notifications/" title="Web Notifications - W3C">W3C Recommendation</a>；2016 年 <a href="https://blogs.windows.com/msedgedev/2016/05/16/web-notifications-microsoft-edge/#2VBm890EjvAvUcgE.97">Edge 的支持</a>；Web Notifications 已经在桌面浏览器中获得了全面支持（Chrome、Edge、Firefox、Opera、Safari）的成就。</p>
+<p><a href="https://notifications.spec.whatwg.org/" title="Notification API">Notification API</a> 相信大家并不陌生，它负责所有与通知本身相关的机制，比如通知的权限管理、向操作系统发起通知、通知的类型与音效，以及提供通知被点击或关闭时的回调等等，目前国内外的各大网站（尤其在桌面端）都有一定的使用。Notification API 最早应该是在 <a href="https://www.html5rocks.com/en/tutorials/notifications/quick/" title="Using the Notification API">2010</a> 年前后由 Chromium 提出<a href="http://www.chromium.org/developers/design-documents/desktop-notifications/api-specification" title="API Specification - The Chromium Projects">草案</a>以 <code class="highlighter-rouge">webkitNotifications</code> 前缀方式实现；随着 2011 年进入标准化；2012 年在 Safari 6（Mac OSX 10.8+）上获得支持；2015 年 Notification API 成为 <a href="https://www.w3.org/TR/notifications/" title="Web Notifications - W3C">W3C Recommendation</a>；2016 年 <a href="https://blogs.windows.com/msedgedev/2016/05/16/web-notifications-microsoft-edge/#2VBm890EjvAvUcgE.97">Edge 的支持</a>；Web Notifications 已经在桌面浏览器中获得了全面支持（Chrome、Edge、Firefox、Opera、Safari）的成就。</p>
 
 <p><a href="http://w3c.github.io/push-api/" title="Push API">Push API</a> 的出现则让推送服务具备了向 web 应用推送消息的能力，它定义了 web 应用如何向推送服务发起订阅、如何响应推送消息，以及 web 应用、应用服务器与推送服务之间的鉴权与加密机制；由于 Push API 并不依赖 web 应用与浏览器 UI 存活，所以即使是在 web 应用与浏览器未被用户打开的时候，也可以通过后台进程接受推送消息并调用 Notification API 向用户发出通知。值得一提的是，Mac OSX 10.9 Mavericks 与 Safari 7 在 2013 年就发布了自己的私有推送支持，基于 APNS 的 <a href="https://developer.apple.com/notifications/safari-push-notifications/" title="Safari Push Notifications">Safari Push Notifications</a>。</p>
 
 <p>在 PWA 中，我们利用 Service Worker 的后台计算能力结合 Push API 对推送事件进行响应，并通过 Notification API 实现通知的发出与处理：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js</span>
-<span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">&#39;</span><span class="n">push</span><span class="err">&#39;</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="c1">// sw.js
+</span><span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">'</span><span class="n">push</span><span class="err">'</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="n">event</span><span class="p">.</span><span class="n">waitUntil</span><span class="p">(</span>
-    <span class="c1">// Process the event and display a notification.</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">registration</span><span class="p">.</span><span class="n">showNotification</span><span class="p">(</span><span class="s">&quot;Hey!&quot;</span><span class="p">)</span>
+    <span class="c1">// Process the event and display a notification.
+</span>    <span class="n">self</span><span class="p">.</span><span class="n">registration</span><span class="p">.</span><span class="n">showNotification</span><span class="p">(</span><span class="s">"Hey!"</span><span class="p">)</span>
   <span class="p">);</span>
 <span class="p">});</span>
 
-<span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">&#39;</span><span class="n">notificationclick</span><span class="err">&#39;</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>  
-  <span class="c1">// Do something with the event  </span>
-  <span class="n">event</span><span class="p">.</span><span class="n">notification</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>  
+<span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">'</span><span class="n">notificationclick</span><span class="err">'</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>  
+  <span class="c1">// Do something with the event  
+</span>  <span class="n">event</span><span class="p">.</span><span class="n">notification</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>  
 <span class="p">});</span>
 
-<span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">&#39;</span><span class="n">notificationclose</span><span class="err">&#39;</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>  
-  <span class="c1">// Do something with the event  </span>
-<span class="p">});</span></code></pre></div>
+<span class="n">self</span><span class="p">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="err">'</span><span class="n">notificationclose</span><span class="err">'</span><span class="p">,</span> <span class="n">event</span> <span class="o">=&gt;</span> <span class="p">{</span>  
+  <span class="c1">// Do something with the event  
+</span><span class="p">});</span></code></pre></figure>
 
 <p>对于 Push Notification，笔者的几次分享中一直都提的稍微少一些，一是因为 Push API 还处于 Editor Draft 的状态，二是目前浏览器与推送服务间的协议支持还不够成熟：Chrome（与其它基于 Blink 的浏览器）在 Chromium 52 之前只支持基于 Google 私有的 GCM/FCM 服务进行通知推送。不过好消息是，继 Firefox 44 之后，Chrome 52 与 Opera 39 也紧追其后实现了正在由 IETF 进行标准化的 <a href="https://tools.ietf.org/html/draft-ietf-webpush-protocol-12" title="Web Push Protocol">Web 推送协议（Web Push Protocol）</a>。</p>
 

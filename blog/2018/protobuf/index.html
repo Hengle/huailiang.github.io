@@ -66,21 +66,21 @@
 
 <p>csharp 与 c++交互接口定义如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cp">#if UNITY_IPHONE || UNITY_XBOX360</span>
-<span class="na">	[DllImport(&quot;__Internal&quot;)]</span>
-<span class="cp">#else</span>
-<span class="na">    [DllImport(&quot;ptotobuf-lib&quot;)]</span>
-<span class="cp">#endif</span>
-    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iDeserial</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">pb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cp">#if UNITY_IPHONE || UNITY_XBOX360
+</span>	<span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"__Internal"</span><span class="p">)]</span>
+<span class="cp">#else
+</span>    <span class="p">[</span><span class="nf">DllImport</span><span class="p">(</span><span class="s">"ptotobuf-lib"</span><span class="p">)]</span>
+<span class="cp">#endif
+</span>    <span class="k">public</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">int</span> <span class="nf">iDeserial</span><span class="p">(</span><span class="n">IntPtr</span> <span class="n">pb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">);</span></code></pre></figure>
 
 <p>csharp 获取 bytes 数组的首地址可以通过GCHandle来获取：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">GCHandle</span> <span class="n">hObject</span> <span class="p">=</span> <span class="n">GCHandle</span><span class="p">.</span><span class="n">Alloc</span><span class="p">(</span><span class="n">bytes</span><span class="p">,</span> <span class="n">GCHandleType</span><span class="p">.</span><span class="n">Pinned</span><span class="p">);</span>
-<span class="n">IntPtr</span> <span class="n">pObject</span> <span class="p">=</span> <span class="n">hObject</span><span class="p">.</span><span class="n">AddrOfPinnedObject</span><span class="p">();</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"> <span class="n">GCHandle</span> <span class="n">hObject</span> <span class="p">=</span> <span class="n">GCHandle</span><span class="p">.</span><span class="nf">Alloc</span><span class="p">(</span><span class="n">bytes</span><span class="p">,</span> <span class="n">GCHandleType</span><span class="p">.</span><span class="n">Pinned</span><span class="p">);</span>
+<span class="n">IntPtr</span> <span class="n">pObject</span> <span class="p">=</span> <span class="n">hObject</span><span class="p">.</span><span class="nf">AddrOfPinnedObject</span><span class="p">();</span></code></pre></figure>
 
 <p>c++部分与 c#交互的部分需要写在 extern里, 参数传递指针和 bytes 数组的长度：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">extern</span> <span class="s">&quot;C&quot;</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
 
 	<span class="kt">int</span> <span class="n">iDeserial</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span>
@@ -88,19 +88,19 @@
 		<span class="n">XNet</span><span class="o">::</span><span class="n">Student</span> <span class="n">student</span><span class="p">;</span>
 		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">student</span><span class="p">.</span><span class="n">ParseFromArray</span><span class="p">(</span><span class="n">pb</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
 		<span class="p">{</span>
-			<span class="n">printf</span><span class="p">(</span><span class="s">&quot;parse student error&quot;</span><span class="p">);</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"parse student error"</span><span class="p">);</span>
 		<span class="p">}</span>
 		<span class="k">else</span>
 		<span class="p">{</span>
 			<span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="n">student</span><span class="p">.</span><span class="n">age</span><span class="p">();</span>
 			<span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">student</span><span class="p">.</span><span class="n">num</span><span class="p">();</span>
-			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;age: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">age</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;num:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">num</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"age: "</span> <span class="o">&lt;&lt;</span> <span class="n">age</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+			<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"num:"</span> <span class="o">&lt;&lt;</span> <span class="n">num</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 			<span class="k">return</span> <span class="n">age</span> <span class="o">+</span> <span class="n">num</span><span class="p">;</span>
 		<span class="p">}</span>
 		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>下面就是不同平台部分的编译 dll 部分</p>
 
@@ -128,55 +128,55 @@
 
 <p>在Application.mk 中声明编译的平台，使用的 Android 版本：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="nl">APP_ABI</span>          <span class="p">:</span><span class="o">=</span> <span class="n">armeabi</span><span class="o">-</span><span class="n">v7a</span> <span class="n">x86</span>
-<span class="nl">APP_OPTIM</span>         <span class="p">:</span><span class="o">=</span> <span class="n">release</span>
-<span class="nl">APP_PLATFORM</span>      <span class="p">:</span><span class="o">=</span> <span class="n">android</span><span class="o">-</span><span class="mi">14</span>
-<span class="cp">#APP_BUILD_SCRIPT := Android.mk</span>
-<span class="nl">APP_STL</span>       <span class="p">:</span><span class="o">=</span> <span class="n">c</span><span class="o">++</span><span class="n">_static</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">APP_ABI</span>          <span class="o">:=</span> <span class="n">armeabi</span><span class="o">-</span><span class="n">v7a</span> <span class="n">x86</span>
+<span class="n">APP_OPTIM</span>         <span class="o">:=</span> <span class="n">release</span>
+<span class="n">APP_PLATFORM</span>      <span class="o">:=</span> <span class="n">android</span><span class="o">-</span><span class="mi">14</span>
+<span class="cp">#APP_BUILD_SCRIPT := Android.mk
+</span><span class="n">APP_STL</span>       <span class="o">:=</span> <span class="n">c</span><span class="o">++</span><span class="n">_static</span></code></pre></figure>
 
 <p>在Android.mk中配置所要编译的 c++文件，编译使用的宏。使用方式跟 linux 使用 gcc编译c++很类似。</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="nl">LOCAL_PATH</span> <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">my</span><span class="o">-</span><span class="n">dir</span><span class="p">)</span>  
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">LOCAL_PATH</span> <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">my</span><span class="o">-</span><span class="n">dir</span><span class="p">)</span>  
 
 <span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">CLEAR_VARS</span><span class="p">)</span>
 
-<span class="nl">LOCAL_CFLAGS</span><span class="p">:</span><span class="o">=</span> <span class="o">-</span><span class="n">DHAVE_PTHREAD</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">LOCAL_CFLAGS</span><span class="o">:=</span> <span class="o">-</span><span class="n">DHAVE_PTHREAD</span><span class="o">=</span><span class="mi">1</span>
 
-<span class="cp">#  c++目录的相对路径</span>
-<span class="nl">MY_FILES_PATH</span>  <span class="p">:</span><span class="o">=</span>  <span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/</span>
+<span class="cp">#  c++目录的相对路径
+</span><span class="n">MY_FILES_PATH</span>  <span class="o">:=</span>  <span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/</span>
 
-<span class="cp"># c++后缀</span>
-<span class="nl">MY_FILES_SUFFIX</span> <span class="p">:</span><span class="o">=</span> <span class="o">%</span><span class="p">.</span><span class="n">cpp</span> <span class="o">%</span><span class="p">.</span><span class="n">cc</span> <span class="o">%</span><span class="p">.</span><span class="n">c</span>
+<span class="cp"># c++后缀
+</span><span class="n">MY_FILES_SUFFIX</span> <span class="o">:=</span> <span class="o">%</span><span class="p">.</span><span class="n">cpp</span> <span class="o">%</span><span class="p">.</span><span class="n">cc</span> <span class="o">%</span><span class="p">.</span><span class="n">c</span>
 
-<span class="cp"># 递归遍历目录下的所有的文件</span>
-<span class="n">rwildcard</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">wildcard</span> <span class="err">$</span><span class="mi">1</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">d</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">wildcard</span> <span class="err">$</span><span class="mi">1</span><span class="o">*</span><span class="p">),</span><span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="n">d</span><span class="o">/</span><span class="p">,</span><span class="err">$</span><span class="mi">2</span><span class="p">))</span>
+<span class="cp"># 递归遍历目录下的所有的文件
+</span><span class="n">rwildcard</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">wildcard</span> <span class="err">$</span><span class="mi">1</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">d</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">wildcard</span> <span class="err">$</span><span class="mi">1</span><span class="o">*</span><span class="p">),</span><span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="n">d</span><span class="o">/</span><span class="p">,</span><span class="err">$</span><span class="mi">2</span><span class="p">))</span>
 
-<span class="cp"># 获取相应的源文件</span>
-<span class="nl">MY_ALL_FILES</span> <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">src_path</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_PATH</span><span class="p">),</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">src_path</span><span class="p">),</span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="p">)</span> <span class="p">)</span> 
-<span class="nl">MY_ALL_FILES</span> <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="nl">MY_ALL_FILES</span><span class="p">:</span><span class="err">$</span><span class="p">(</span><span class="n">MY_CPP_PATH</span><span class="p">)</span><span class="o">/</span><span class="p">.</span><span class="o">/%=</span><span class="err">$</span><span class="p">(</span><span class="n">MY_CPP_PATH</span><span class="p">)</span><span class="o">%</span><span class="p">)</span>
-<span class="nl">MY_SRC_LIST</span>  <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">filter</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_SUFFIX</span><span class="p">),</span><span class="err">$</span><span class="p">(</span><span class="n">MY_ALL_FILES</span><span class="p">))</span> 
-<span class="nl">MY_SRC_LIST</span>  <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="nl">MY_SRC_LIST</span><span class="p">:</span><span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/%=%</span><span class="p">)</span>
+<span class="cp"># 获取相应的源文件
+</span><span class="n">MY_ALL_FILES</span> <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">src_path</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_PATH</span><span class="p">),</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">src_path</span><span class="p">),</span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="p">)</span> <span class="p">)</span> 
+<span class="n">MY_ALL_FILES</span> <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_ALL_FILES</span><span class="o">:</span><span class="err">$</span><span class="p">(</span><span class="n">MY_CPP_PATH</span><span class="p">)</span><span class="o">/</span><span class="p">.</span><span class="o">/%=</span><span class="err">$</span><span class="p">(</span><span class="n">MY_CPP_PATH</span><span class="p">)</span><span class="o">%</span><span class="p">)</span>
+<span class="n">MY_SRC_LIST</span>  <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">filter</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_SUFFIX</span><span class="p">),</span><span class="err">$</span><span class="p">(</span><span class="n">MY_ALL_FILES</span><span class="p">))</span> 
+<span class="n">MY_SRC_LIST</span>  <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_SRC_LIST</span><span class="o">:</span><span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/%=%</span><span class="p">)</span>
 
-<span class="cp"># 去除字串的重复单词</span>
-<span class="n">define</span> <span class="n">uniq</span> <span class="o">=</span>
-  <span class="err">$</span><span class="p">(</span><span class="n">eval</span> <span class="nl">seen</span> <span class="p">:</span><span class="o">=</span><span class="p">)</span>
+<span class="cp"># 去除字串的重复单词
+</span><span class="n">define</span> <span class="n">uniq</span> <span class="o">=</span>
+  <span class="err">$</span><span class="p">(</span><span class="n">eval</span> <span class="n">seen</span> <span class="o">:=</span><span class="p">)</span>
   <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">_</span><span class="p">,</span><span class="err">$</span><span class="mi">1</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="k">if</span> <span class="err">$</span><span class="p">(</span><span class="n">filter</span> <span class="err">$</span><span class="n">_</span><span class="p">,</span><span class="err">$</span><span class="p">{</span><span class="n">seen</span><span class="p">}),,</span><span class="err">$</span><span class="p">(</span><span class="n">eval</span> <span class="n">seen</span> <span class="o">+=</span> <span class="err">$</span><span class="n">_</span><span class="p">)))</span>
   <span class="err">$</span><span class="p">{</span><span class="n">seen</span><span class="p">}</span>
 <span class="n">endef</span>
 
-<span class="cp"># 递归遍历获取所有目录</span>
-<span class="nl">MY_ALL_DIRS</span> <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">dir</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">src_path</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_PATH</span><span class="p">),</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">src_path</span><span class="p">),</span><span class="err">*/</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
-<span class="nl">MY_ALL_DIRS</span> <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">uniq</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_ALL_DIRS</span><span class="p">))</span>
+<span class="cp"># 递归遍历获取所有目录
+</span><span class="n">MY_ALL_DIRS</span> <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">dir</span> <span class="err">$</span><span class="p">(</span><span class="n">foreach</span> <span class="n">src_path</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_FILES_PATH</span><span class="p">),</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">rwildcard</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">src_path</span><span class="p">),</span><span class="err">*/</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+<span class="n">MY_ALL_DIRS</span> <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">call</span> <span class="n">uniq</span><span class="p">,</span><span class="err">$</span><span class="p">(</span><span class="n">MY_ALL_DIRS</span><span class="p">))</span>
 
-<span class="cp"># 赋值给NDK编译系统</span>
-<span class="nl">LOCAL_SRC_FILES</span>  <span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_SRC_LIST</span><span class="p">)</span>
-<span class="nl">LOCAL_C_INCLUDES</span><span class="p">:</span><span class="o">=</span> <span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/</span>
+<span class="cp"># 赋值给NDK编译系统
+</span><span class="n">LOCAL_SRC_FILES</span>  <span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">MY_SRC_LIST</span><span class="p">)</span>
+<span class="n">LOCAL_C_INCLUDES</span><span class="o">:=</span> <span class="err">$</span><span class="p">(</span><span class="n">LOCAL_PATH</span><span class="p">)</span><span class="o">/</span>
 
-<span class="nl">LOCAL_SHARED_LIBRARIES</span><span class="p">:</span><span class="o">=</span> 
-<span class="nl">LOCAL_MODULE</span><span class="p">:</span><span class="o">=</span> <span class="n">libprotobuf</span><span class="o">-</span><span class="n">lib</span>
-<span class="nl">LOCAL_MODULE_TAGS</span> <span class="p">:</span><span class="o">=</span> <span class="n">optional</span>
+<span class="n">LOCAL_SHARED_LIBRARIES</span><span class="o">:=</span> 
+<span class="n">LOCAL_MODULE</span><span class="o">:=</span> <span class="n">libprotobuf</span><span class="o">-</span><span class="n">lib</span>
+<span class="n">LOCAL_MODULE_TAGS</span> <span class="o">:=</span> <span class="n">optional</span>
 <span class="n">LOCAL_LDLIBS</span> <span class="o">+=</span> <span class="o">-</span><span class="n">llog</span>
-<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">BUILD_SHARED_LIBRARY</span><span class="p">)</span></code></pre></div>
+<span class="n">include</span> <span class="err">$</span><span class="p">(</span><span class="n">BUILD_SHARED_LIBRARY</span><span class="p">)</span></code></pre></figure>
 
 <p>下载好 ndk，把路径配置到环境变量中，就可以使用了 ndk-build 来编译 so 了。</p>
 

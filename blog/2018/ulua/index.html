@@ -87,19 +87,19 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 将loslib.c中</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">stat</span> <span class="o">=</span> <span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">stat</span> <span class="o">=</span> <span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span></code></pre></figure>
 
 <p>改为:</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">stat</span> <span class="o">=</span> <span class="n">nftw</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">unlink_cb</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">FTW_DEPTH</span> <span class="o">|</span> <span class="n">FTW_PHYS</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="n">stat</span> <span class="o">=</span> <span class="n">nftw</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">unlink_cb</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">FTW_DEPTH</span> <span class="o">|</span> <span class="n">FTW_PHYS</span><span class="p">);</span></code></pre></figure>
 
 <p>引入头文件</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;ftw.h&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;ftw.h&gt;</span></code></pre></figure>
 
 <p>添加方法:</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">unlink_cb</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">fpath</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">stat</span> <span class="o">*</span><span class="n">sb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">typeflag</span><span class="p">,</span> <span class="k">struct</span> <span class="n">FTW</span>     <span class="o">*</span><span class="n">ftwbuf</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">unlink_cb</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">fpath</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">stat</span> <span class="o">*</span><span class="n">sb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">typeflag</span><span class="p">,</span> <span class="k">struct</span> <span class="n">FTW</span>     <span class="o">*</span><span class="n">ftwbuf</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">rv</span> <span class="o">=</span> <span class="n">remove</span><span class="p">(</span><span class="n">fpath</span><span class="p">);</span>
     
@@ -107,7 +107,7 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
         <span class="n">perror</span><span class="p">(</span><span class="n">fpath</span><span class="p">);</span>
     
     <span class="k">return</span> <span class="n">rv</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>ftw.h当然这是ios平台才有的头文件，所以你使用同一份代码编译编译Android的时候又会发现此文件找不到，所以可以使用#ifdef IOS 这样的宏区分开来。</p>
 
@@ -121,14 +121,14 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 
 <p>于是将错误的地址进行如下修改：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#ifdef WIN32</span>
-
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#ifdef WIN32
+</span>
        <span class="n">lcc</span> <span class="o">=</span> <span class="n">localeconv</span><span class="p">();</span>   <span class="cm">/* set structure containing local decimal point symbol */</span>
        <span class="n">decimalpt</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">lcc</span><span class="o">-&gt;</span><span class="n">decimal_point</span><span class="p">);</span>
-<span class="cp">#else</span>
-
-       <span class="n">decimalpt</span> <span class="o">=</span> <span class="sc">&#39;.&#39;</span><span class="p">;</span>
-<span class="cp">#endif</span></code></pre></div>
+<span class="cp">#else
+</span>
+       <span class="n">decimalpt</span> <span class="o">=</span> <span class="sc">'.'</span><span class="p">;</span>
+<span class="cp">#endif</span></code></pre></figure>
 
 <p>效果如下：</p>
 
@@ -140,7 +140,7 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 
 <p>把差异化的东西编译到link文件，然后cmakelist这样配置：</p>
 
-<div class="highlight"><pre><code class="language-r" data-lang="r">configure_file <span class="p">(</span> <span class="o">$</span><span class="p">{</span>LUA_SRC_PATH<span class="p">}</span><span class="o">/</span>luaconf.h.in <span class="o">$</span><span class="p">{</span>CMAKE_CURRENT_BINARY_DIR<span class="p">}</span><span class="o">/</span>luaconf.h <span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">configure_file</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">LUA_SRC_PATH</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h.in</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_BINARY_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h</span><span class="w"> </span><span class="p">)</span></code></pre></figure>
 
 <h2 id="protobuf">Protobuf</h2>
 
@@ -162,8 +162,8 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 
 <p>lua使用bytecode 的好处主要有两点：</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">a</span><span class="p">.</span> <span class="err">二进制文件，为了加密</span>
- <span class="n">b</span><span class="p">.</span> <span class="err">编译后的中间件，提升效率</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"> <span class="n">a</span><span class="p">.</span> <span class="err">二进制文件，为了加密</span>
+ <span class="n">b</span><span class="p">.</span> <span class="err">编译后的中间件，提升效率</span></code></pre></figure>
 
 <p>那么如何导出bytecode呢？</p>
 
@@ -171,12 +171,12 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
   <li>luajit</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">a</span><span class="p">.</span> <span class="err">进入</span><span class="n">luajit</span><span class="err">\</span><span class="n">LuaJIT</span><span class="o">-</span><span class="mf">2.0.1</span><span class="err">\</span><span class="n">src</span> <span class="err">目录</span>
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">a</span><span class="p">.</span> <span class="err">进入</span><span class="n">luajit</span><span class="err">\</span><span class="n">LuaJIT</span><span class="o">-</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="err">\</span><span class="n">src</span> <span class="err">目录</span>
 
-<span class="n">b</span><span class="p">.</span> <span class="n">uajit</span> <span class="o">-</span><span class="n">b</span> <span class="err">需要编译的</span><span class="n">lua</span><span class="err">文件路径</span> <span class="err">编译输出文件保存路径</span></code></pre></div>
+<span class="n">b</span><span class="p">.</span> <span class="n">uajit</span> <span class="o">-</span><span class="n">b</span> <span class="err">需要编译的</span><span class="n">lua</span><span class="err">文件路径</span> <span class="err">编译输出文件保存路径</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># luajit -b d:\src.lua d:\des.lua</span>
-luajit -b d:<span class="se">\s</span>rc.lua d:<span class="se">\d</span>es.lua</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># luajit -b d:\src.lua d:\des.lua</span>
+luajit -b d:<span class="se">\s</span>rc.lua d:<span class="se">\d</span>es.lua</code></pre></figure>
 
 <ul>
   <li>luac (mac下)</li>
@@ -184,14 +184,14 @@ luajit -b d:<span class="se">\s</span>rc.lua d:<span class="se">\d</span>es.lua<
 
 <p>运行下面命令</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">curl -R -O http://www.lua.org/ftp/lua-5.3.1.tar.gz 
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">curl -R -O http://www.lua.org/ftp/lua-5.3.1.tar.gz 
 tar zxf lua-5.3.1.tar.gz 
 <span class="nb">cd </span>lua-5.3.1 
-make macosx <span class="nb">test</span></code></pre></div>
+make macosx <span class="nb">test</span></code></pre></figure>
 
 <p>安装, 输入以下命令，会要求输入Password: 输入相应密码（你的密码），然后回车就自动安装了</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo make install</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo make install</code></pre></figure>
 
 <p>配置编译器 sublime下执行Tools-&gt;Build System-&gt;New Build System 输入：</p>
 
@@ -204,7 +204,7 @@ make macosx <span class="nb">test</span></code></pre></div>
 
 <p>luac生成bytecode, 使用如下命令：</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">luac -o test.luac test.lua</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">luac -o test.luac test.lua</code></pre></figure>
 
 <p>注意：</p>
 

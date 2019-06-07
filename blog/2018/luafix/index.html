@@ -94,53 +94,53 @@
 
 <p>所有上面的实现都是基于埋点来实现的。比如说我们在发布前在每个view的显示函数（基类的虚函数）或者隐藏的地方，埋下如下所示的点：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">ILuaEngine</span> <span class="n">luaEngine</span> <span class="p">=</span> <span class="n">XUpdater</span><span class="p">.</span><span class="n">XUpdater</span><span class="p">.</span><span class="n">singleton</span><span class="p">.</span><span class="n">XLuaEngine</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(!</span><span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="n">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">BEFORE</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">))</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">ILuaEngine</span> <span class="n">luaEngine</span> <span class="p">=</span> <span class="n">XUpdater</span><span class="p">.</span><span class="n">XUpdater</span><span class="p">.</span><span class="n">singleton</span><span class="p">.</span><span class="n">XLuaEngine</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(!</span><span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="nf">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">BEFORE</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">))</span>
 <span class="p">{</span>
-  <span class="n">OnShow</span><span class="p">();</span>
-  <span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="n">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">AFTER</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+  <span class="nf">OnShow</span><span class="p">();</span>
+  <span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="nf">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">AFTER</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-    <span class="n">OnHide</span><span class="p">();</span>
-    <span class="n">UIManager</span><span class="p">.</span><span class="n">singleton</span><span class="p">.</span><span class="n">OnDlgHide</span><span class="p">(</span><span class="n">s_instance</span><span class="p">);</span>
+    <span class="nf">OnHide</span><span class="p">();</span>
+    <span class="n">UIManager</span><span class="p">.</span><span class="n">singleton</span><span class="p">.</span><span class="nf">OnDlgHide</span><span class="p">(</span><span class="n">s_instance</span><span class="p">);</span>
     <span class="n">ILuaEngine</span> <span class="n">luaEngine</span> <span class="p">=</span> <span class="n">XUpdater</span><span class="p">.</span><span class="n">XUpdater</span><span class="p">.</span><span class="n">singleton</span><span class="p">.</span><span class="n">XLuaEngine</span><span class="p">;</span>
-    <span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="n">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">HIDE</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+    <span class="n">luaEngine</span><span class="p">.</span><span class="n">hotfixMgr</span><span class="p">.</span><span class="nf">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span><span class="p">.</span><span class="n">HIDE</span><span class="p">,</span> <span class="n">luaFileName</span><span class="p">,</span> <span class="n">uiBehaviour</span><span class="p">.</span><span class="n">gameObject</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>OnShow和OnHide是每个界面的显示、隐藏函数。这样的话，每次刷新的UI都先去检查是否存在相应的lua热更文件，如果存在的话，则跳入对应lua的函数入口。具体的实现如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="kt">bool</span> <span class="nf">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span> <span class="n">_mode</span><span class="p">,</span> <span class="kt">string</span> <span class="n">_pageName</span><span class="p">,</span> <span class="n">GameObject</span> <span class="n">go</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="kt">bool</span> <span class="nf">TryFixRefresh</span><span class="p">(</span><span class="n">Mode</span> <span class="n">_mode</span><span class="p">,</span> <span class="kt">string</span> <span class="n">_pageName</span><span class="p">,</span> <span class="n">GameObject</span> <span class="n">go</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">useHotfix</span> <span class="p">&amp;&amp;</span> <span class="n">init</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">&quot;Hotfix&quot;</span> <span class="p">+</span> <span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot;.lua&quot;</span><span class="p">;</span>
-        <span class="kt">bool</span> <span class="n">dolua</span> <span class="p">=</span> <span class="n">DoLuaFile</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+        <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">"Hotfix"</span> <span class="p">+</span> <span class="n">_pageName</span> <span class="p">+</span> <span class="s">".lua"</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">dolua</span> <span class="p">=</span> <span class="nf">DoLuaFile</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">dolua</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">_refresh</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">BEFORE</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="n">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot;.BeforeRefresh&quot;</span><span class="p">);</span><span class="c1">// : _pageName + &quot;.AfterRefresh&quot;);</span>
-            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">AFTER</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="n">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot;.AfterRefresh&quot;</span><span class="p">);</span>
-            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">HIDE</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="n">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot;.Hide&quot;</span><span class="p">);</span>
-            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">UNLOAD</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="n">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot;.Unload&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">BEFORE</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="nf">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">".BeforeRefresh"</span><span class="p">);</span><span class="c1">// : _pageName + ".AfterRefresh");
+</span>            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">AFTER</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="nf">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">".AfterRefresh"</span><span class="p">);</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">HIDE</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="nf">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">".Hide"</span><span class="p">);</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_mode</span> <span class="p">==</span> <span class="n">Mode</span><span class="p">.</span><span class="n">UNLOAD</span><span class="p">)</span> <span class="n">_refresh</span> <span class="p">=</span> <span class="n">hot</span><span class="p">.</span><span class="n">lua</span><span class="p">.</span><span class="nf">GetFunction</span><span class="p">(</span><span class="n">_pageName</span> <span class="p">+</span> <span class="s">".Unload"</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">_refresh</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="kt">object</span><span class="p">[]</span> <span class="n">r</span> <span class="p">=</span> <span class="n">_refresh</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">go</span><span class="p">);</span>
-                <span class="n">_refresh</span><span class="p">.</span><span class="n">Release</span><span class="p">();</span>
+                <span class="kt">object</span><span class="p">[]</span> <span class="n">r</span> <span class="p">=</span> <span class="n">_refresh</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="n">go</span><span class="p">);</span>
+                <span class="n">_refresh</span><span class="p">.</span><span class="nf">Release</span><span class="p">();</span>
                 <span class="k">return</span> <span class="n">r</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">r</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">?</span> <span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="n">r</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">:</span> <span class="k">false</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;func is null!&quot;</span> <span class="p">+</span> <span class="n">_pageName</span> <span class="p">+</span> <span class="s">&quot; mode: &quot;</span> <span class="p">+</span> <span class="n">_mode</span><span class="p">);</span>
+                <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"func is null!"</span> <span class="p">+</span> <span class="n">_pageName</span> <span class="p">+</span> <span class="s">" mode: "</span> <span class="p">+</span> <span class="n">_mode</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>而如果有新的lua文件，则会跳入相应的lua函数中，lua的实现如下：</p>
 
-<div class="highlight"><pre><code class="language-lua" data-lang="lua"><span class="n">TestDlg</span> <span class="o">=</span> <span class="p">{}</span>
+<figure class="highlight"><pre><code class="language-lua" data-lang="lua"><span class="n">TestDlg</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="kd">local</span> <span class="n">this</span> <span class="o">=</span> <span class="n">TestDlg</span>
 <span class="kd">local</span> <span class="n">m_go</span>
 
@@ -153,7 +153,7 @@
 	 	<span class="n">m_go</span> <span class="o">=</span> <span class="n">go</span><span class="p">;</span>
 	 	<span class="nb">print</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
 	<span class="k">else</span>
-		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">AfterRefresh: TestDlg.AfterRefresh is nil lua script &quot;</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">"AfterRefresh: TestDlg.AfterRefresh is nil lua script "</span><span class="p">)</span>
 	<span class="k">end</span>
 	<span class="k">return</span> <span class="kc">false</span>
 <span class="k">end</span>
@@ -164,7 +164,7 @@
 
 <span class="k">function</span> <span class="nc">TestDlg</span><span class="p">.</span><span class="nf">Unload</span><span class="p">(</span><span class="n">go</span><span class="p">)</span>
 	<span class="k">return</span> <span class="kc">false</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>lua 模板内置的函数诸如BeforeRefresh，AfterRefresh，Unload这些函数都会带有返回值，如果返回false，则是不覆盖之前的c#的逻辑，如果返回true，则是覆盖原来c#写的代码。类似的原理，我们还可以重载掉所有的c#里的click事件，覆盖所有的c#里网络协议。</p>
 
@@ -185,34 +185,34 @@ LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
 
 <p>实现跟c#的类似,luadlg.cs 实现如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">using</span> <span class="nn">LuaInterface</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">using</span> <span class="nn">LuaInterface</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
 <span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
 
 <span class="k">public</span> <span class="k">class</span> <span class="nc">LuaDlg</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
 <span class="p">{</span>
     <span class="k">private</span> <span class="n">LuaScriptMgr</span> <span class="n">mgr</span><span class="p">;</span>
-    <span class="k">private</span> <span class="kt">string</span> <span class="n">m_name</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">name</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">).</span><span class="n">ToUpper</span><span class="p">()</span> <span class="p">+</span> <span class="n">name</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="m">1</span><span class="p">);</span> <span class="p">}</span> <span class="p">}</span>
-    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">AWAKE</span> <span class="p">=</span> <span class="s">&quot;Awake&quot;</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">START</span> <span class="p">=</span> <span class="s">&quot;Start&quot;</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">ENABLE</span> <span class="p">=</span> <span class="s">&quot;OnEnable&quot;</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">DISABLE</span> <span class="p">=</span> <span class="s">&quot;OnDisable&quot;</span><span class="p">;</span>
-    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">DESTROY</span> <span class="p">=</span> <span class="s">&quot;OnDestroy&quot;</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">m_name</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">name</span><span class="p">.</span><span class="nf">Substring</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">).</span><span class="nf">ToUpper</span><span class="p">()</span> <span class="p">+</span> <span class="n">name</span><span class="p">.</span><span class="nf">Substring</span><span class="p">(</span><span class="m">1</span><span class="p">);</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">AWAKE</span> <span class="p">=</span> <span class="s">"Awake"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">START</span> <span class="p">=</span> <span class="s">"Start"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">ENABLE</span> <span class="p">=</span> <span class="s">"OnEnable"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">DISABLE</span> <span class="p">=</span> <span class="s">"OnDisable"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">DESTROY</span> <span class="p">=</span> <span class="s">"OnDestroy"</span><span class="p">;</span>
 
     <span class="k">void</span> <span class="nf">Awake</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">mgr</span> <span class="p">=</span> <span class="n">HotfixManager</span><span class="p">.</span><span class="n">GetLuaScriptMgr</span><span class="p">();</span>
-        <span class="n">mgr</span><span class="p">.</span><span class="n">DoFile</span><span class="p">(</span><span class="s">&quot;Lua&quot;</span> <span class="p">+</span> <span class="n">m_name</span> <span class="p">+</span> <span class="s">&quot;.lua&quot;</span><span class="p">);</span>
-        <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="n">GetLuaFunction</span><span class="p">(</span><span class="n">SPend</span><span class="p">(</span><span class="n">AWAKE</span><span class="p">));</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
+        <span class="n">mgr</span> <span class="p">=</span> <span class="n">HotfixManager</span><span class="p">.</span><span class="nf">GetLuaScriptMgr</span><span class="p">();</span>
+        <span class="n">mgr</span><span class="p">.</span><span class="nf">DoFile</span><span class="p">(</span><span class="s">"Lua"</span> <span class="p">+</span> <span class="n">m_name</span> <span class="p">+</span> <span class="s">".lua"</span><span class="p">);</span>
+        <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">GetLuaFunction</span><span class="p">(</span><span class="nf">SPend</span><span class="p">(</span><span class="n">AWAKE</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="n">gameObject</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">mgr</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="n">GetLuaFunction</span><span class="p">(</span><span class="n">SPend</span><span class="p">(</span><span class="n">START</span><span class="p">));</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="n">Call</span><span class="p">();</span>
+            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">GetLuaFunction</span><span class="p">(</span><span class="nf">SPend</span><span class="p">(</span><span class="n">START</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="nf">Call</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -220,8 +220,8 @@ LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">mgr</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="n">GetLuaFunction</span><span class="p">(</span><span class="n">SPend</span><span class="p">(</span><span class="n">ENABLE</span><span class="p">));</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="n">Call</span><span class="p">();</span>
+            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">GetLuaFunction</span><span class="p">(</span><span class="nf">SPend</span><span class="p">(</span><span class="n">ENABLE</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="nf">Call</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -229,8 +229,8 @@ LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">mgr</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="n">GetLuaFunction</span><span class="p">(</span><span class="n">SPend</span><span class="p">(</span><span class="n">DISABLE</span><span class="p">));</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="n">Call</span><span class="p">();</span>
+            <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">GetLuaFunction</span><span class="p">(</span><span class="nf">SPend</span><span class="p">(</span><span class="n">DISABLE</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="nf">Call</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -240,21 +240,21 @@ LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
         <span class="p">{</span>
             <span class="k">try</span>
             <span class="p">{</span>
-                <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="n">GetLuaFunction</span><span class="p">(</span><span class="n">SPend</span><span class="p">(</span><span class="n">DESTROY</span><span class="p">));</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="n">Call</span><span class="p">();</span>
+                <span class="n">LuaFunction</span> <span class="n">func</span> <span class="p">=</span> <span class="n">mgr</span><span class="p">.</span><span class="nf">GetLuaFunction</span><span class="p">(</span><span class="nf">SPend</span><span class="p">(</span><span class="n">DESTROY</span><span class="p">));</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="n">func</span><span class="p">.</span><span class="nf">Call</span><span class="p">();</span>
             <span class="p">}</span><span class="k">catch</span> <span class="p">{</span> <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="k">private</span> <span class="kt">string</span> <span class="nf">SPend</span><span class="p">(</span><span class="kt">string</span> <span class="n">func</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="p">(</span><span class="s">&quot;Lua&quot;</span><span class="p">);</span>
-        <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">m_name</span><span class="p">);</span>
-        <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">);</span>
-        <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">sb</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+        <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">(</span><span class="s">"Lua"</span><span class="p">);</span>
+        <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">m_name</span><span class="p">);</span>
+        <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+        <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">sb</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="xxxx_pb协议解析">xxxx_pb协议解析</h3>
 <p>协议解析文件 由protoc-gen-lua生成（不要手动编辑）<br />

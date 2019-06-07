@@ -143,7 +143,7 @@
 
 <p>就不过多解释了，代码贴出来了：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># -*- coding:utf-8 -*-</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># -*- coding:utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">board</span> <span class="kn">import</span> <span class="n">Board</span>
@@ -167,28 +167,28 @@
 <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">train</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
 
-<span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">&quot;loss&quot;</span><span class="p">,</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">"loss"</span><span class="p">,</span><span class="n">loss</span><span class="p">)</span>
 <span class="n">merged</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span>
 
 <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
-   <span class="n">summary_writer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span> <span class="s">&quot;output/&quot;</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+   <span class="n">summary_writer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span> <span class="s">"output/"</span><span class="p">,</span><span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
    <span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
 
-   <span class="k">print</span><span class="p">(</span><span class="s">&quot;real vale: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">linear_mode</span><span class="p">,</span><span class="n">feed_dict</span><span class="p">)))</span>
-   <span class="k">print</span><span class="p">(</span><span class="s">&quot;curr loss: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span><span class="n">feed_dict</span><span class="p">)))</span>
+   <span class="k">print</span><span class="p">(</span><span class="s">"real vale: {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">linear_mode</span><span class="p">,</span><span class="n">feed_dict</span><span class="p">)))</span>
+   <span class="k">print</span><span class="p">(</span><span class="s">"curr loss: {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span><span class="n">feed_dict</span><span class="p">)))</span>
 
    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">feed_dict</span><span class="p">)</span>
        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
            <span class="n">cc</span><span class="p">,</span><span class="n">res</span><span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">loss</span><span class="p">,</span><span class="n">merged</span><span class="p">],</span><span class="n">feed_dict</span><span class="p">)</span>
            <span class="n">summary_writer</span><span class="o">.</span><span class="n">add_summary</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-           <span class="k">print</span> <span class="s">&quot;train step(</span><span class="si">%s</span><span class="s">) loss:</span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">cc</span><span class="p">)</span>
+           <span class="k">print</span> <span class="s">"train step(</span><span class="si">%</span><span class="s">s) loss:</span><span class="si">%</span><span class="s">s"</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">cc</span><span class="p">)</span>
 
    <span class="c"># Evaluate training accuracy</span>
    <span class="n">curr_W</span><span class="p">,</span><span class="n">curr_b</span><span class="p">,</span><span class="n">currr_loss</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">W</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">loss</span><span class="p">],</span><span class="n">feed_dict</span><span class="p">)</span>
-   <span class="k">print</span><span class="p">(</span><span class="s">&quot;W: </span><span class="si">%s</span><span class="s">,b: </span><span class="si">%s</span><span class="s">,loss: </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">curr_W</span><span class="p">,</span><span class="n">curr_b</span><span class="p">,</span><span class="n">currr_loss</span><span class="p">))</span>
-   <span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">W</span><span class="p">,</span><span class="n">b</span><span class="p">]))</span></code></pre></div>
+   <span class="k">print</span><span class="p">(</span><span class="s">"W: </span><span class="si">%</span><span class="s">s,b: </span><span class="si">%</span><span class="s">s,loss: </span><span class="si">%</span><span class="s">s"</span><span class="o">%</span><span class="p">(</span><span class="n">curr_W</span><span class="p">,</span><span class="n">curr_b</span><span class="p">,</span><span class="n">currr_loss</span><span class="p">))</span>
+   <span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">W</span><span class="p">,</span><span class="n">b</span><span class="p">]))</span></code></pre></figure>
 
 <p>经过1000次训练，我们可以从下图的运行结果可以发现 loss 越来越小了，说明我们的模型值越来越精准。准确率接近100%<br />
 最终我们训练出来的模型 W:2.0000005, b:-1.0000029 loss:1.3187673e-11<br />
@@ -202,7 +202,7 @@
 <p>我想训练出来的模型准确率之所以这么高，一是因为我们给的训练数据比较少，而是因为训练数据给的很理想。<br />
 现实生活中的数据可比这复杂多了，当然我们也有更好的模型来训练它，这是后话了。</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">运行结果：
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">运行结果：
 real vale: <span class="o">[</span>-0.9999999   0.10000014  1.2000003   2.3000002   3.4         4.61      <span class="o">]</span>
 curr loss: 121.132095337
 train step<span class="o">(</span>0<span class="o">)</span> loss:107.545296
@@ -215,8 +215,8 @@ train step<span class="o">(</span>600<span class="o">)</span> loss:0.018509895
 train step<span class="o">(</span>700<span class="o">)</span> loss:0.018509895
 train step<span class="o">(</span>800<span class="o">)</span> loss:0.018509895
 train step<span class="o">(</span>900<span class="o">)</span> loss:0.018509895
-W: <span class="o">[</span>1.97131<span class="o">]</span>,b: <span class="o">[</span>-0.93244034<span class="o">]</span>,loss: 0.018509895
-<span class="o">[</span>array<span class="o">([</span>1.97131<span class="o">]</span>, <span class="nv">dtype</span><span class="o">=</span>float32<span class="o">)</span>, array<span class="o">([</span>-0.93244034<span class="o">]</span>, <span class="nv">dtype</span><span class="o">=</span>float32<span class="o">)]</span></code></pre></div>
+W: <span class="o">[</span>1.97131],b: <span class="o">[</span>-0.93244034],loss: 0.018509895
+<span class="o">[</span>array<span class="o">([</span>1.97131], <span class="nv">dtype</span><span class="o">=</span>float32<span class="o">)</span>, array<span class="o">([</span>-0.93244034], <span class="nv">dtype</span><span class="o">=</span>float32<span class="o">)]</span></code></pre></figure>
 
 <p>从 tensorboard 上来看，loss 矫正的速度还是挺快的，大概在第200步之后，模型就稳定了。</p>
 

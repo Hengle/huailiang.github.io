@@ -79,32 +79,32 @@
 
 <p>二进制记录的内容代码如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">OpenOrCreate</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">);</span>
-<span class="n">BinaryWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BinaryWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">OpenOrCreate</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">);</span>
+<span class="n">BinaryWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BinaryWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
 
-<span class="c1">//这里我分割的宽和长度是一样的.这里求出循环次数,TerrainLoad.SIZE要生成的地形宽度,长度相同</span>
-<span class="c1">//高度地图的分辨率只能是2的N次幂加1,所以SLICING_SIZE必须为2的N次幂</span>
-<span class="kt">int</span> <span class="n">size</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">terrain</span><span class="p">.</span><span class="n">terrainData</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span> <span class="p">/</span> <span class="n">trnconst</span><span class="p">.</span><span class="n">SLICE</span><span class="p">;</span>
+<span class="c1">//这里我分割的宽和长度是一样的.这里求出循环次数,TerrainLoad.SIZE要生成的地形宽度,长度相同
+//高度地图的分辨率只能是2的N次幂加1,所以SLICING_SIZE必须为2的N次幂
+</span><span class="kt">int</span> <span class="n">size</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">terrain</span><span class="p">.</span><span class="n">terrainData</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span> <span class="p">/</span> <span class="n">trnconst</span><span class="p">.</span><span class="n">SLICE</span><span class="p">;</span>
 <span class="n">Vector3</span> <span class="n">pos</span> <span class="p">=</span> <span class="n">terrain</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeDistance</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeBillboardDistance</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeCrossFadeLength</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeMaximumFullLODCount</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">detailObjectDistance</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">detailObjectDensity</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">heightmapPixelError</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">heightmapMaximumLOD</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">basemapDistance</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">lightmapIndex</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">castShadows</span><span class="p">);</span>
-<span class="n">WriteParts</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Flush</span><span class="p">();</span>
-<span class="n">writer</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
-<span class="n">fs</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span></code></pre></div>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeDistance</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeBillboardDistance</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeCrossFadeLength</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">treeMaximumFullLODCount</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">detailObjectDistance</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">detailObjectDensity</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">heightmapPixelError</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">heightmapMaximumLOD</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">basemapDistance</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">lightmapIndex</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">terrain</span><span class="p">.</span><span class="n">castShadows</span><span class="p">);</span>
+<span class="nf">WriteParts</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Flush</span><span class="p">();</span>
+<span class="n">writer</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+<span class="n">fs</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span></code></pre></figure>
 
 <h3 id="分段加载地形和物件">分段加载地形和物件。</h3>
 
@@ -114,16 +114,16 @@
 
 <p>类似图片的展示的一样，走进走出collider 的 triger 就会触发地形的加载和卸载，实现过程类似于 Unreal引擎实现的Level Streaming Volume。为了避免玩家在collider边界频繁的走动从而出发频繁的内存的加载和卸载，可以在卸载加载的时候加一定的延时。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">OnTriggerEnter</span><span class="p">(</span><span class="n">Collider</span> <span class="n">other</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">OnTriggerEnter</span><span class="p">(</span><span class="n">Collider</span> <span class="n">other</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">TerrainLoadMgr</span><span class="p">.</span><span class="n">sington</span><span class="p">.</span><span class="n">LoadItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">TerrainLoadMgr</span><span class="p">.</span><span class="n">sington</span><span class="p">.</span><span class="nf">LoadItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
 <span class="p">}</span>
 
 
 <span class="k">private</span> <span class="k">void</span> <span class="nf">OnTriggerExit</span><span class="p">(</span><span class="n">Collider</span> <span class="n">other</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">TerrainLoadMgr</span><span class="p">.</span><span class="n">sington</span><span class="p">.</span><span class="n">UnloadItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+    <span class="n">TerrainLoadMgr</span><span class="p">.</span><span class="n">sington</span><span class="p">.</span><span class="nf">UnloadItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="部件的加载">部件的加载</h3>
 

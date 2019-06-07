@@ -79,10 +79,10 @@
 
 <p>在快速使用中我们添加如下代码：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
   <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
   <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">head</span><span class="p">)</span>
-  <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">)</span></code></pre></div>
+  <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">)</span></code></pre></figure>
 
 <p>通过这种soup.标签名 我们就可以获得这个标签的内容<br />
   这里有个问题需要注意，通过这种方式获取标签，如果文档中有多个这样的标签，返回的结果是第一个标签的内容，如上面我们通过soup.p获取p标签，而文档中有多个p标签，但是只返回了第一个p标签内容</p>
@@ -98,8 +98,8 @@
   </li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span></code></pre></figure>
 
 <p>上面两种方式都可以获取p标签的name属性值</p>
 
@@ -107,7 +107,7 @@
   <li>获取内容</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">string</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">string</span><span class="p">)</span></code></pre></figure>
 
 <p>结果就可以获取第一个p标签的内容：<br />
   The Dormouse’s story</p>
@@ -120,11 +120,11 @@
   </li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">string</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">string</span><span class="p">)</span></code></pre></figure>
 
 <p>下面代码就是展示了利用 BeautifulSoup 扒取《国家地理》里的精美图片。我们可以设置最大的链接页面 max=5. 所有扒取的图片都存在跟nationalgeographic文件夹下。</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
@@ -133,12 +133,12 @@
 <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
 
 <span class="nb">max</span><span class="o">=</span><span class="mi">5</span>
-<span class="n">dest</span> <span class="o">=</span> <span class="s">&quot;./nationalgeographic/&quot;</span>
-<span class="n">URL</span> <span class="o">=</span> <span class="s">&quot;http://www.nationalgeographic.com.cn/animals/&quot;</span>
+<span class="n">dest</span> <span class="o">=</span> <span class="s">"./nationalgeographic/"</span>
+<span class="n">URL</span> <span class="o">=</span> <span class="s">"http://www.nationalgeographic.com.cn/animals/"</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">扒取之前，先清理干净本地目录</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="s">"""
+扒取之前，先清理干净本地目录
+"""</span>
 
 <span class="k">def</span> <span class="nf">clear</span><span class="p">():</span>
 	<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest</span><span class="p">):</span>
@@ -146,38 +146,38 @@
 	<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">扒取下载图片</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="s">"""
+扒取下载图片
+"""</span>
 <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
 	<span class="c"># 用global关键字来进行说明该变量是全局变量</span>
 	<span class="k">global</span> <span class="nb">max</span>
 
 	<span class="n">html</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
-	<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="s">&quot;lxml&quot;</span><span class="p">)</span>
+	<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span><span class="s">"lxml"</span><span class="p">)</span>
 	<span class="k">print</span> <span class="n">soup</span><span class="o">.</span><span class="n">title</span>
-	<span class="n">imgs</span><span class="o">=</span><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">&#39;img&#39;</span><span class="p">)</span>
+	<span class="n">imgs</span><span class="o">=</span><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'img'</span><span class="p">)</span>
 	<span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
-		<span class="n">url</span><span class="o">=</span><span class="n">img</span><span class="p">[</span><span class="s">&#39;src&#39;</span><span class="p">]</span>
-		<span class="nb">file</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-		<span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;http&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;jpg&quot;</span><span class="p">):</span>
+		<span class="n">url</span><span class="o">=</span><span class="n">img</span><span class="p">[</span><span class="s">'src'</span><span class="p">]</span>
+		<span class="nb">file</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"http"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"jpg"</span><span class="p">):</span>
 		<span class="c"># urlretrieve(url,dest+file)</span>
 			<span class="k">print</span> <span class="n">url</span>
 			<span class="n">r</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 				<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
 					<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-	<span class="n">links</span><span class="o">=</span><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+	<span class="n">links</span><span class="o">=</span><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
 	<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
-	 	<span class="n">url</span><span class="o">=</span><span class="n">link</span><span class="p">[</span><span class="s">&#39;href&#39;</span><span class="p">]</span>
+	 	<span class="n">url</span><span class="o">=</span><span class="n">link</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
 	 	<span class="c"># print url</span>
-	 	<span class="k">if</span> <span class="nb">max</span> <span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;http&quot;</span><span class="p">):</span>
+	 	<span class="k">if</span> <span class="nb">max</span> <span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"http"</span><span class="p">):</span>
  			<span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 	 		<span class="nb">max</span><span class="o">=</span><span class="nb">max</span><span class="o">-</span><span class="mi">1</span>
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
 	<span class="n">clear</span><span class="p">()</span>
-	<span class="n">download</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span></code></pre></div>
+	<span class="n">download</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span></code></pre></figure>
 
 <p>当我们使用urlretrieve下载图片的时候，发现有的图片下载不下来，使用requests.get(url,stream=True)可以比较完整的下载图片。</p>
 
@@ -187,17 +187,17 @@
 
 <p>代码实现类似这样：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
 <span class="kn">import</span> <span class="nn">threading</span> <span class="kn">as</span> <span class="nn">td</span>
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
 	<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">categorie</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">categories</span><span class="p">):</span>
 		<span class="n">clear</span><span class="p">(</span><span class="n">categorie</span><span class="p">)</span>
 		<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">categorie</span><span class="p">)</span>
 		<span class="c">#使用多进程</span>
 		<span class="n">p</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">download</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">categorie</span><span class="p">,))</span>
 		<span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-    <span class="c"># p.join()</span></code></pre></div>
+    <span class="c"># p.join()</span></code></pre></figure>
 
 <p>在使用多进程的时候，在 for 循环中调用 jion 的时候，发现并不能触发多进程，实际上只有一个进程，另一个进程可能在等待。</p>
 

@@ -117,42 +117,42 @@
   <li>使用atexit注册一个进程退出的函数，在退出的时候关闭 socket</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">atexit</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="kn">import</span> <span class="nn">atexit</span>
 
   <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;env closed&quot;</span><span class="p">)</span></code></pre></div>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">"env closed"</span><span class="p">)</span></code></pre></figure>
 
 <ul>
   <li>由模块subprocess开启一个子进程用来启动 unity 导出来的包，这里考虑 Linux, Windows, Macos 三种平台的包，考虑的比较全面。</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="n">proc1</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">launch_string</span><span class="p">,</span><span class="s">&#39;--port&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)])</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="n">proc1</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">launch_string</span><span class="p">,</span><span class="s">'--port'</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)])</span></code></pre></figure>
 
 <ul>
   <li>建立 Socket， 用于监听的 Unity 侧发过来的参数，设置好超时时间。</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">base_port</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">base_port</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_buffer_size</span> <span class="o">=</span> <span class="mi">10240</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_loaded</span> <span class="o">=</span> <span class="bp">False</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_open_socket</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;unity env try created, socket with port:{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">"unity env try created, socket with port:{}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span>
 
   <span class="k">try</span><span class="p">:</span>
       <span class="c"># Establish communication socket</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s">"localhost"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_open_socket</span> <span class="o">=</span> <span class="bp">True</span>
   <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">_open_socket</span> <span class="o">=</span> <span class="bp">True</span>
       <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-      <span class="k">raise</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Couldn&#39;t launch new environment &quot;</span>
-                         <span class="s">&quot;You may need to manually close a previously opened environment &quot;</span>
-                         <span class="s">&quot;or use a different worker number.&quot;</span><span class="p">)</span>
+      <span class="k">raise</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">"Couldn't launch new environment "</span>
+                         <span class="s">"You may need to manually close a previously opened environment "</span>
+                         <span class="s">"or use a different worker number."</span><span class="p">)</span>
 
   <span class="bp">self</span><span class="o">.</span><span class="n">_socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
   <span class="k">try</span><span class="p">:</span>
@@ -163,36 +163,36 @@
 
       <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
           <span class="k">raise</span> <span class="n">UnityTimeOutException</span><span class="p">(</span>
-              <span class="s">&quot;The Unity environment took too long to respond. Make sure {} does not need user interaction to &quot;</span>
-              <span class="s">&quot;launch and that the Academy and the external Brain(s) are attached to objects in the Scene.&quot;</span>
-              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_name</span><span class="p">)))</span></code></pre></div>
+              <span class="s">"The Unity environment took too long to respond. Make sure {} does not need user interaction to "</span>
+              <span class="s">"launch and that the Academy and the external Brain(s) are attached to objects in the Scene."</span>
+              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_name</span><span class="p">)))</span></code></pre></figure>
 
 <ul>
   <li>解析 socket 发过来的参数，同时初始化 Brain， 在 Brain 中构建一张 q_table。</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_size</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer_size</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
   <span class="n">p</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_global_done</span> <span class="o">=</span> <span class="bp">None</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;logPath&quot;</span><span class="p">]</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;alpha&quot;</span><span class="p">]</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_epsilon</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;epsilon&quot;</span><span class="p">]</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;gamma&quot;</span><span class="p">]</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_states</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;states&quot;</span><span class="p">]</span>
-  <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&quot;actions&quot;</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"logPath"</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"alpha"</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_epsilon</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"epsilon"</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"gamma"</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_states</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"states"</span><span class="p">]</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">"actions"</span><span class="p">]</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_brain</span> <span class="o">=</span> <span class="n">QLearningTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_actions</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_states</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_epsilon</span><span class="p">)</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_loaded</span> <span class="o">=</span> <span class="bp">True</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">_recv_bytes</span><span class="p">()</span>
-  <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;started successfully!&quot;</span><span class="p">)</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">"started successfully!"</span><span class="p">)</span>
   <span class="k">except</span> <span class="n">UnityEnvironmentException</span><span class="p">:</span>
   <span class="n">proc1</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
   <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-  <span class="k">raise</span></code></pre></div>
+  <span class="k">raise</span></code></pre></figure>
 
 <p>在 brain.py中实现了 q_learning和 Sarsa的 reinforcement算法， 二者在根据 state 做选择的是一样的，差别就是二者学习的过程，即更新 q_table 的方式。 q_learning在下一个 state_ 的选择的是action 值最大的 q 值来算 q_target, 而 sarsa是根据 下一个 state_和下一个action_来算 q_target。class RL是基类，显现了二者共同的choose_action，export，而QLearningTable和SarsaTable都继承 RL,并实现了各自的 learn()，即更新 q_Table 的方法。具体的代码实现如下：</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -204,7 +204,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">_epsilon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">_states</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">csv</span> <span class="o">=</span> <span class="s">&quot;q_table.csv&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csv</span> <span class="o">=</span> <span class="s">"q_table.csv"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">state_num</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">action_num</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">)</span>
@@ -218,7 +218,7 @@
             <span class="n">state_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">observation</span><span class="p">,</span> <span class="p">:]</span>
             <span class="n">state_action</span> <span class="o">=</span> <span class="n">state_action</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">state_action</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>     <span class="c"># some actions have same value</span>
             <span class="n">action</span> <span class="o">=</span> <span class="n">state_action</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s">&quot;state_action:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">state_action</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; action:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; state:&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">"state_action:"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">state_action</span><span class="p">)</span><span class="o">+</span><span class="s">" action:"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">+</span><span class="s">" state:"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c"># choose random action</span>
             <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
@@ -232,7 +232,7 @@
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&quot;brain export&quot;</span>
+        <span class="k">print</span> <span class="s">"brain export"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csv</span><span class="p">)</span>
 
 
@@ -243,8 +243,8 @@
 
     <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s_</span><span class="p">):</span>
         <span class="n">q_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">s_</span> <span class="o">!=</span> <span class="s">&#39;terminal&#39;</span><span class="p">:</span>
-            <span class="n">q_target</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s_</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>  <span class="c"># next state is not terminal</span>
+        <span class="k">if</span> <span class="n">s_</span> <span class="o">!=</span> <span class="s">'terminal'</span><span class="p">:</span>
+            <span class="n">q_target</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s_</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span>  <span class="c"># next state is not terminal</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">q_target</span> <span class="o">=</span> <span class="n">r</span>  <span class="c"># next state is terminal</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_target</span> <span class="o">-</span> <span class="n">q_predict</span><span class="p">)</span>  <span class="c"># update</span>
@@ -258,39 +258,39 @@
 
     <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s_</span><span class="p">,</span> <span class="n">a_</span><span class="p">):</span>
         <span class="n">q_predict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">s_</span> <span class="o">!=</span> <span class="s">&#39;terminal&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">s_</span> <span class="o">!=</span> <span class="s">'terminal'</span><span class="p">:</span>
             <span class="n">q_target</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s_</span><span class="p">,</span> <span class="n">a_</span><span class="p">]</span>  
         <span class="k">else</span><span class="p">:</span>
             <span class="n">q_target</span> <span class="o">=</span> <span class="n">r</span>  <span class="c"># next state is terminal</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_target</span> <span class="o">-</span> <span class="n">q_predict</span><span class="p">)</span>  <span class="c"># update</span></code></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_target</span> <span class="o">-</span> <span class="n">q_predict</span><span class="p">)</span>  <span class="c"># update</span></code></pre></figure>
 
 <p>在 Unity 侧，我们使用ExternalEnv.cs 与 python 交互，所有通信的数据结构都定义在ExternalData.cs 中。<br />
 我们使用ExternalEnv中，我们在 socket建立起来就会把 q_learning 需要的参数同步到 python, 比如说：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">//迭代概率</span>
-<span class="n">paramerters</span><span class="p">.</span><span class="n">epsilon</span> <span class="p">=</span> <span class="n">epsilon</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">//迭代概率
+</span><span class="n">paramerters</span><span class="p">.</span><span class="n">epsilon</span> <span class="p">=</span> <span class="n">epsilon</span><span class="p">;</span>
 
-<span class="c1">//衰减因子</span>
-<span class="n">paramerters</span><span class="p">.</span><span class="n">gamma</span> <span class="p">=</span> <span class="n">gamma</span><span class="p">;</span>
+<span class="c1">//衰减因子
+</span><span class="n">paramerters</span><span class="p">.</span><span class="n">gamma</span> <span class="p">=</span> <span class="n">gamma</span><span class="p">;</span>
 
-<span class="c1">//学习率</span>
-<span class="n">paramerters</span><span class="p">.</span><span class="n">alpha</span> <span class="p">=</span> <span class="n">alpha</span><span class="p">;</span>
+<span class="c1">//学习率
+</span><span class="n">paramerters</span><span class="p">.</span><span class="n">alpha</span> <span class="p">=</span> <span class="n">alpha</span><span class="p">;</span>
 
-<span class="c1">//日志位置</span>
-<span class="n">paramerters</span><span class="p">.</span><span class="n">logPath</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">save_path</span><span class="p">;</span></code></pre></div>
+<span class="c1">//日志位置
+</span><span class="n">paramerters</span><span class="p">.</span><span class="n">logPath</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">save_path</span><span class="p">;</span></code></pre></figure>
 
 <p>游戏每15帧触发一个心跳-Tick， 每个心跳做一个决定和更新一次 q_table，这些数据都是通过 socket 连接起来的。然后根据 python 返回的 action 去表现。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnTick</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnTick</span><span class="p">()</span>
 <span class="p">{</span>
-     <span class="kt">int</span> <span class="n">state</span> <span class="p">=</span> <span class="n">GetCurrentState</span><span class="p">();</span>
+     <span class="kt">int</span> <span class="n">state</span> <span class="p">=</span> <span class="nf">GetCurrentState</span><span class="p">();</span>
      <span class="k">if</span> <span class="p">(</span><span class="n">last_state</span> <span class="p">!=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
      <span class="p">{</span>
-         <span class="n">UpdateState</span><span class="p">(</span><span class="n">last_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">last_r</span><span class="p">,</span> <span class="n">last_action</span><span class="p">);</span>
+         <span class="nf">UpdateState</span><span class="p">(</span><span class="n">last_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">last_r</span><span class="p">,</span> <span class="n">last_action</span><span class="p">);</span>
      <span class="p">}</span>
-     <span class="kt">bool</span> <span class="n">action</span> <span class="p">=</span> <span class="n">choose_action</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
-     <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">RespondByDecision</span><span class="p">(</span><span class="n">action</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+     <span class="kt">bool</span> <span class="n">action</span> <span class="p">=</span> <span class="nf">choose_action</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+     <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="nf">RespondByDecision</span><span class="p">(</span><span class="n">action</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>运行 main.py，最后的表现如下图所示：</p>
 

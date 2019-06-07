@@ -74,7 +74,7 @@
 
 <p>在VertxSurfShade中我们采样顶点色(appdata_full)来作为vert shader输出的颜色。</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>  
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>  
 
 <span class="k">struct</span> <span class="n">Input</span>
 <span class="p">{</span>
@@ -90,27 +90,27 @@
 <span class="kt">void</span> <span class="nf">surf</span> <span class="p">(</span><span class="n">Input</span> <span class="n">IN</span><span class="p">,</span> <span class="n">inout</span> <span class="n">SurfaceOutput</span> <span class="n">o</span><span class="p">)</span> 
 <span class="p">{</span>
     <span class="n">o</span><span class="p">.</span><span class="n">Albedo</span><span class="o">=</span><span class="n">IN</span><span class="p">.</span><span class="n">vertexColor</span> <span class="o">*</span> <span class="n">_Color</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>在VertxFragShader中采样顶点色的使用如下：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">CGPROGRAM</span>
-<span class="cp">#pragma vertex vert</span>
-
-<span class="cp">#pragma fragment frag</span>
-
-<span class="cp">#include &quot;UnityCG.cginc&quot;</span>
-
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">CGPROGRAM</span>
+<span class="cp">#pragma vertex vert
+</span>
+<span class="cp">#pragma fragment frag
+</span>
+<span class="cp">#include "UnityCG.cginc"
+</span>
 <span class="n">fixed4</span> <span class="n">_Color</span><span class="p">;</span>  
 
 <span class="k">struct</span> <span class="n">appdata</span> <span class="p">{</span>
-    <span class="n">float4</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">POSITION</span><span class="p">;</span>
-    <span class="n">fixed4</span> <span class="nl">color</span> <span class="p">:</span> <span class="n">COLOR</span><span class="p">;</span>
+    <span class="n">float4</span> <span class="n">vertex</span> <span class="o">:</span> <span class="n">POSITION</span><span class="p">;</span>
+    <span class="n">fixed4</span> <span class="n">color</span> <span class="o">:</span> <span class="n">COLOR</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">struct</span> <span class="n">v2f</span> <span class="p">{</span>
-    <span class="n">fixed4</span> <span class="nl">vertexColor</span> <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
-    <span class="n">float4</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>
+    <span class="n">fixed4</span> <span class="n">vertexColor</span> <span class="o">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+    <span class="n">float4</span> <span class="n">vertex</span> <span class="o">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>
 <span class="p">};</span>
 
 
@@ -125,7 +125,7 @@
     <span class="n">fixed4</span> <span class="n">c</span> <span class="o">=</span> <span class="n">i</span><span class="p">.</span><span class="n">vertexColor</span><span class="p">;</span>
     <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">_Color</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="n">ENDCG</span></code></pre></div>
+<span class="n">ENDCG</span></code></pre></figure>
 
 <p>然后设置关联的render组件里关闭反射光线和接收投射阴影。</p>
 
@@ -133,43 +133,43 @@
 
 <p>对应的代码实现如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">rend</span><span class="p">.</span><span class="n">shadowCastingMode</span> <span class="p">=</span> <span class="n">ShadowCastingMode</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">rend</span><span class="p">.</span><span class="n">shadowCastingMode</span> <span class="p">=</span> <span class="n">ShadowCastingMode</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span>
 <span class="n">rend</span><span class="p">.</span><span class="n">receiveShadows</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
 <span class="n">rend</span><span class="p">.</span><span class="n">lightProbeUsage</span> <span class="p">=</span> <span class="n">LightProbeUsage</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span>
-<span class="n">rend</span><span class="p">.</span><span class="n">reflectionProbeUsage</span> <span class="p">=</span> <span class="n">ReflectionProbeUsage</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span></code></pre></div>
+<span class="n">rend</span><span class="p">.</span><span class="n">reflectionProbeUsage</span> <span class="p">=</span> <span class="n">ReflectionProbeUsage</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span></code></pre></figure>
 
 <h2 id="绘制文字">绘制文字</h2>
 
 <p>绘制文字也不实用nGUI或者uGui使用的组件，而是使用Unity自带的组件TextMesh。我们把TextMesh挂在Hud组件下面，设置好文字大小和对齐方式。对应的代码实现如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">CreateText</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">CreateText</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="n">GameObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GameObject</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">SetParent</span><span class="p">(</span><span class="n">hud</span><span class="p">.</span><span class="n">transform</span><span class="p">);</span>
+    <span class="n">GameObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GameObject</span><span class="p">(</span><span class="s">"Name"</span><span class="p">);</span>
+    <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="nf">SetParent</span><span class="p">(</span><span class="n">hud</span><span class="p">.</span><span class="n">transform</span><span class="p">);</span>
     <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span> <span class="p">=</span> <span class="n">Quaternion</span><span class="p">.</span><span class="n">identity</span><span class="p">;</span>
     <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">localScale</span> <span class="p">=</span> <span class="m">0.1f</span> <span class="p">*</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">one</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">localPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0.5f</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+    <span class="n">go</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">localPosition</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0.5f</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
     <span class="n">font</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">TextMesh</span><span class="p">&gt;();</span>
     <span class="n">font</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">_txt</span><span class="p">;</span>
     <span class="n">font</span><span class="p">.</span><span class="n">fontSize</span> <span class="p">=</span> <span class="m">36</span><span class="p">;</span>
     <span class="n">font</span><span class="p">.</span><span class="n">alignment</span> <span class="p">=</span> <span class="n">TextAlignment</span><span class="p">.</span><span class="n">Center</span><span class="p">;</span>
     <span class="n">font</span><span class="p">.</span><span class="n">anchor</span> <span class="p">=</span> <span class="n">TextAnchor</span><span class="p">.</span><span class="n">MiddleCenter</span><span class="p">;</span>
     <span class="n">font</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">black</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="控制血条进度">控制血条进度</h3>
 
 <p>控制血条进度，其实控制的就是顶点1、3、4、6的uv信息。这些顶点的位置在[-x,x] 之间（x=2),我们根据传进来的值在[-2,2]进行差值，算出最终的顶点位置，最后赋值给mesh，来达到控制血条进度的效果。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">void</span> <span class="nf">UpdateHud</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">void</span> <span class="nf">UpdateHud</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">float</span> <span class="n">val</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">Lerp</span><span class="p">(-</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="m">1</span> <span class="p">-</span> <span class="n">v</span><span class="p">);</span>
-    <span class="n">vertices</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="n">Set</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="n">vertices</span><span class="p">[</span><span class="m">3</span><span class="p">].</span><span class="n">Set</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">-</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">val</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Lerp</span><span class="p">(-</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="m">1</span> <span class="p">-</span> <span class="n">v</span><span class="p">);</span>
+    <span class="n">vertices</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="nf">Set</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+    <span class="n">vertices</span><span class="p">[</span><span class="m">3</span><span class="p">].</span><span class="nf">Set</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">-</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
     <span class="n">vertices</span><span class="p">[</span><span class="m">4</span><span class="p">]</span> <span class="p">=</span> <span class="n">vertices</span><span class="p">[</span><span class="m">1</span><span class="p">];</span>
     <span class="n">vertices</span><span class="p">[</span><span class="m">6</span><span class="p">]</span> <span class="p">=</span> <span class="n">vertices</span><span class="p">[</span><span class="m">3</span><span class="p">];</span>
     <span class="n">filter</span><span class="p">.</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span> <span class="p">=</span> <span class="n">vertices</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>在Unity中运行HudShow， 在Game视图左上角的GUI-Slider调整进度，我们可以发现对应的血条也跟着发生变化。下面查看Drawcall的信息，运行DCShow，我们创建了大量的hud,并控制不同的血条进度和位置，打开Stats面板，我们看见一共只有四个drawcall，除了摄像机固定的两个drawcall,所有的hud通过合批一共只有2个drawcall。</p>
 

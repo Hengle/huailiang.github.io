@@ -68,47 +68,47 @@
 
 <h3 id="第一步-从fbx中提取部件mesh-并给mesh赋值一些必要的属性">第一步： 从fbx中提取部件mesh, 并给mesh赋值一些必要的属性</h3>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">string</span> <span class="n">saveRootPath</span> <span class="p">=</span> <span class="s">&quot;Assets/Resources/Equipments/&quot;</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">string</span> <span class="n">saveRootPath</span> <span class="p">=</span> <span class="s">"Assets/Resources/Equipments/"</span><span class="p">;</span>
 <span class="n">modelImporter</span><span class="p">.</span><span class="n">isReadable</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-<span class="n">AssetDatabase</span><span class="p">.</span><span class="n">ImportAsset</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
-<span class="n">GameObject</span> <span class="n">go</span> <span class="p">=</span> <span class="n">GameObject</span><span class="p">.</span><span class="n">Instantiate</span><span class="p">(</span><span class="n">fbx</span><span class="p">)</span> <span class="k">as</span> <span class="n">GameObject</span><span class="p">;</span>
+<span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
+<span class="n">GameObject</span> <span class="n">go</span> <span class="p">=</span> <span class="n">GameObject</span><span class="p">.</span><span class="nf">Instantiate</span><span class="p">(</span><span class="n">fbx</span><span class="p">)</span> <span class="k">as</span> <span class="n">GameObject</span><span class="p">;</span>
 
 <span class="n">SkinnedMeshRenderer</span><span class="p">[]</span> <span class="n">smrs</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetComponentsInChildren</span><span class="p">&lt;</span><span class="n">SkinnedMeshRenderer</span><span class="p">&gt;();</span>
 <span class="k">foreach</span> <span class="p">(</span><span class="n">SkinnedMeshRenderer</span> <span class="n">smr</span> <span class="k">in</span> <span class="n">smrs</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="n">Object</span><span class="p">.</span><span class="n">Instantiate</span><span class="p">(</span><span class="n">smr</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">)</span> <span class="k">as</span> <span class="n">Mesh</span><span class="p">;</span>
+    <span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="n">Object</span><span class="p">.</span><span class="nf">Instantiate</span><span class="p">(</span><span class="n">smr</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">)</span> <span class="k">as</span> <span class="n">Mesh</span><span class="p">;</span>
     <span class="n">mesh</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="n">smr</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">UploadMeshData</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="n">SaveMeshAsset</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">smr</span><span class="p">.</span><span class="n">sharedMaterial</span><span class="p">.</span><span class="n">mainTexture</span> <span class="k">as</span> <span class="n">Texture2D</span><span class="p">,</span> <span class="n">profession</span><span class="p">,</span> <span class="n">saveRootPath</span><span class="p">);</span>
+    <span class="n">mesh</span><span class="p">.</span><span class="nf">UploadMeshData</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    <span class="nf">SaveMeshAsset</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">smr</span><span class="p">.</span><span class="n">sharedMaterial</span><span class="p">.</span><span class="n">mainTexture</span> <span class="k">as</span> <span class="n">Texture2D</span><span class="p">,</span> <span class="n">profession</span><span class="p">,</span> <span class="n">saveRootPath</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="n">modelImporter</span><span class="p">.</span><span class="n">isReadable</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-<span class="n">AssetDatabase</span><span class="p">.</span><span class="n">ImportAsset</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span></code></pre></div>
+<span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span></code></pre></figure>
 
 <h3 id="第二步-保存mesh-并提取出main-texture并且保存在本地">第二步： 保存mesh, 并提取出Main Texture,并且保存在本地</h3>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">Texture2D</span> <span class="n">tex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">profession</span><span class="p">,</span> <span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">Texture2D</span> <span class="n">tex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">profession</span><span class="p">,</span> <span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">uvOffsetX</span> <span class="p">=</span> <span class="n">GetUVOffset</span><span class="p">(</span><span class="n">profession</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">s_CombineConfig</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">uvOffsetX</span> <span class="p">=</span> <span class="nf">GetUVOffset</span><span class="p">(</span><span class="n">profession</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">s_CombineConfig</span><span class="p">);</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">uvOffsetX</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">)</span> <span class="n">CalculateUV</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">uvOffsetX</span><span class="p">);</span>
-    <span class="k">else</span> <span class="n">Debug</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&quot;Find UV Error:&quot;</span> <span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">uvOffsetX</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">)</span> <span class="nf">CalculateUV</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">uvOffsetX</span><span class="p">);</span>
+    <span class="k">else</span> <span class="n">Debug</span><span class="p">.</span><span class="nf">LogError</span><span class="p">(</span><span class="s">"Find UV Error:"</span> <span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
 
-    <span class="n">CleanMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">);</span>
-    <span class="kt">string</span> <span class="n">meshPath</span> <span class="p">=</span> <span class="n">path</span> <span class="p">+</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">&quot;.asset&quot;</span><span class="p">;</span>
-    <span class="n">AssetDatabase</span><span class="p">.</span><span class="n">CreateAsset</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">meshPath</span><span class="p">);</span>
+    <span class="nf">CleanMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">meshPath</span> <span class="p">=</span> <span class="n">path</span> <span class="p">+</span> <span class="n">mesh</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">".asset"</span><span class="p">;</span>
+    <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">CreateAsset</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">meshPath</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">tex</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">srcTexPath</span> <span class="p">=</span> <span class="n">AssetDatabase</span><span class="p">.</span><span class="n">GetAssetPath</span><span class="p">(</span><span class="n">tex</span><span class="p">);</span>
-        <span class="kt">string</span> <span class="n">destTexPath</span> <span class="p">=</span> <span class="s">&quot;Assets/Resources/Equipments/&quot;</span> <span class="p">+</span> <span class="n">tex</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">&quot;.tga&quot;</span><span class="p">;</span>
-        <span class="n">AssetDatabase</span><span class="p">.</span><span class="n">CopyAsset</span><span class="p">(</span><span class="n">srcTexPath</span><span class="p">,</span> <span class="n">destTexPath</span><span class="p">);</span>
+        <span class="kt">string</span> <span class="n">srcTexPath</span> <span class="p">=</span> <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">GetAssetPath</span><span class="p">(</span><span class="n">tex</span><span class="p">);</span>
+        <span class="kt">string</span> <span class="n">destTexPath</span> <span class="p">=</span> <span class="s">"Assets/Resources/Equipments/"</span> <span class="p">+</span> <span class="n">tex</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">".tga"</span><span class="p">;</span>
+        <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">CopyAsset</span><span class="p">(</span><span class="n">srcTexPath</span><span class="p">,</span> <span class="n">destTexPath</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="n">AssetDatabase</span><span class="p">.</span><span class="n">SaveAssets</span><span class="p">();</span>
-<span class="p">}</span></code></pre></div>
+    <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">SaveAssets</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
 
 <h3 id="第三步-预处理uv">第三步： 预处理uv</h3>
 <p>根据部件位置序列，设置相应uv, 先确保uv的区间在[0,1]之间，然后u加上部件的索引 uvOffsetX对应每个部位的枚举定义值[1-8], 至于为什么这么处理，我们对在后面shader中使用这些uv信息，拼接时装时会用到。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">CalculateUV</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="kt">int</span> <span class="n">uvOffsetX</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">CalculateUV</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="kt">int</span> <span class="n">uvOffsetX</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">uvOffsetX</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">)</span>
     <span class="p">{</span>
@@ -116,18 +116,18 @@
         <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">imax</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">imax</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">Vector2</span> <span class="n">tmp</span> <span class="p">=</span> <span class="n">uv</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="p">-</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">Floor</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="p">-</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
             <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="p">+=</span> <span class="n">uvOffsetX</span><span class="p">;</span>
-            <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="p">-</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">Floor</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="p">-</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
             <span class="n">uv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span> <span class="p">=</span> <span class="n">uv</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>往往在预处理uv之前，为了减少不必要的计算和内存，也是为了优化，我们会清理掉mesh上可能附带的信息，比如uv2，切线信息。具体的实现如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">CleanMesh</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">CleanMesh</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">)</span>
  <span class="p">{</span>
      <span class="n">mesh</span><span class="p">.</span><span class="n">uv2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
      <span class="n">mesh</span><span class="p">.</span><span class="n">uv3</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
@@ -135,7 +135,7 @@
      <span class="n">mesh</span><span class="p">.</span><span class="n">colors</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
      <span class="n">mesh</span><span class="p">.</span><span class="n">colors32</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
      <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
- <span class="p">}</span></code></pre></div>
+ <span class="p">}</span></code></pre></figure>
 
 <p>处理好的之后的mesh 确保是干净的，且只有我们想要的信息。如下图所示，只有第一层uv和skin信息，并没有其他冗余的信息。所有都处理好之后，我们可以写批处理脚本，把所有的资源都移到程序所用的工程Rsources目录下。</p>
 
@@ -144,8 +144,8 @@
 <p>### 第四步： 预处理Texture<br />
  在Texture提取出来之后，往往是各种预带有各种信息，这时我们还需要写一个类似格式刷工具把项目里所有的texture全部处理一遍。类似这样实现：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">AssetDatabase</span><span class="p">.</span><span class="n">ImportAsset</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
-<span class="n">TextureImporter</span> <span class="n">alphaTextureImporter</span> <span class="p">=</span> <span class="n">AssetImporter</span><span class="p">.</span><span class="n">GetAtPath</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">)</span> <span class="k">as</span> <span class="n">TextureImporter</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
+<span class="n">TextureImporter</span> <span class="n">alphaTextureImporter</span> <span class="p">=</span> <span class="n">AssetImporter</span><span class="p">.</span><span class="nf">GetAtPath</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">)</span> <span class="k">as</span> <span class="n">TextureImporter</span><span class="p">;</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">alphaTextureImporter</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">alphaSize</span> <span class="p">=</span> <span class="n">size</span><span class="p">;</span>
@@ -154,9 +154,9 @@
     <span class="n">alphaTextureImporter</span><span class="p">.</span><span class="n">mipmapEnabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
     <span class="n">alphaTextureImporter</span><span class="p">.</span><span class="n">isReadable</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
     <span class="n">alphaTextureImporter</span><span class="p">.</span><span class="n">npotScale</span> <span class="p">=</span> <span class="n">TextureImporterNPOTScale</span><span class="p">.</span><span class="n">ToNearest</span><span class="p">;</span>
-    <span class="n">SetPlatformSetting</span><span class="p">(</span><span class="n">alphaTextureImporter</span><span class="p">,</span> <span class="n">alphaSize</span><span class="p">);</span>
-    <span class="n">AssetDatabase</span><span class="p">.</span><span class="n">ImportAsset</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+    <span class="nf">SetPlatformSetting</span><span class="p">(</span><span class="n">alphaTextureImporter</span><span class="p">,</span> <span class="n">alphaSize</span><span class="p">);</span>
+    <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <h1 id="运行时组装时装">运行时，组装时装</h1>
 
@@ -167,8 +167,8 @@
 <p>这时游戏中参与光照计算的shader,由八张Texture合并。 Shader针对预处理的uv拼接时装。<br />
 下面代码会在MaskNV函数会在vert Shader中调用，BlendColor函数在frag 函数中调用。</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &quot;CommonHead_Include.cginc&quot;</span>
-  <span class="kr">inline</span> <span class="n">fixed</span> <span class="nf">MaskUV</span><span class="p">(</span><span class="n">half2</span> <span class="n">uv</span><span class="p">,</span><span class="n">inout</span> <span class="n">half4</span> <span class="n">uvMask</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">  <span class="cp">#include "CommonHead_Include.cginc"
+</span>  <span class="kr">inline</span> <span class="n">fixed</span> <span class="nf">MaskUV</span><span class="p">(</span><span class="n">half2</span> <span class="n">uv</span><span class="p">,</span><span class="n">inout</span> <span class="n">half4</span> <span class="n">uvMask</span><span class="p">)</span>
   <span class="p">{</span>
   	<span class="n">uvMask</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">uvMask</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">;</span>
   	<span class="n">uvMask</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">uvMask</span><span class="p">.</span><span class="n">z</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">;</span>
@@ -219,7 +219,7 @@
   	<span class="n">uvOffset</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
   	<span class="n">c</span><span class="o">+=</span> <span class="n">tex2D</span><span class="p">(</span><span class="n">_Tex7</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="n">uv</span><span class="o">-</span><span class="n">uvOffset</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="p">.</span><span class="n">mask1</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>					
   	<span class="k">return</span> <span class="n">c</span><span class="p">;</span>
-  <span class="p">}</span></code></pre></div>
+  <span class="p">}</span></code></pre></figure>
 
 <p>下面一张图展示了根据部件不同的uv（这里在上一步中预处理好），推导了uvmask函数返回值，在frag shader采样Tex2D时使用的Texture。</p>
 
@@ -227,58 +227,58 @@
 
 <p>vert shader 所有的计算值都保存在v2f中mask0,mask1两个fixed4寄存器中，v2f声明如下：</p>
 
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">v2f</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">v2f</span>
 <span class="p">{</span>  
-	<span class="n">float4</span> <span class="nl">pos</span> <span class="p">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>  	
-<span class="cp">#ifndef NONORMAL</span>
+	<span class="n">float4</span> <span class="n">pos</span> <span class="o">:</span> <span class="n">SV_POSITION</span><span class="p">;</span>  	
+<span class="cp">#ifndef NONORMAL
+</span>
+	<span class="n">half3</span> <span class="n">normal</span><span class="o">:</span> <span class="n">NORMAL</span><span class="p">;</span>
+<span class="cp">#endif//NONORMAL		  
+</span>
+	<span class="n">half2</span> <span class="n">uv</span> <span class="o">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
+<span class="cp">#ifdef UV2
+</span>
+	<span class="n">half2</span> <span class="n">uv1</span> <span class="o">:</span> <span class="n">TEXCOORD1</span><span class="p">;</span>
+<span class="cp">#endif//UV2
+</span>
 
-	<span class="n">half3</span> <span class="nl">normal</span><span class="p">:</span> <span class="n">NORMAL</span><span class="p">;</span>
-<span class="cp">#endif</span><span class="c1">//NONORMAL		  </span>
+<span class="cp">#ifdef LIGHTON
+</span>
+	<span class="n">fixed3</span> <span class="n">vertexLighting</span> <span class="o">:</span> <span class="n">TEXCOORD2</span><span class="p">;</span>
+<span class="cp">#endif//VERTEXLIGHTON
+</span>
+<span class="cp">#ifdef VIEWDIR
+</span>
+	<span class="n">half3</span> <span class="n">viewDir</span><span class="o">:</span> <span class="n">TEXCOORD3</span><span class="p">;</span>
+<span class="cp">#ifdef REFLECTUV
+</span>
+	<span class="n">half3</span> <span class="n">refluv</span> <span class="o">:</span> <span class="n">TEXCOORD4</span><span class="p">;</span>
+<span class="cp">#endif //REFLECTUV
+</span>
+<span class="cp">#endif//VIEWDIR
+</span>
 
-	<span class="n">half2</span> <span class="nl">uv</span> <span class="p">:</span> <span class="n">TEXCOORD0</span><span class="p">;</span>
-<span class="cp">#ifdef UV2</span>
+<span class="cp">#ifdef SKINTEX
+</span>
+  <span class="n">fixed4</span> <span class="n">mask0</span> <span class="o">:</span> <span class="n">TEXCOORD5</span><span class="p">;</span>
+<span class="cp">#ifdef SKINTEX8
+</span>
+  <span class="n">fixed4</span> <span class="n">mask1</span> <span class="o">:</span> <span class="n">TEXCOORD6</span><span class="p">;</span>
+<span class="cp">#endif//SKINTEX8
+</span>
+<span class="cp">#endif//SKINTEX
+</span>
 
-	<span class="n">half2</span> <span class="nl">uv1</span> <span class="p">:</span> <span class="n">TEXCOORD1</span><span class="p">;</span>
-<span class="cp">#endif</span><span class="c1">//UV2</span>
-
-
-<span class="cp">#ifdef LIGHTON</span>
-
-	<span class="n">fixed3</span> <span class="nl">vertexLighting</span> <span class="p">:</span> <span class="n">TEXCOORD2</span><span class="p">;</span>
-<span class="cp">#endif</span><span class="c1">//VERTEXLIGHTON</span>
-
-<span class="cp">#ifdef VIEWDIR</span>
-
-	<span class="n">half3</span> <span class="nl">viewDir</span><span class="p">:</span> <span class="n">TEXCOORD3</span><span class="p">;</span>
-<span class="cp">#ifdef REFLECTUV</span>
-
-	<span class="n">half3</span> <span class="nl">refluv</span> <span class="p">:</span> <span class="n">TEXCOORD4</span><span class="p">;</span>
-<span class="cp">#endif </span><span class="c1">//REFLECTUV</span>
-
-<span class="cp">#endif</span><span class="c1">//VIEWDIR</span>
-
-
-<span class="cp">#ifdef SKINTEX</span>
-
-  <span class="n">fixed4</span> <span class="nl">mask0</span> <span class="p">:</span> <span class="n">TEXCOORD5</span><span class="p">;</span>
-<span class="cp">#ifdef SKINTEX8</span>
-
-  <span class="n">fixed4</span> <span class="nl">mask1</span> <span class="p">:</span> <span class="n">TEXCOORD6</span><span class="p">;</span>
-<span class="cp">#endif</span><span class="c1">//SKINTEX8</span>
-
-<span class="cp">#endif</span><span class="c1">//SKINTEX</span>
-
-
-<span class="cp">#ifndef NONORMAL</span>
-
-<span class="cp">#ifdef MATCAP</span>
-
-	<span class="n">half2</span> <span class="nl">cap</span> <span class="p">:</span> <span class="n">TEXCOORD7</span><span class="p">;</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#endif</span>
-
-<span class="p">};</span></code></pre></div>
+<span class="cp">#ifndef NONORMAL
+</span>
+<span class="cp">#ifdef MATCAP
+</span>
+	<span class="n">half2</span> <span class="n">cap</span> <span class="o">:</span> <span class="n">TEXCOORD7</span><span class="p">;</span>
+<span class="cp">#endif
+</span>
+<span class="cp">#endif
+</span>
+<span class="p">};</span></code></pre></figure>
 
 <h3 id="第二步-c动态拼接">第二步 c#动态拼接</h3>
 <ul>
@@ -288,17 +288,17 @@
   <li>设置texture</li>
 </ul>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">SkinnedMeshRenderer</span> <span class="n">skin</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">SkinnedMeshRenderer</span> <span class="n">skin</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
 <span class="n">MaterialPropertyBlock</span> <span class="n">mpb</span> <span class="p">=</span> <span class="k">null</span>
 
-<span class="c1">//1.mesh collection</span>
-<span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="c1">//1.mesh collection
+</span><span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
 <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">EPartType</span><span class="p">.</span><span class="n">ECombinePartStart</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">EPartType</span><span class="p">.</span><span class="n">ECombinePartEnd</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">PartLoadTask</span> <span class="n">part</span> <span class="p">=</span> <span class="n">parts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">as</span> <span class="n">PartLoadTask</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">HasMesh</span><span class="p">())</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="nf">HasMesh</span><span class="p">())</span>
     <span class="p">{</span>
-        <span class="n">CombineInstance</span> <span class="n">ci</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CombineInstance</span><span class="p">();</span>
+        <span class="n">CombineInstance</span> <span class="n">ci</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CombineInstance</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">mesh</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">ci</span><span class="p">.</span><span class="n">mesh</span> <span class="p">=</span> <span class="n">part</span><span class="p">.</span><span class="n">mesh</span><span class="p">;</span>
@@ -307,33 +307,33 @@
         <span class="n">combineArray</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="n">ci</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="c1">//2.combine</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+<span class="c1">//2.combine
+</span><span class="k">if</span> <span class="p">(</span><span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Mesh</span><span class="p">();</span>
+    <span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Mesh</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-    <span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">.</span><span class="n">Clear</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+    <span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">.</span><span class="nf">Clear</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="n">skin</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">SetActive</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-<span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">.</span><span class="n">CombineMeshes</span><span class="p">(</span><span class="n">combineArray</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-<span class="n">skin</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">SetActive</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+<span class="n">skin</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="nf">SetActive</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+<span class="n">skin</span><span class="p">.</span><span class="n">sharedMesh</span><span class="p">.</span><span class="nf">CombineMeshes</span><span class="p">(</span><span class="n">combineArray</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="n">skin</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="nf">SetActive</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
 
-<span class="c1">//3.set material</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">skin</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+<span class="c1">//3.set material
+</span><span class="k">if</span> <span class="p">(</span><span class="n">skin</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="n">XEquipUtil</span><span class="p">.</span><span class="n">ReturnMaterial</span><span class="p">(</span><span class="n">skin</span><span class="p">.</span><span class="n">sharedMaterial</span><span class="p">);</span>
+    <span class="n">XEquipUtil</span><span class="p">.</span><span class="nf">ReturnMaterial</span><span class="p">(</span><span class="n">skin</span><span class="p">.</span><span class="n">sharedMaterial</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="n">skin</span><span class="p">.</span><span class="n">sharedMaterial</span> <span class="p">=</span> <span class="n">XEquipUtil</span><span class="p">.</span><span class="n">GetRoleMat</span><span class="p">();</span>
-<span class="n">skin</span><span class="p">.</span><span class="n">GetPropertyBlock</span><span class="p">(</span><span class="n">mpb</span><span class="p">);</span>
+<span class="n">skin</span><span class="p">.</span><span class="n">sharedMaterial</span> <span class="p">=</span> <span class="n">XEquipUtil</span><span class="p">.</span><span class="nf">GetRoleMat</span><span class="p">();</span>
+<span class="n">skin</span><span class="p">.</span><span class="nf">GetPropertyBlock</span><span class="p">(</span><span class="n">mpb</span><span class="p">);</span>
 
-<span class="c1">//4. postload - set texture</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">EPartType</span> <span class="n">part</span> <span class="p">=</span> <span class="n">EPartType</span><span class="p">.</span><span class="n">ECombinePartStart</span><span class="p">;</span> <span class="n">part</span> <span class="p">&lt;</span> <span class="n">EPartType</span><span class="p">.</span><span class="n">EMountEnd</span><span class="p">;</span> <span class="p">++</span><span class="n">part</span><span class="p">)</span>
+<span class="c1">//4. postload - set texture
+</span><span class="k">for</span> <span class="p">(</span><span class="n">EPartType</span> <span class="n">part</span> <span class="p">=</span> <span class="n">EPartType</span><span class="p">.</span><span class="n">ECombinePartStart</span><span class="p">;</span> <span class="n">part</span> <span class="p">&lt;</span> <span class="n">EPartType</span><span class="p">.</span><span class="n">EMountEnd</span><span class="p">;</span> <span class="p">++</span><span class="n">part</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="n">mpb</span><span class="p">.</span><span class="n">SetTexture</span><span class="p">(</span><span class="n">ShaderMgr</span><span class="p">.</span><span class="n">GetPartOffset</span><span class="p">(</span><span class="n">part</span><span class="p">),</span> <span class="n">tex</span><span class="p">);</span>
-  <span class="n">skin</span><span class="p">.</span><span class="n">SetPropertyBlock</span><span class="p">(</span><span class="n">mpb</span><span class="p">);</span>
-<span class="p">}</span></code></pre></div>
+  <span class="n">mpb</span><span class="p">.</span><span class="nf">SetTexture</span><span class="p">(</span><span class="n">ShaderMgr</span><span class="p">.</span><span class="nf">GetPartOffset</span><span class="p">(</span><span class="n">part</span><span class="p">),</span> <span class="n">tex</span><span class="p">);</span>
+  <span class="n">skin</span><span class="p">.</span><span class="nf">SetPropertyBlock</span><span class="p">(</span><span class="n">mpb</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>在设置texture的时候我们使用MaterialPropertyBlock做了优化，更多关于MaterialPropertyBlock的知识，可以参考下面一篇文章：<br />
 <a href="http://www.sohu.com/a/164943889_726639">使用MaterialPropertyBlock来替换Material属性操作</a></p>

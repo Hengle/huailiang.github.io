@@ -115,46 +115,46 @@
 
 <p>首先呢，我们在 Unity 实现 q_learning算法。在后面的章节中，我们将导出包，在 python 中训练，并且通过 Tensorboard，我们观察模型的学习率（alpha）,衰减（gamma）以及生存时间的变化。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// greedy police</span>
- <span class="kt">float</span> <span class="n">epsilon</span> <span class="p">=</span> <span class="m">0.9f</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// greedy police
+</span> <span class="kt">float</span> <span class="n">epsilon</span> <span class="p">=</span> <span class="m">0.9f</span><span class="p">;</span>
 
- <span class="c1">// learning rate</span>
- <span class="kt">float</span> <span class="n">alpha</span> <span class="p">=</span> <span class="m">0.1f</span><span class="p">;</span>
+ <span class="c1">// learning rate
+</span> <span class="kt">float</span> <span class="n">alpha</span> <span class="p">=</span> <span class="m">0.1f</span><span class="p">;</span>
 
- <span class="c1">//discount factor</span>
- <span class="kt">float</span> <span class="n">gamma</span> <span class="p">=</span> <span class="m">0.9f</span><span class="p">;</span></code></pre></div>
+ <span class="c1">//discount factor
+</span> <span class="kt">float</span> <span class="n">gamma</span> <span class="p">=</span> <span class="m">0.9f</span><span class="p">;</span></code></pre></figure>
 
 <p>首先我们定义 q_learning里面的几个变量值，如上所示，接着我们定义 Q_Table:</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;</span>
-<span class="c1">/// Dictionary做二维表，key 是代表的状态，</span>
-<span class="c1">/// Row 存储对应的 action 的 Q值</span>
-<span class="c1">/// &lt;/summary&gt;</span>
-<span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Row</span><span class="p">&gt;</span> <span class="n">q_table</span><span class="p">;</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+/// Dictionary做二维表，key 是代表的状态，
+/// Row 存储对应的 action 的 Q值
+/// &lt;/summary&gt;
+</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Row</span><span class="p">&gt;</span> <span class="n">q_table</span><span class="p">;</span>
 
 <span class="k">public</span> <span class="k">class</span> <span class="nc">Row</span>
 <span class="p">{</span>
-    <span class="c1">/// &lt;summary&gt;</span>
-    <span class="c1">/// 拍翅膀</span>
-    <span class="c1">/// &lt;/summary&gt;</span>
-    <span class="k">public</span> <span class="kt">float</span> <span class="n">pad</span><span class="p">;</span>
+    <span class="c1">/// &lt;summary&gt;
+</span>    <span class="c1">/// 拍翅膀
+</span>    <span class="c1">/// &lt;/summary&gt;
+</span>    <span class="k">public</span> <span class="kt">float</span> <span class="n">pad</span><span class="p">;</span>
 
-    <span class="c1">/// &lt;summary&gt;</span>
-    <span class="c1">/// 继续滑翔</span>
-    <span class="c1">/// &lt;/summary&gt;</span>
-    <span class="k">public</span> <span class="kt">float</span> <span class="n">stay</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+    <span class="c1">/// &lt;summary&gt;
+</span>    <span class="c1">/// 继续滑翔
+</span>    <span class="c1">/// &lt;/summary&gt;
+</span>    <span class="k">public</span> <span class="kt">float</span> <span class="n">stay</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>首先呢，我们把鸟position 的 y 坐标取值范围是[-5,5]分为十种种状态，我们定义鸟的状态1-10，由鸟的坐标转换状态。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">int</span> <span class="n">v</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="p">+</span> <span class="m">5</span><span class="p">;</span>
-<span class="k">return</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">Clamp</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">int</span> <span class="n">v</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="p">+</span> <span class="m">5</span><span class="p">;</span>
+<span class="k">return</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Clamp</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span></code></pre></figure>
 
 <p>我们更新 q表通过如下方法实现：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cm">/**</span>
-<span class="cm">    更新 Q_TABLE</span>
-<span class="cm"> */</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cm">/**
+    更新 Q_TABLE
+ */</span>
 <span class="k">public</span> <span class="k">void</span> <span class="nf">UpdateState</span><span class="p">(</span><span class="kt">int</span> <span class="n">state</span><span class="p">,</span> <span class="kt">int</span> <span class="n">state_</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rewd</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">action</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">q_table</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
@@ -164,7 +164,7 @@
         <span class="kt">float</span> <span class="n">q_target</span> <span class="p">=</span> <span class="n">rewd</span> <span class="p">+</span> <span class="n">gamma</span> <span class="p">*</span> <span class="n">max</span><span class="p">;</span>
         <span class="kt">float</span> <span class="n">q_predict</span> <span class="p">=</span> <span class="n">action</span> <span class="p">?</span> <span class="n">q_table</span><span class="p">[</span><span class="n">state</span><span class="p">].</span><span class="n">pad</span> <span class="p">:</span> <span class="n">q_table</span><span class="p">[</span><span class="n">state</span><span class="p">].</span><span class="n">stay</span><span class="p">;</span>
         <span class="kt">float</span> <span class="k">add</span> <span class="p">=</span> <span class="n">alpha</span> <span class="p">*</span> <span class="p">(</span><span class="n">q_target</span> <span class="p">-</span> <span class="n">q_predict</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">rewd</span> <span class="p">!=</span> <span class="m">0</span><span class="p">)</span> <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;state:&quot;</span> <span class="p">+</span> <span class="n">state</span> <span class="p">+</span> <span class="s">&quot; rewd:&quot;</span> <span class="p">+</span> <span class="n">rewd</span> <span class="p">+</span> <span class="s">&quot; add:&quot;</span> <span class="p">+</span> <span class="k">add</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rewd</span> <span class="p">!=</span> <span class="m">0</span><span class="p">)</span> <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"state:"</span> <span class="p">+</span> <span class="n">state</span> <span class="p">+</span> <span class="s">" rewd:"</span> <span class="p">+</span> <span class="n">rewd</span> <span class="p">+</span> <span class="s">" add:"</span> <span class="p">+</span> <span class="k">add</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">q_table</span><span class="p">[</span><span class="n">state</span><span class="p">].</span><span class="n">pad</span> <span class="p">+=</span> <span class="k">add</span><span class="p">;</span>
@@ -173,80 +173,80 @@
         <span class="p">{</span>
             <span class="n">q_table</span><span class="p">[</span><span class="n">state</span><span class="p">].</span><span class="n">stay</span> <span class="p">+=</span> <span class="k">add</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;state:&quot;</span> <span class="p">+</span> <span class="n">state</span> <span class="p">+</span> <span class="s">&quot; rewd:&quot;</span> <span class="p">+</span> <span class="n">rewd</span> <span class="p">+</span> <span class="s">&quot; action:&quot;</span> <span class="p">+</span> <span class="n">action</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"state:"</span> <span class="p">+</span> <span class="n">state</span> <span class="p">+</span> <span class="s">" rewd:"</span> <span class="p">+</span> <span class="n">rewd</span> <span class="p">+</span> <span class="s">" action:"</span> <span class="p">+</span> <span class="n">action</span><span class="p">);</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>我们以每15帧一个心跳(Tick), 根据 q_table 做出相应的动作，并且根据公式和 Reward 更新 q_table。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="cm">/*</span>
-<span class="cm">   comment: tick time is 15f</span>
-<span class="cm">    */</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">  <span class="cm">/*
+   comment: tick time is 15f
+    */</span>
    <span class="k">public</span> <span class="k">void</span> <span class="nf">OnTick</span><span class="p">()</span>
    <span class="p">{</span>
-       <span class="kt">int</span> <span class="n">state</span> <span class="p">=</span> <span class="n">GetCurrentState</span><span class="p">();</span>
+       <span class="kt">int</span> <span class="n">state</span> <span class="p">=</span> <span class="nf">GetCurrentState</span><span class="p">();</span>
        <span class="k">if</span> <span class="p">(</span><span class="n">last_state</span> <span class="p">!=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
        <span class="p">{</span>
-           <span class="c1">//cul last loop</span>
-           <span class="n">UpdateState</span><span class="p">(</span><span class="n">last_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">last_r</span><span class="p">,</span> <span class="n">last_action</span><span class="p">);</span>
+           <span class="c1">//cul last loop
+</span>           <span class="nf">UpdateState</span><span class="p">(</span><span class="n">last_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">last_r</span><span class="p">,</span> <span class="n">last_action</span><span class="p">);</span>
        <span class="p">}</span>
 
-       <span class="c1">//do next loop</span>
-       <span class="kt">bool</span> <span class="n">action</span> <span class="p">=</span> <span class="n">choose_action</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
-       <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">RespondByDecision</span><span class="p">(</span><span class="n">action</span><span class="p">);</span>
+       <span class="c1">//do next loop
+</span>       <span class="kt">bool</span> <span class="n">action</span> <span class="p">=</span> <span class="nf">choose_action</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+       <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="nf">RespondByDecision</span><span class="p">(</span><span class="n">action</span><span class="p">);</span>
        <span class="n">last_r</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
        <span class="n">last_state</span> <span class="p">=</span> <span class="n">state</span><span class="p">;</span>
        <span class="n">last_action</span> <span class="p">=</span> <span class="n">action</span><span class="p">;</span>
-   <span class="p">}</span></code></pre></div>
+   <span class="p">}</span></code></pre></figure>
 
 <p>在训练完成后，我们导出 q_table,在下次加载的时候再导入，我们就可以迁移到别的设备上了。导出的时候，为了方便观察，现在我们到处 csv 结构的，可以直接在 Excel 里看每个状态的 q 值。 由于当前难度较低，我们的状态（state）比较有限, 所以我们存成 csv 这样的。后面随着状态的急速增加，我们考虑使用 protobuff （二进制）的格式来导出。</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;</span>
-<span class="c1">/// 导出q_table</span>
-<span class="c1">/// &lt;/summary&gt;</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">exportQTable</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+/// 导出q_table
+/// &lt;/summary&gt;
+</span><span class="k">public</span> <span class="k">void</span> <span class="nf">exportQTable</span><span class="p">()</span>
 <span class="p">{</span>
-    <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">save_path</span><span class="p">);</span>
-    <span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">OpenOrCreate</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">);</span>
-    <span class="n">StreamWriter</span> <span class="n">sw</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
+    <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="n">save_path</span><span class="p">);</span>
+    <span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">OpenOrCreate</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">);</span>
+    <span class="n">StreamWriter</span> <span class="n">sw</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
     <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">q_table</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">Key</span> <span class="p">+</span> <span class="s">&quot;,&quot;</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">pad</span> <span class="p">+</span> <span class="s">&quot;,&quot;</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">stay</span><span class="p">;</span>
-        <span class="n">sw</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+        <span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">Key</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">pad</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">stay</span><span class="p">;</span>
+        <span class="n">sw</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="n">sw</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
-    <span class="n">fs</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
+    <span class="n">sw</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
+    <span class="n">fs</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="c1">/// &lt;summary&gt;</span>
-<span class="c1">/// 游戏进入时 加载q_table</span>
-<span class="c1">/// &lt;/summary&gt;</span>
-<span class="k">private</span> <span class="k">void</span> <span class="nf">loadQTable</span><span class="p">()</span>
+<span class="c1">/// &lt;summary&gt;
+/// 游戏进入时 加载q_table
+/// &lt;/summary&gt;
+</span><span class="k">private</span> <span class="k">void</span> <span class="nf">loadQTable</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">q_table</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="n">q_table</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Row</span><span class="p">&gt;();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">save_path</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="nf">Exists</span><span class="p">(</span><span class="n">save_path</span><span class="p">))</span>
     <span class="p">{</span>
-        <span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FileStream</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">);</span>
-        <span class="n">StreamReader</span> <span class="n">sr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamReader</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
+        <span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">);</span>
+        <span class="n">StreamReader</span> <span class="n">sr</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamReader</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
         <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
-            <span class="kt">string</span><span class="p">[]</span> <span class="n">ch</span> <span class="p">=</span> <span class="n">line</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
+            <span class="kt">string</span><span class="p">[]</span> <span class="n">ch</span> <span class="p">=</span> <span class="n">line</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">':'</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">ch</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;=</span> <span class="m">3</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="kt">int</span> <span class="n">key</span> <span class="p">=</span> <span class="kt">int</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
-                <span class="kt">float</span> <span class="n">pad</span> <span class="p">=</span> <span class="kt">float</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span>
-                <span class="kt">float</span> <span class="n">stay</span> <span class="p">=</span> <span class="kt">float</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">2</span><span class="p">]);</span>
-                <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">stay</span> <span class="p">=</span> <span class="n">stay</span><span class="p">,</span> <span class="n">pad</span> <span class="p">=</span> <span class="n">pad</span> <span class="p">};</span>
-                <span class="k">if</span> <span class="p">(!</span><span class="n">q_table</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="n">q_table</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">key</span> <span class="p">=</span> <span class="kt">int</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+                <span class="kt">float</span> <span class="n">pad</span> <span class="p">=</span> <span class="kt">float</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span>
+                <span class="kt">float</span> <span class="n">stay</span> <span class="p">=</span> <span class="kt">float</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="m">2</span><span class="p">]);</span>
+                <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">stay</span> <span class="p">=</span> <span class="n">stay</span><span class="p">,</span> <span class="n">pad</span> <span class="p">=</span> <span class="n">pad</span> <span class="p">};</span>
+                <span class="k">if</span> <span class="p">(!</span><span class="n">q_table</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="n">q_table</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
                 <span class="k">else</span> <span class="n">q_table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="p">=</span> <span class="n">row</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="n">sr</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
-        <span class="n">fs</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+        <span class="n">sr</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
+        <span class="n">fs</span><span class="p">.</span><span class="nf">Dispose</span><span class="p">();</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>难度二：</p>
 
@@ -256,59 +256,59 @@
 
 <p>我们把 Pillar（柱子）的状态（state）也计算在内，Pillar 一共有五个状态，即我们根据和鸟的相对位置划分五个状态（state）,Bird 的 position x坐标始终为0，移动的是 Pillar, Bird和 Pillar 运动是相对的。如下代码：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="kt">int</span> <span class="nf">GetPillarMiniState</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="kt">int</span> <span class="nf">GetPillarMiniState</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">pillars</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="kt">float</span> <span class="n">_dis</span> <span class="p">=</span> <span class="n">pillars</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">2</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">4</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
-        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">6</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">2</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">4</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">_dis</span> <span class="p">&lt;=</span> <span class="m">6</span><span class="p">)</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
         <span class="k">else</span> <span class="n">ret</span> <span class="p">=</span> <span class="m">4</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">ret</span> <span class="p">*</span> <span class="m">10</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
 <p>Pillar 和Bird 一共组合了9X5=45种状态， 我们在构建 q_table的时候，代码如下：</p>
 
-<div class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;</span>
-<span class="c1">/// Bird [0-9)一共九个状态</span>
-<span class="c1">/// Pillar [0-5) 一共5个状态</span>
-<span class="c1">/// 状态统计 9x5=45个状态</span>
-<span class="c1">/// &lt;/summary&gt;</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">Build_Q_Table</span><span class="p">()</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">/// &lt;summary&gt;
+/// Bird [0-9)一共九个状态
+/// Pillar [0-5) 一共5个状态
+/// 状态统计 9x5=45个状态
+/// &lt;/summary&gt;
+</span><span class="k">public</span> <span class="k">void</span> <span class="nf">Build_Q_Table</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">q_table</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Row</span><span class="p">&gt;();</span>
     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="m">9</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
     <span class="p">{</span>
-<span class="cp">#if ENABLE_PILLAR</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">j</span><span class="p">++)</span>
+<span class="cp">#if ENABLE_PILLAR
+</span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">j</span><span class="p">++)</span>
         <span class="p">{</span>
-            <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">pad</span> <span class="p">=</span> <span class="m">0f</span><span class="p">,</span> <span class="n">stay</span> <span class="p">=</span> <span class="m">0f</span> <span class="p">};</span>
-            <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;i:&quot;</span> <span class="p">+</span> <span class="n">i</span> <span class="p">+</span> <span class="s">&quot; j:&quot;</span> <span class="p">+</span> <span class="n">j</span> <span class="p">+</span> <span class="s">&quot; val:&quot;</span> <span class="p">+</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">10</span> <span class="p">*</span> <span class="n">j</span><span class="p">));</span>
-            <span class="n">q_table</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">10</span> <span class="p">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
+            <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">pad</span> <span class="p">=</span> <span class="m">0f</span><span class="p">,</span> <span class="n">stay</span> <span class="p">=</span> <span class="m">0f</span> <span class="p">};</span>
+            <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">"i:"</span> <span class="p">+</span> <span class="n">i</span> <span class="p">+</span> <span class="s">" j:"</span> <span class="p">+</span> <span class="n">j</span> <span class="p">+</span> <span class="s">" val:"</span> <span class="p">+</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">10</span> <span class="p">*</span> <span class="n">j</span><span class="p">));</span>
+            <span class="n">q_table</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">10</span> <span class="p">*</span> <span class="n">j</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
         <span class="p">}</span>
-<span class="cp">#else</span>
-        <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">pad</span> <span class="p">=</span> <span class="m">0f</span><span class="p">,</span> <span class="n">stay</span> <span class="p">=</span> <span class="m">0f</span> <span class="p">};</span>
-        <span class="n">q_table</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
-<span class="cp">#endif</span>
-
+<span class="cp">#else
+</span>        <span class="n">Row</span> <span class="n">row</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Row</span><span class="p">()</span> <span class="p">{</span> <span class="n">pad</span> <span class="p">=</span> <span class="m">0f</span><span class="p">,</span> <span class="n">stay</span> <span class="p">=</span> <span class="m">0f</span> <span class="p">};</span>
+        <span class="n">q_table</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">row</span><span class="p">);</span>
+<span class="cp">#endif
+</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 
     <span class="k">public</span> <span class="kt">int</span> <span class="nf">GetCurrentState</span><span class="p">()</span>
     <span class="p">{</span>
-<span class="cp">#if ENABLE_PILLAR</span>
-        <span class="kt">int</span> <span class="n">p_st</span> <span class="p">=</span> <span class="n">PillarManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">GetPillarMiniState</span><span class="p">();</span>
-        <span class="kt">int</span> <span class="n">b_st</span> <span class="p">=</span> <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">mainBird</span><span class="p">.</span><span class="n">GetState</span><span class="p">();</span>
+<span class="cp">#if ENABLE_PILLAR
+</span>        <span class="kt">int</span> <span class="n">p_st</span> <span class="p">=</span> <span class="n">PillarManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="nf">GetPillarMiniState</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">b_st</span> <span class="p">=</span> <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">mainBird</span><span class="p">.</span><span class="nf">GetState</span><span class="p">();</span>
         <span class="k">return</span> <span class="n">p_st</span> <span class="p">+</span> <span class="n">b_st</span><span class="p">;</span>
-<span class="cp">#else</span>
-        <span class="k">return</span> <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">mainBird</span><span class="p">.</span><span class="n">GetState</span><span class="p">();</span>
-<span class="cp">#endif</span>
-    <span class="p">}</span></code></pre></div>
+<span class="cp">#else
+</span>        <span class="k">return</span> <span class="n">GameManager</span><span class="p">.</span><span class="n">S</span><span class="p">.</span><span class="n">mainBird</span><span class="p">.</span><span class="nf">GetState</span><span class="p">();</span>
+<span class="cp">#endif
+</span>    <span class="p">}</span></code></pre></figure>
 
 <p>Reinforcement做选择还是和之前一样，由 epsilon概率来由 q_table 来决定，1-epsilon概率随机决定。</p>
 
