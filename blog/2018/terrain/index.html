@@ -71,7 +71,7 @@
   <li>分块之后，lightmap的索引和偏移重新计算</li>
 </ol>
 
-<h3 id="切割大地形">切割大地形</h3>
+<h3 id="section">切割大地形</h3>
 
 <p>打开 unity, 在菜单栏点击 Terrain-&gt;Slicing 即可以切割大地形，代码会自动遍历 Hirerachy 里的地形，切割4X4的16块，切割好的地形默认会存在 Resources 目录下，生成一个地形 gameobject 同名的文件夹。</p>
 
@@ -106,7 +106,7 @@
 <span class="n">writer</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span>
 <span class="n">fs</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span></code></pre></figure>
 
-<h3 id="分段加载地形和物件">分段加载地形和物件。</h3>
+<h3 id="section-1">分段加载地形和物件。</h3>
 
 <p>点击 Terrain-&gt;Load 会加载分片地形， 并且根据地形分片生成一个对应的 collider.</p>
 
@@ -125,7 +125,7 @@
     <span class="n">TerrainLoadMgr</span><span class="p">.</span><span class="n">sington</span><span class="p">.</span><span class="nf">UnloadItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="部件的加载">部件的加载</h3>
+<h3 id="section-2">部件的加载</h3>
 
 <p>部件如场景里的石头这个物件，他的加载跟着地形分片一同加载、卸载。而不是以 player 为中心做四叉树来管理场景的加载卸载。</p>
 
@@ -133,7 +133,7 @@
 
 <p><img src="/img/in-post/post_terrain/3.jpg" alt="" /></p>
 
-<h3 id="lightmap生成assetbundle">lightmap生成assetbundle</h3>
+<h3 id="lightmapassetbundle">lightmap生成assetbundle</h3>
 
 <p>点击 Terrain-&gt;生成lightmap资源，即可以把当前场景的lightmap 贴图全部达成assetbundle. 在打包lightmap贴图的同时，会生成一个二进制文件被打到同一个assetbundle中，这个二进制文件记录了当前场景里所有render的lightmap的index索引和offsetscale偏移。</p>
 
@@ -141,7 +141,7 @@
 
 <p><img src="/img/in-post/post_terrain/1.jpg" alt="" /></p>
 
-<h3 id="注意">注意：</h3>
+<h3 id="section-3">注意：</h3>
 
 <ol>
   <li>

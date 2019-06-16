@@ -5,13 +5,13 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 07 Jun 2019 23:09:29 +0800</pubDate>
-    <lastBuildDate>Fri, 07 Jun 2019 23:09:29 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Jun 2019 23:35:35 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Jun 2019 23:35:35 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
         <title>矢量字是如何画出来的</title>
-        <description>&lt;h3 id=&quot;经典文本渲染位图字体&quot;&gt;经典文本渲染：位图字体&lt;/h3&gt;
+        <description>&lt;h3 id=&quot;section&quot;&gt;经典文本渲染：位图字体&lt;/h3&gt;
 
 &lt;p&gt;数学函数早期的时候，渲染文本是通过选择一个需要的字体(Font)（或者自己创建一个），并提取这个字体中所有相关的字符，将它们放到一个单独的大纹理中来实现的。这样一张纹理叫做位图字体(Bitmap Font)，它在纹理的预定义区域中包含了我们想要使用的所有字符。字体的这些字符被称为字形(Glyph)。每个字形都关联着一个特定的纹理坐标区域。当你想要渲染一个字符的时候，你只需要通过渲染这一块特定的位图字体区域到2D四边形上即可。&lt;/p&gt;
 
@@ -24,7 +24,7 @@
 
 &lt;p&gt;使用这种方式绘制文本有许多优势也有很多缺点。首先，它相对来说很容易实现，并且因为位图字体已经预光栅化了，它的效率也很高。然而，这种方式不够灵活。当你想要使用不同的字体时，你需要重新编译一套全新的位图字体，而且你的程序会被限制在一个固定的分辨率。如果你对这些文本进行缩放的话你会看到文本的像素边缘。&lt;/p&gt;
 
-&lt;h3 id=&quot;现代文本渲染freetype&quot;&gt;现代文本渲染：FreeType&lt;/h3&gt;
+&lt;h3 id=&quot;freetype&quot;&gt;现代文本渲染：FreeType&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://www.freetype.org&quot;&gt;FreeType&lt;/a&gt;是一个能够用于加载字体并将他们渲染到位图以及提供多种字体相关的操作的软件开发库。FreeType的真正吸引力在于它能够加载TrueType字体。它被用于Mac OS X、Java、PlayStation主机、Linux、Android等平台。很多游戏引擎，比如说unity也使用了freetype，来生成动态字体，&lt;a href=&quot;https://docs.unity3d.com/Manual/class-Font.html&quot;&gt;参考这里&lt;/a&gt;。&lt;/p&gt;
 
@@ -76,7 +76,7 @@
 
 &lt;p&gt;根据上述api,生成对应的行文字：&lt;/p&gt;
 
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;ft2build.h&amp;gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;ft2build.h&amp;gt;
 #include FT_FREETYPE_H 
 &lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
@@ -128,13 +128,13 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;注意事项&quot;&gt;注意事项&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;注意事项&lt;/h3&gt;
 
 &lt;ol&gt;
   &lt;li&gt;1.我们把FreeType生成的位图存储在一个单通道的buffer中， 所以OpenGL根据位图宽高和buffer绑定给Texture2D&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;glTexImage2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_TEXTURE_2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;glTexImage2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_TEXTURE_2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;n&quot;&gt;GL_RED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;n&quot;&gt;glyph&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bitmap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
@@ -148,7 +148,7 @@
 
 &lt;p&gt;在OpenES平台上，是不支持GL_RED，需要使用GL_LUMINANCE， 否则是看不到字体显示的。具体&lt;a href=&quot;https://github.com/rougier/freetype-gl/pull/77&quot;&gt;参考这里&lt;/a&gt;。&lt;/p&gt;
 
-&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;glTexImage2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_TEXTURE_2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;glTexImage2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_TEXTURE_2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;n&quot;&gt;GL_LUMINANCE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
             &lt;span class=&quot;n&quot;&gt;glyph&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bitmap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
@@ -182,7 +182,7 @@
     
       <item>
         <title>CG/hlsl 内置函数</title>
-        <description>&lt;h3 id=&quot;数学函数&quot;&gt;数学函数&lt;/h3&gt;
+        <description>&lt;h3 id=&quot;section&quot;&gt;数学函数&lt;/h3&gt;
 
 &lt;p&gt;abs(x)   返回输入参数的绝对值&lt;br /&gt;
 acos(x)  反余切函数，输入参数范围为[-1,1]， 返回[0,π]区间的角度值&lt;br /&gt;
@@ -230,7 +230,7 @@ step(a, x)   如果x&amp;lt;a，返回0；否则，返回1sqrt(x)求x的平方�
 tan(x)   计算x正切值tanh(x)计算x的双曲线切线&lt;br /&gt;
 transpose(M)   矩阵M的转置矩阵如果M是一个AxB矩阵，M的转置是一个BxA矩阵，它的第一列是M的第一行，第二列是M的第二行，第三列是M的第三行，等等&lt;/p&gt;
 
-&lt;h3 id=&quot;几何函数&quot;&gt;几何函数&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;几何函数&lt;/h3&gt;
 &lt;p&gt;distance(pt1, pt2)   两点之间的欧几里德距离（Euclidean distance）&lt;br /&gt;
 faceforward(N,I,Ng)  如果Ng∙I&amp;lt;0，返回N；否则返回-N。&lt;br /&gt;
 length(v)    返回一个向量的模，即sqrt(dot(v,v))&lt;br /&gt;
@@ -238,7 +238,7 @@ normalize(v)     返回v向量的单位向量&lt;br /&gt;
 reflect(I, N)    根据入射光纤方向I和表面法向量N计算反射向量，仅对三元向量有效&lt;br /&gt;
 refract(I,N,eta)     根据入射光线方向I，表面法向量N和折射相对系数eta,计算折射向量。如果对给定的eta,I和N之间的角度太大，返回(0,0,0)。只对三元向量有效&lt;/p&gt;
 
-&lt;h3 id=&quot;纹理映射函数&quot;&gt;纹理映射函数&lt;/h3&gt;
+&lt;h3 id=&quot;section-2&quot;&gt;纹理映射函数&lt;/h3&gt;
 &lt;p&gt;tex1D(sampler1D tex, float s)    一维纹理查询&lt;br /&gt;
 tex1D(sampler1D tex, float s, float dsdx, float dsdy)  使用导数值（derivatives）查询一维纹理&lt;br /&gt;
 Tex1D(sampler1D tex, float2 sz)  一维纹理查询，并进行深度值比较&lt;br /&gt;
@@ -270,15 +270,15 @@ z表示这是一个用来进行阴影贴图查找的深度比较值。&lt;br /&g
 q表示这是一个透视值，在进行纹理查找之前，它被用来除以纹理坐标（s）。&lt;br /&gt;
 当你使用的纹理函数允许你指定一个深度比较值的时候，与之相关联的纹理单元必须被设置成深度比较纹理。否则，深度比较实际上不会被执行。&lt;/p&gt;
 
-&lt;h3 id=&quot;偏导函数&quot;&gt;偏导函数&lt;/h3&gt;
+&lt;h3 id=&quot;section-3&quot;&gt;偏导函数&lt;/h3&gt;
 &lt;p&gt;ddx(a)  近似a关于屏幕空间x轴的偏导数ddy(a)近似a关于屏幕空间y轴的偏导数&lt;/p&gt;
 
-&lt;h3 id=&quot;调试函数&quot;&gt;调试函数&lt;/h3&gt;
+&lt;h3 id=&quot;section-4&quot;&gt;调试函数&lt;/h3&gt;
 &lt;p&gt;void debug(float4 x)  如果在编译时设置了DEBUG，片段着 色程序中调用该函数可以将值x作为COLOR语义的最终输出；否则该函数什么也不做。&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;hlsl函数和glsl映射&quot;&gt;HLSL函数和glsl映射&lt;/h3&gt;
+&lt;h3 id=&quot;hlslglsl&quot;&gt;HLSL函数和glsl映射&lt;/h3&gt;
 
 &lt;table border=&quot;1&quot;&gt;
  &lt;tr&gt;
@@ -373,7 +373,7 @@ q表示这是一个透视值，在进行纹理查找之前，它被用来除以�
   &lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&quot;训练集&quot;&gt;训练集&lt;/h2&gt;
+&lt;h2 id=&quot;section&quot;&gt;训练集&lt;/h2&gt;
 
 &lt;p&gt;我们在python-tensorflow中实现了一种反向传播网络，我们使用Auto-Encoder替代GAN中Generator，用以生成风格化的图像， 而在Discriminator来鉴别图像。&lt;/p&gt;
 
@@ -402,7 +402,7 @@ q表示这是一个透视值，在进行纹理查找之前，它被用来除以�
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/post-tf/loss.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;运行时&quot;&gt;运行时&lt;/h2&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;运行时&lt;/h2&gt;
 
 &lt;p&gt;在unity中， 我们使用compute shader实现了一套跟TensorFlow中的相同的前向传播网络。 这里只是实现了Encoder和Decoder， 并没有实现Discriminator, 因为只有训练的时候用到了Discriminator.&lt;/p&gt;
 
@@ -424,7 +424,7 @@ q表示这是一个透视值，在进行纹理查找之前，它被用来除以�
 
 &lt;p&gt;在设计的CNN网络层中， 卷积核大都是3x3的， 所以这里我们定义了一个Matrix3x3.cs在csharp中， 这样给StructureBuffer传递数据的时候，一次性传递过去。&lt;/p&gt;
 
-&lt;h2 id=&quot;数据导出&quot;&gt;数据导出&lt;/h2&gt;
+&lt;h2 id=&quot;section-2&quot;&gt;数据导出&lt;/h2&gt;
 
 &lt;p&gt;tensorflow 训练数据集有自己的序列化方式，大概是protobuf,  google也提供了一套api, 去获取里面的张量Tensor。&lt;/p&gt;
 
@@ -436,7 +436,7 @@ q表示这是一个透视值，在进行纹理查找之前，它被用来除以�
 
 &lt;p&gt;通过上面的操作我们导出的参数规模大概是48M，由于可以去掉预算复杂且效率不高的残差网络模块，参数规模进一步缩小到十几兆。 这还是我们采用float存储的格式， 如果对精度要求不高， 采用half的数据格式 5M-6M之间， 我觉得这个大小都手机平台还是可以接受的。&lt;/p&gt;
 
-&lt;h2 id=&quot;数据调试&quot;&gt;数据调试&lt;/h2&gt;
+&lt;h2 id=&quot;section-3&quot;&gt;数据调试&lt;/h2&gt;
 
 &lt;p&gt;为了清晰的看出Tensorflow Session里的每一层数据， 我们同时在python和unity环境中定义了printf 和 printh 函数， 分别用来输出二三维和一二维数据到控制台。  也可以检测python环境和unity环境运算结果是否具有一致性。&lt;/p&gt;
 
@@ -451,7 +451,7 @@ q表示这是一个透视值，在进行纹理查找之前，它被用来除以�
 
 &lt;p&gt;我们通过一张图片看到， ganerator前期encoder前期更多的学到的是形状信息， 后期decoder学到的更多的是风格相关的信息。&lt;/p&gt;
 
-&lt;h2 id=&quot;性能分析&quot;&gt;性能分析&lt;/h2&gt;
+&lt;h2 id=&quot;section-4&quot;&gt;性能分析&lt;/h2&gt;
 
 &lt;ol&gt;
   &lt;li&gt;&lt;b&gt;参数规模:&lt;/b&gt;&lt;br /&gt;&lt;/li&gt;
@@ -844,7 +844,7 @@ git checkout ppo&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;本文对应到github工程代码地址：&lt;a href=&quot;https://github.com/huailiang/ulua_proj&quot;&gt;https://github.com/huailiang/ulua_proj&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;为什么要定制&quot;&gt;为什么要定制&lt;/h2&gt;
+&lt;h2 id=&quot;section&quot;&gt;为什么要定制&lt;/h2&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -855,13 +855,13 @@ git checkout ppo&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&quot;为什么选择lua53&quot;&gt;为什么选择lua53&lt;/h2&gt;
+&lt;h2 id=&quot;lua53&quot;&gt;为什么选择lua53&lt;/h2&gt;
 
 &lt;p&gt;为什么选择lua53, 而不是效率更高的luajit。 主要是考虑到项目�使用lua来修复既有的逻辑模块，而不是使用lua来开发新的模块。（不是绝对的使用lua不开发新功能，比如说活动系统�这种频繁更新的模块可以使用lua�来开发，只是这种需求比较少，而且对性能要求不高）&lt;/p&gt;
 
 &lt;p&gt;还有一个原因是使用lua53，是因为lua53天然支持int64，游戏逻辑使用c#,c++这种高阶语言编写的，很容易用到int64这种数据格式。&lt;/p&gt;
 
-&lt;h2 id=&quot;编译lua源码踩的坑&quot;&gt;编译lua源码踩的坑&lt;/h2&gt;
+&lt;h2 id=&quot;lua&quot;&gt;编译lua源码踩的坑&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;ios build error: ‘system’ is unavailable: not available on iOS&lt;br /&gt;
@@ -922,7 +922,7 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 
 &lt;p&gt;把差异化的东西编译到link文件，然后cmakelist这样配置：&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;configure_file&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LUA_SRC_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;luaconf.h.in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CMAKE_CURRENT_BINARY_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;luaconf.h&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;n&quot;&gt;configure_file&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LUA_SRC_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;luaconf.h.in&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CMAKE_CURRENT_BINARY_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;luaconf.h&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;protobuf&quot;&gt;Protobuf&lt;/h2&gt;
 
@@ -1002,7 +1002,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
 
 &lt;p&gt;https://www.jianshu.com/p/3c49cf454502&lt;/p&gt;
 
-&lt;h2 id=&quot;结语&quot;&gt;结语&lt;/h2&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;结语&lt;/h2&gt;
 
 &lt;p&gt;好久没有更新博客了，最近的项目工作量上来了，之后相信会越来越忙了，祝大家工作顺利。&lt;/p&gt;
 
@@ -1106,7 +1106,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
   &lt;li&gt;分块之后，lightmap的索引和偏移重新计算&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&quot;切割大地形&quot;&gt;切割大地形&lt;/h3&gt;
+&lt;h3 id=&quot;section&quot;&gt;切割大地形&lt;/h3&gt;
 
 &lt;p&gt;打开 unity, 在菜单栏点击 Terrain-&amp;gt;Slicing 即可以切割大地形，代码会自动遍历 Hirerachy 里的地形，切割4X4的16块，切割好的地形默认会存在 Resources 目录下，生成一个地形 gameobject 同名的文件夹。&lt;/p&gt;
 
@@ -1141,7 +1141,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
 &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;分段加载地形和物件&quot;&gt;分段加载地形和物件。&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;分段加载地形和物件。&lt;/h3&gt;
 
 &lt;p&gt;点击 Terrain-&amp;gt;Load 会加载分片地形， 并且根据地形分片生成一个对应的 collider.&lt;/p&gt;
 
@@ -1160,7 +1160,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
     &lt;span class=&quot;n&quot;&gt;TerrainLoadMgr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sington&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;UnloadItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;部件的加载&quot;&gt;部件的加载&lt;/h3&gt;
+&lt;h3 id=&quot;section-2&quot;&gt;部件的加载&lt;/h3&gt;
 
 &lt;p&gt;部件如场景里的石头这个物件，他的加载跟着地形分片一同加载、卸载。而不是以 player 为中心做四叉树来管理场景的加载卸载。&lt;/p&gt;
 
@@ -1168,7 +1168,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/post_terrain/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;lightmap生成assetbundle&quot;&gt;lightmap生成assetbundle&lt;/h3&gt;
+&lt;h3 id=&quot;lightmapassetbundle&quot;&gt;lightmap生成assetbundle&lt;/h3&gt;
 
 &lt;p&gt;点击 Terrain-&amp;gt;生成lightmap资源，即可以把当前场景的lightmap 贴图全部达成assetbundle. 在打包lightmap贴图的同时，会生成一个二进制文件被打到同一个assetbundle中，这个二进制文件记录了当前场景里所有render的lightmap的index索引和offsetscale偏移。&lt;/p&gt;
 
@@ -1176,7 +1176,7 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/post_terrain/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;注意&quot;&gt;注意：&lt;/h3&gt;
+&lt;h3 id=&quot;section-3&quot;&gt;注意：&lt;/h3&gt;
 
 &lt;ol&gt;
   &lt;li&gt;

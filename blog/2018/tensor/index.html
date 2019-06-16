@@ -60,7 +60,7 @@
   <p>TensorFlow是谷歌基于DistBelief进行研发的第二代人工智能学习系统，其命名来源于本身的运行原理。Tensor（张量）意味着N维数组，Flow（流）意味着基于数据流图的计算，TensorFlow为张量从流图的一端流动到另一端计算过程。TensorFlow是将复杂的数据结构传输至人工智能神经网中进行分析和处理过程的系统。</p>
 </blockquote>
 
-<h2 id="导入tensorflow">导入TensorFlow</h2>
+<h2 id="tensorflow">导入TensorFlow</h2>
 
 <p>典型的导入TensorFlow程序的做法如下：</p>
 
@@ -68,7 +68,7 @@
 
 <p>运行这个，可以得到Python下的TensorFlow中的所有类、方法和符号。大多数的文档默认你已经执行了这个。</p>
 
-<h2 id="计算图-computational-graph">计算图 (Computational Graph)</h2>
+<h2 id="computational-graph">计算图 (Computational Graph)</h2>
 
 <p>TensorFlow Core程序是由两个分离的部分组成的：</p>
 
@@ -78,13 +78,13 @@
 
 <p>一个计算图是一系列TensorFlow操作的点(nodes)。我们构建一个简单的计算图。每一个点需要零个或者更多的张量(tensor)作为输入，并且产生一个张量作为输出。</p>
 
-<h3 id="数据类型">数据类型</h3>
+<h3 id="section">数据类型</h3>
 
 <p>下图列出了所有的 tensorflow的数据类型</p>
 
 <p><img src="/img/in-post/post-tf/tf01.jpeg" alt="" /></p>
 
-<h3 id="常量constant">常量(Constant)</h3>
+<h3 id="constant">常量(Constant)</h3>
 
 <p>点的一种形式是常数。像所有TensorFlow常数，它不需要输入，而它会从内部输出一个值。我们可以创建两个点的张量c1和c2，如下所示：</p>
 
@@ -101,7 +101,7 @@
 
 <p>注意到，它输出的并不是[0.3,2.0]和([1.3,1.2]的值，而是对应的点张量，要通过开启会话，才能直接输出其值。这直接反映了TensorFlow的构建和计算是分离的。</p>
 
-<h3 id="张量的阶形状">张量的阶、形状</h3>
+<h3 id="section-1">张量的阶、形状</h3>
 
 <p>TensorFlow用张量这种数据结构来表示所有的数据.你可以把一个张量想象成一个n维的数组或列表.一个张量有一个静态类型和动态类型的维数.张量可以在图中的节点之间流通.</p>
 
@@ -199,7 +199,7 @@ tf.reduce_mean(x_) ==&gt; 2.5 #如果不指定第二个参数，那么就在所�
 2.5 <span class="o">[</span>2. 3.] <span class="o">[</span>1.5 3.5]
 4.0 <span class="o">[</span>3. 4.] <span class="o">[</span>2. 4.]</code></pre></figure>
 
-<h3 id="会话">会话</h3>
+<h3 id="section-2">会话</h3>
 
 <p>接下来的代码就是创建一个Session对象，调用它的run方法。只有这样，才能进行真正的运算。如下所示：</p>
 
@@ -225,7 +225,7 @@ tf.reduce_mean(x_) ==&gt; 2.5 #如果不指定第二个参数，那么就在所�
 
 <span class="c"># 输出：op_add rst:[1.5999999 3.2      ]</span></code></pre></figure>
 
-<h3 id="占位符placeholder">占位符(Placeholder)</h3>
+<h3 id="placeholder">占位符(Placeholder)</h3>
 
 <p>有些时候，我们不会直接使用常量进行计算，而需要事先创建一个量去表示运算。这时，在TensorFlow中可以采用placeholders的方法。它的本质就是一个占位符，先用placeholder表示进行运算的表达，程序后面在进行“喂值”(feed_dict)。如下所示：</p>
 
@@ -260,7 +260,7 @@ tf.reduce_mean(x_) ==&gt; 2.5 #如果不指定第二个参数，那么就在所�
 
 <p>当然，要显示最终结果，需要进行回话和喂值。</p>
 
-<h3 id="变量variable">变量(Variable)</h3>
+<h3 id="variable">变量(Variable)</h3>
 
 <p>机器学习中，我们构建模型，TensorFlow中模型有输入有输出，训练中参数会不断更新，这时，我们需要创建变量(Variable)。TensorFlow中，Variable可以将训练参数添加到图中，声明变量时，一般需要声明变量的类型（如：tf.float32）和赋初值。如下所示：</p>
 
@@ -304,16 +304,14 @@ tf.reduce_mean(x_) ==&gt; 2.5 #如果不指定第二个参数，那么就在所�
 
 <h3 id="tensorboard">tensorboard</h3>
 
-<p>Tensorboard可以记录与展示以下数据形式：</p>
-<ul>
-  <li>标量Scalars</li>
-  <li>图片Images</li>
-  <li>音频Audio</li>
-  <li>计算图Graph</li>
-  <li>数据分布Distribution</li>
-  <li>直方图Histograms</li>
-  <li>嵌入向量Embeddings</li>
-</ul>
+<p>Tensorboard可以记录与展示以下数据形式：<br />
+- 标量Scalars<br />
+- 图片Images<br />
+- 音频Audio<br />
+- 计算图Graph<br />
+- 数据分布Distribution<br />
+- 直方图Histograms<br />
+- 嵌入向量Embeddings</p>
 
 <p>Tensorboard的可视化过程</p>
 

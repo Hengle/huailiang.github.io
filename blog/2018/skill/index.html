@@ -60,18 +60,18 @@
   <p>不知道大家游戏的技能编辑器是怎么实现的呢，可能不同类型的游戏，技能编辑会有很大的不同吧。下面就介绍一个《龙之谷》手游作为一款经典的 ARPG 游戏，技能编辑器是如何实现的。</p>
 </blockquote>
 
-<h3 id="技能编辑器界面预览">技能编辑器界面预览</h3>
+<h3 id="section">技能编辑器界面预览</h3>
 <p><img src="/img/in-post/post-skill/gif1.gif" alt="" /></p>
 
 <p><em>图片来源: <a href="https://huailiang.github.io" title="Huailiang: A Progressive Web App">huailiang.github.io</a></em></p>
 
-<h3 id="在unity对应的编辑器">在unity对应的编辑器</h3>
+<h3 id="unity">在unity对应的编辑器</h3>
 
 <p><img src="/img/in-post/post-skill/skill1.jpg" alt="" /></p>
 
 <p><em>图片来源: <a href="https://huailiang.github.io" title="Huailiang: A Progressive Web App">huailiang.github.io</a></em></p>
 
-<h3 id="数据保存格式-xml">数据保存格式-xml</h3>
+<h3 id="xml">数据保存格式-xml</h3>
 <p>龙之谷的技能编辑生成的中间数据是 xml,用来供游戏逻辑来读取，进一步实现相关的逻辑。客户端使用System.Xml.Serialization.XmlSerializer序列化解析xml,服务器使用tinyxml来解析xml</p>
 
 <p>技能编辑是基于帧率的，游戏锁定在30帧。 技能编辑器总体设置镜头FOV, 配置文件的物理位置， 技能的长度， 技能使用的animation动画等。</p>
@@ -80,9 +80,9 @@
 
 <p>龙之谷技能编辑器的实现是基于Unity Editor扩展实现的。策划在编辑器里编辑，编辑好之后保存成xml格式。 运行时读取xml。 运行时又区分在unity里预览编辑器里效果和游戏实际运行的效果。</p>
 
-<p>下面的配置是基于帧率实现的：</p>
-<h3 id="result-技能作用效果">Result 技能作用效果</h3>
-<p>配置打击点 子弹效果</p>
+<p>下面的配置是基于帧率实现的：<br />
+### Result 技能作用效果<br />
+配置打击点 子弹效果</p>
 
 <p><img src="/img/in-post/post-skill/skill2.jpg" alt="" /></p>
 
@@ -137,7 +137,7 @@
     <span class="n">Gizmos</span><span class="p">.</span><span class="nf">DrawLine</span><span class="p">(</span><span class="n">br</span><span class="p">,</span> <span class="n">fr</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="hit-配置技能的打击效果">Hit 配置技能的打击效果</h3>
+<h3 id="hit-">Hit 配置技能的打击效果</h3>
 <p>可以在hit Dummy 设置一个被打击的对象<br />
 type是被打击的效果<br />
 还可以配置一些打击使用的特效</p>
@@ -146,14 +146,14 @@ type是被打击的效果<br />
 
 <p><em>图片来源: <a href="https://huailiang.github.io" title="Huailiang: A Progressive Web App">huailiang.github.io</a></em></p>
 
-<h3 id="fmod-技能使用的音效">FMOd 技能使用的音效</h3>
+<h3 id="fmod-">FMOd 技能使用的音效</h3>
 <p>配置基本上播放其实帧数 还有就是fmod需要的一些参数如路径、还有频道</p>
 
 <p><img src="/img/in-post/post-skill/skill5.jpg" alt="" /></p>
 
 <p><em>图片来源: <a href="https://huailiang.github.io" title="Huailiang: A Progressive Web App">huailiang.github.io</a></em></p>
 
-<h3 id="fx-配置技能在某帧播放的特效">Fx 配置技能在某帧播放的特效</h3>
+<h3 id="fx-">Fx 配置技能在某帧播放的特效</h3>
 <p>配置帧的起始位置，特效对应的prefab 地址等相关的属性  <br />
 编辑器里还支持跟随效果、延时播放 transform 缩放和postion偏移<br />
 <img src="/img/in-post/post-skill/skill4.jpg" alt="" /></p>

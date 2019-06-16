@@ -62,7 +62,7 @@
 
 <p>Homebrew是一款Mac OS平台下的软件包管理工具，拥有安装、卸载、更新、查看、搜索等很多实用的功能。简单的一条指令，就可以实现包管理，而不用你关心各种依赖和文件路径的情况，十分方便快捷。</p>
 
-<h2 id="如何安装-homebrew">如何安装 Homebrew？</h2>
+<h2 id="homebrew">如何安装 Homebrew？</h2>
 
 <p>首先安装 ruby(Ruby，Mac自带，如果没有请安装)</p>
 
@@ -82,7 +82,7 @@
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">  ruby -v</code></pre></figure>
 
-<h2 id="如何卸载-homebrew">如何卸载 Homebrew</h2>
+<h2 id="homebrew-1">如何卸载 Homebrew</h2>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="nv">$ </span><span class="nb">cd</span> <span class="sb">`</span>brew --prefix<span class="sb">`</span>
  <span class="nv">$ </span>rm -rf Cellar
@@ -93,18 +93,16 @@
  <span class="nv">$ </span>rm -rf .git
  <span class="nv">$ </span>rm -rf ~/Library/Caches/Homebrew</code></pre></figure>
 
-<p>常用的 homebrew命令：</p>
-<ol>
-  <li>brew list 显示已安装的包</li>
-  <li>brew home [] 用浏览器打开相关包的页面</li>
-  <li>brew info [] 显示包信息</li>
-  <li>brew deps [] 显示包依赖</li>
-  <li>brew server 启动web服务器，可以通过浏览器访问  <br />
-http://localhost:4567/ 来同网页来管理包</li>
-  <li>brew -h brew帮助</li>
-</ol>
+<p>常用的 homebrew命令：<br />
+1. brew list 显示已安装的包<br />
+2. brew home [] 用浏览器打开相关包的页面<br />
+3. brew info [] 显示包信息<br />
+4. brew deps [] 显示包依赖<br />
+4. brew server 启动web服务器，可以通过浏览器访问  <br />
+http://localhost:4567/ 来同网页来管理包<br />
+5. brew -h brew帮助</p>
 
-<h2 id="注意">注意：</h2>
+<h2 id="section">注意：</h2>
 <p>在Mac OS X 10.11系统以后，/usr/local/等系统目录下的文件读写是需要系统root权限的，以往的Homebrew安装如果没有指定安装路径，会默认安装在这些需要系统root用户读写权限的目录下，导致有些指令需要添加sudo前缀来执行，比如升级Homebrew需要：</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>sudo brew update</code></pre></figure>

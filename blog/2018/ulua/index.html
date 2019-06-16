@@ -62,7 +62,7 @@
 
 <p>本文对应到github工程代码地址：<a href="https://github.com/huailiang/ulua_proj">https://github.com/huailiang/ulua_proj</a></p>
 
-<h2 id="为什么要定制">为什么要定制</h2>
+<h2 id="section">为什么要定制</h2>
 
 <ol>
   <li>
@@ -73,13 +73,13 @@
   </li>
 </ol>
 
-<h2 id="为什么选择lua53">为什么选择lua53</h2>
+<h2 id="lua53">为什么选择lua53</h2>
 
 <p>为什么选择lua53, 而不是效率更高的luajit。 主要是考虑到项目�使用lua来修复既有的逻辑模块，而不是使用lua来开发新的模块。（不是绝对的使用lua不开发新功能，比如说活动系统�这种频繁更新的模块可以使用lua�来开发，只是这种需求比较少，而且对性能要求不高）</p>
 
 <p>还有一个原因是使用lua53，是因为lua53天然支持int64，游戏逻辑使用c#,c++这种高阶语言编写的，很容易用到int64这种数据格式。</p>
 
-<h2 id="编译lua源码踩的坑">编译lua源码踩的坑</h2>
+<h2 id="lua">编译lua源码踩的坑</h2>
 
 <ul>
   <li>ios build error: ‘system’ is unavailable: not available on iOS<br />
@@ -140,7 +140,7 @@ iOS11废除了system之后,rug如果使用xcode9以上的版本编译都会报�
 
 <p>把差异化的东西编译到link文件，然后cmakelist这样配置：</p>
 
-<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">configure_file</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">LUA_SRC_PATH</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h.in</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_BINARY_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h</span><span class="w"> </span><span class="p">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">configure_file</span> <span class="p">(</span> <span class="o">$</span><span class="p">{</span><span class="n">LUA_SRC_PATH</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h.in</span> <span class="o">$</span><span class="p">{</span><span class="n">CMAKE_CURRENT_BINARY_DIR</span><span class="p">}</span><span class="o">/</span><span class="n">luaconf.h</span> <span class="p">)</span></code></pre></figure>
 
 <h2 id="protobuf">Protobuf</h2>
 
@@ -220,7 +220,7 @@ Main: size_t size mismatch in precompiled chunk<br />
 
 <p>https://www.jianshu.com/p/3c49cf454502</p>
 
-<h2 id="结语">结语</h2>
+<h2 id="section-1">结语</h2>
 
 <p>好久没有更新博客了，最近的项目工作量上来了，之后相信会越来越忙了，祝大家工作顺利。</p>
 

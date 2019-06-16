@@ -64,9 +64,9 @@
 
 <p><img src="/img/in-post/post-ml/ml1.gif" alt="" /></p>
 
-<p>研究者和开发者可使用ML - Agents SDK将由Unity编辑器创建的游戏和模拟程序转换成可训练智能代理的环境。在这个环境中，只需一个简单的Python API即可使用深度增强学习、演化策略或其他机器学习方法对智能代理进行训练。测试版版的Unity ML – Agents已作为开源软件发布，其中包含了一套示例项目和基线算法用作新手入门。有关机器学习代理工具的github地址， 请访问<a href="https://github.com/Unity-Technologies/ml-agents">这里</a>。</p>
-<h3 id="环境配置">环境配置：</h3>
-<p>Python是机器学习常用的语言，TensorFlow就使用它作为主要开发语言。作为解释语言，它不需要进行编译，对于机器学习所需要的大量原型化和迭代处理有相当高的效率。而且Python开发生态成熟，有许多库可供使用。通过pip（Python Package Index）工具，你可以安装各种基于Python的库。</p>
+<p>研究者和开发者可使用ML - Agents SDK将由Unity编辑器创建的游戏和模拟程序转换成可训练智能代理的环境。在这个环境中，只需一个简单的Python API即可使用深度增强学习、演化策略或其他机器学习方法对智能代理进行训练。测试版版的Unity ML – Agents已作为开源软件发布，其中包含了一套示例项目和基线算法用作新手入门。有关机器学习代理工具的github地址， 请访问<a href="https://github.com/Unity-Technologies/ml-agents">这里</a>。<br />
+### 环境配置：<br />
+Python是机器学习常用的语言，TensorFlow就使用它作为主要开发语言。作为解释语言，它不需要进行编译，对于机器学习所需要的大量原型化和迭代处理有相当高的效率。而且Python开发生态成熟，有许多库可供使用。通过pip（Python Package Index）工具，你可以安装各种基于Python的库。</p>
 
 <p>安装项目所需Python库和工具</p>
 
@@ -113,11 +113,10 @@ TensorFlow是现今非常流行的使用数据流图进行数值计算的开源�
 <p>每个代理都可以拥有一组独有的状态和观察，在环境中采取独有的行为，并在环境中获得独有的奖励。一个代理的动作由与之相联的大脑决定。</p>
 
 <h4 id="brain">Brain:</h4>
-<p>每个大脑都定义了一个特定的状态和动作空间，并负责决定每个关联的代理将采取哪些行动。当前版本支持将大脑设定为以下四种模式之一：</p>
+<p>每个大脑都定义了一个特定的状态和动作空间，并负责决定每个关联的代理将采取哪些行动。当前版本支持将大脑设定为以下四种模式之一：<br />
+- CoreBrainExternal.cs 动作决策由TensorFlow(或你选择的ML库)决定，我们的Python API负责打开套接字进行通信</p>
+
 <ul>
-  <li>
-    <p>CoreBrainExternal.cs 动作决策由TensorFlow(或你选择的ML库)决定，我们的Python API负责打开套接字进行通信</p>
-  </li>
   <li>
     <p>CoreBrainInternal.cs 动作决策由一个已训练模型决定，该模型使用TensorFlowSharp嵌入项目。</p>
   </li>
@@ -140,7 +139,7 @@ TensorFlow是现今非常流行的使用数据流图进行数值计算的开源�
 
 <p>所有连接着设置为外部模式大脑的代理，它们的状态和观察都会被外部通信器（External Communicator）收集，并通过我们的Python API与你选择的ML库进行通信。将多个代理设置到单个大脑，可以以批处理方式进行动作决策，从而在系统支持的情况下获得并行计算的优势。</p>
 
-<h3 id="设置unity环境">设置Unity环境</h3>
+<h3 id="unity">设置Unity环境</h3>
 
 <p>运行启动Unity 2017.1，在Unity中打开unity-environment文件夹。在启动窗口中，选择Open，并在弹出的文件浏览窗口中，选择unity-environment，点击Open。<br />
 注意：如遇见弹出警告信息为”Opening Project in Non-Matching Editor Installation”，请直接忽略。</p>
@@ -167,7 +166,7 @@ TensorFlow是现今非常流行的使用数据流图进行数值计算的开源�
 
 <p>点击Build,保存环境文件到python文件夹中</p>
 
-<h3 id="用强化学习训练大脑">用强化学习训练大脑</h3>
+<h3 id="section">用强化学习训练大脑</h3>
 
 <p>测试Python API</p>
 
@@ -205,7 +204,7 @@ https://blog.openai.com/openai-baselines-ppo/</p>
 
 <p><img src="/img/in-post/post-ml/ml11.jpg" alt="" /></p>
 
-<h3 id="观察训练过程">观察训练过程</h3>
+<h3 id="section-1">观察训练过程</h3>
 
 <p>要更仔细地观察训练过程，你可以使用Tensorboard。在命令行中，切换到前面提到的python文件夹下，输入：tensorboard –logdir=summaries</p>
 
@@ -224,14 +223,14 @@ https://blog.openai.com/openai-baselines-ppo/</p>
 <p>Value  Estimates：代理所访问的所有状态下的平均数值估计。在成功的训练过程中，这个变量数值会增大。</p>
 
 <p>Policy  Entropy：这个变量告诉你模型的决定随机度有多大。在成功的训练过程中，这个变量会缓慢减小。如果它减小得太快，beta hyperparameter应该会增大。<br />
-<img src="/img/in-post/post-ml/ml12.png" alt="" /></p>
-<h3 id="将训练好的模型载入unity环境">将训练好的模型载入Unity环境</h3>
+<img src="/img/in-post/post-ml/ml12.png" alt="" /><br />
+### 将训练好的模型载入Unity环境</p>
 
 <p>当训练过程显示的平均回报为75或更大时，并且模型已经保存过后。你可以通过中止执行代码来停止训练。，现在你就已经有训练好的TensorFlow模型。你必须将保存的模型转换为Unity可使用的格式，这样就可以直接通过以下步骤载入到Unity项目中。</p>
 
 <p><img src="/img/in-post/post-ml/ml13.jpg" alt="" /></p>
 
-<h3 id="配置对tensorflowsharp的支持">配置对TensorFlowSharp的支持</h3>
+<h3 id="tensorflowsharp">配置对TensorFlowSharp的支持</h3>
 <p>因为对TensorFlowSharp的支持目前还处于实验阶段，默认情况下它是被禁用的。要打开它，你必须按如下步骤操作。</p>
 
 <p>请注意Internal Brain模式只在完成以下步骤后才能使用。</p>

@@ -86,7 +86,7 @@ YCbCr         3×8位像素，彩色视频格式
 I             32位整型像素
 F             32位浮点型像素</code></pre></figure>
 
-<h3 id="获取图片的基本信息">获取图片的基本信息</h3>
+<h3 id="section">获取图片的基本信息</h3>
 
 <p>如获取图片的大小、通道、模式等信息</p>
 
@@ -112,7 +112,7 @@ F             32位浮点型像素</code></pre></figure>
 <span class="n">pixels</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">getpixel</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="k">print</span> <span class="s">"pixels:{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span></code></pre></figure>
 
-<h3 id="通道分离与合并">通道分离与合并</h3>
+<h3 id="section-1">通道分离与合并</h3>
 
 <ul>
   <li>变灰处理</li>
@@ -130,16 +130,13 @@ F             32位浮点型像素</code></pre></figure>
 <span class="n">pic</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s">'RGB'</span><span class="p">,(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">))</span> <span class="c">#合并三通道</span>
 <span class="n">pic</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
-<h3 id="使用pil-做图片混合">使用PIL 做图片混合</h3>
+<h3 id="pil-">使用PIL 做图片混合</h3>
 
-<p>注意事项：</p>
+<p>注意事项：<br />
+- 两张图片必须尺寸相等，如果不相等，请先强制改变一张图的尺寸</p>
+
 <ul>
-  <li>
-    <p>两张图片必须尺寸相等，如果不相等，请先强制改变一张图的尺寸</p>
-  </li>
-  <li>
-    <p>将im2合成到im1中，如果其一是透明的， 才能看到结果，不然最终结果只会显示出im2</p>
-  </li>
+  <li>将im2合成到im1中，如果其一是透明的， 才能看到结果，不然最终结果只会显示出im2</li>
 </ul>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
@@ -212,21 +209,19 @@ F             32位浮点型像素</code></pre></figure>
 	<span class="n">blend</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="s">"blend"</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
 	<span class="n">mask</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span><span class="n">im2</span><span class="p">,</span><span class="n">im3</span><span class="p">,</span><span class="s">"mask"</span><span class="p">,</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
 
-<h3 id="使用-pil-做一些美术效果">使用 PIL 做一些美术效果</h3>
+<h3 id="pil--1">使用 PIL 做一些美术效果</h3>
 
 <p>所有的效果：<br />
-引入ImageFilter， 他有如下选项：</p>
-<ul>
-  <li>BLUR - 模糊处理</li>
-  <li>CONTOUR - 轮廓处理</li>
-  <li>DETAIL - 增强</li>
-  <li>EDGE_ENHANCE - 将图像的边缘描绘得更清楚</li>
-  <li>EDGE_ENHANCE_NORE - 程度比EDGE_ENHANCE更强</li>
-  <li>EMBOSS - 产生浮雕效果</li>
-  <li>SMOOTH - 效果与EDGE_ENHANCE相反，将轮廓柔和</li>
-  <li>SMOOTH_MORE - 更柔和</li>
-  <li>SHARPEN - 效果有点像DETAIL</li>
-</ul>
+引入ImageFilter， 他有如下选项：<br />
+- BLUR - 模糊处理<br />
+- CONTOUR - 轮廓处理<br />
+- DETAIL - 增强<br />
+- EDGE_ENHANCE - 将图像的边缘描绘得更清楚<br />
+- EDGE_ENHANCE_NORE - 程度比EDGE_ENHANCE更强<br />
+- EMBOSS - 产生浮雕效果<br />
+- SMOOTH - 效果与EDGE_ENHANCE相反，将轮廓柔和<br />
+- SMOOTH_MORE - 更柔和<br />
+- SHARPEN - 效果有点像DETAIL</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># coding=utf-8</span>
 
@@ -237,7 +232,7 @@ F             32位浮点型像素</code></pre></figure>
 <span class="n">filterimg</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">ImageFilter</span><span class="o">.</span><span class="n">BLUR</span><span class="p">)</span>
 <span class="n">filterimg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
 
-<h3 id="批量生成水印图">批量生成水印图</h3>
+<h3 id="section-2">批量生成水印图</h3>
 
 <p>分为字体水印和图片 logo 水印</p>
 
@@ -287,7 +282,7 @@ F             32位浮点型像素</code></pre></figure>
 		<span class="n">mark_by_font</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">font</span><span class="p">)</span>
 		<span class="n">mark_by_img</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">mark</span><span class="p">)</span></code></pre></figure>
 
-<h3 id="负责的像素计算">负责的像素计算</h3>
+<h3 id="section-3">负责的像素计算</h3>
 
 <p>负责变黑、变亮、灰度处理等</p>
 

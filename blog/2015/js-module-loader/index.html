@@ -193,7 +193,7 @@
 
 <p>AMD 和 CommonJS 的核心争议如下：</p>
 
-<h3 id="1-执行时机">1. <strong>执行时机</strong></h3>
+<h3 id="section">1. <strong>执行时机</strong></h3>
 
 <p>Modules/1.0:</p>
 
@@ -211,7 +211,7 @@
 
 <p>但是 AMD 的执行是 Early Executing，而 Modules/1.0 是第一次 require 时才执行。这个差异很多人不能接受，包括持 Modules/2.0 观点的人也不能接受。</p>
 
-<h3 id="2-书写风格">2. <strong>书写风格</strong></h3>
+<h3 id="section-1">2. <strong>书写风格</strong></h3>
 
 <p>AMD 推荐的风格并不使用<code class="highlighter-rouge">require</code>，而是通过参数传入，破坏了<strong>依赖就近</strong>：</p>
 

@@ -56,7 +56,7 @@
     </header>
 
     <div class="post-content">
-      <h3 id="经典文本渲染位图字体">经典文本渲染：位图字体</h3>
+      <h3 id="section">经典文本渲染：位图字体</h3>
 
 <p>数学函数早期的时候，渲染文本是通过选择一个需要的字体(Font)（或者自己创建一个），并提取这个字体中所有相关的字符，将它们放到一个单独的大纹理中来实现的。这样一张纹理叫做位图字体(Bitmap Font)，它在纹理的预定义区域中包含了我们想要使用的所有字符。字体的这些字符被称为字形(Glyph)。每个字形都关联着一个特定的纹理坐标区域。当你想要渲染一个字符的时候，你只需要通过渲染这一块特定的位图字体区域到2D四边形上即可。</p>
 
@@ -69,7 +69,7 @@
 
 <p>使用这种方式绘制文本有许多优势也有很多缺点。首先，它相对来说很容易实现，并且因为位图字体已经预光栅化了，它的效率也很高。然而，这种方式不够灵活。当你想要使用不同的字体时，你需要重新编译一套全新的位图字体，而且你的程序会被限制在一个固定的分辨率。如果你对这些文本进行缩放的话你会看到文本的像素边缘。</p>
 
-<h3 id="现代文本渲染freetype">现代文本渲染：FreeType</h3>
+<h3 id="freetype">现代文本渲染：FreeType</h3>
 
 <p><a href="https://www.freetype.org">FreeType</a>是一个能够用于加载字体并将他们渲染到位图以及提供多种字体相关的操作的软件开发库。FreeType的真正吸引力在于它能够加载TrueType字体。它被用于Mac OS X、Java、PlayStation主机、Linux、Android等平台。很多游戏引擎，比如说unity也使用了freetype，来生成动态字体，<a href="https://docs.unity3d.com/Manual/class-Font.html">参考这里</a>。</p>
 
@@ -121,7 +121,7 @@
 
 <p>根据上述api,生成对应的行文字：</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ft2build.h&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;ft2build.h&gt;
 #include FT_FREETYPE_H 
 </span>
 <span class="kt">void</span> <span class="nf">render</span><span class="p">()</span>
@@ -173,13 +173,13 @@
 </code></pre>
 </div>
 
-<h3 id="注意事项">注意事项</h3>
+<h3 id="section-1">注意事项</h3>
 
 <ol>
   <li>1.我们把FreeType生成的位图存储在一个单通道的buffer中， 所以OpenGL根据位图宽高和buffer绑定给Texture2D</li>
 </ol>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> 
             <span class="mi">0</span><span class="p">,</span> 
             <span class="n">GL_RED</span><span class="p">,</span> 
             <span class="n">glyph</span><span class="o">-&gt;</span><span class="n">bitmap</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> 
@@ -193,7 +193,7 @@
 
 <p>在OpenES平台上，是不支持GL_RED，需要使用GL_LUMINANCE， 否则是看不到字体显示的。具体<a href="https://github.com/rougier/freetype-gl/pull/77">参考这里</a>。</p>
 
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> 
             <span class="mi">0</span><span class="p">,</span> 
             <span class="n">GL_LUMINANCE</span><span class="p">,</span> 
             <span class="n">glyph</span><span class="o">-&gt;</span><span class="n">bitmap</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> 

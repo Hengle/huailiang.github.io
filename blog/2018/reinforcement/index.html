@@ -64,7 +64,7 @@
 
 <p>目前强化学习的算法很多，诸如说 Q_Learning, Sarsa, DQN, OpenAI gym。等。 今天我们主要讲述 q_learning的实现，并简要介绍其他算法的实现。本节用到的代码都上传到 <a href="https://github.com/huailiang/bird">github 网站</a>, 欢迎点击下载。</p>
 
-<h3 id="q_learing">Q_learing</h3>
+<h3 id="qlearing">Q_learing</h3>
 
 <p>q-learning的伪代码先看这部分，很重要</p>
 
@@ -99,7 +99,7 @@
       <p>Your user agent does not support the HTML5 Video element.</p>
 </video>
 
-<h2 id="游戏应用">游戏应用</h2>
+<h2 id="section">游戏应用</h2>
 
 <p>我们将第次增加难度，来增加难度。</p>
 
@@ -209,7 +209,7 @@
     <span class="n">Debug</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="n">save_path</span><span class="p">);</span>
     <span class="n">FileStream</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">OpenOrCreate</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">);</span>
     <span class="n">StreamWriter</span> <span class="n">sw</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">q_table</span><span class="p">)</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">q_table</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">Key</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">pad</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">item</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">stay</span><span class="p">;</span>
         <span class="n">sw</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>

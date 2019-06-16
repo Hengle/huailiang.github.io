@@ -64,9 +64,9 @@
 
 <p><img src="/img/in-post/post-fashion/fashion1.gif" alt="" /></p>
 
-<h1 id="提取资源-预处理">提取资源-预处理</h1>
+<h1 id="section">提取资源-预处理</h1>
 
-<h3 id="第一步-从fbx中提取部件mesh-并给mesh赋值一些必要的属性">第一步： 从fbx中提取部件mesh, 并给mesh赋值一些必要的属性</h3>
+<h3 id="fbxmesh-mesh">第一步： 从fbx中提取部件mesh, 并给mesh赋值一些必要的属性</h3>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">string</span> <span class="n">saveRootPath</span> <span class="p">=</span> <span class="s">"Assets/Resources/Equipments/"</span><span class="p">;</span>
 <span class="n">modelImporter</span><span class="p">.</span><span class="n">isReadable</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
@@ -84,7 +84,7 @@
 <span class="n">modelImporter</span><span class="p">.</span><span class="n">isReadable</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
 <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span></code></pre></figure>
 
-<h3 id="第二步-保存mesh-并提取出main-texture并且保存在本地">第二步： 保存mesh, 并提取出Main Texture,并且保存在本地</h3>
+<h3 id="mesh-main-texture">第二步： 保存mesh, 并提取出Main Texture,并且保存在本地</h3>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">SaveMesh</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">Texture2D</span> <span class="n">tex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">profession</span><span class="p">,</span> <span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
 <span class="p">{</span>
@@ -105,7 +105,7 @@
     <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">SaveAssets</span><span class="p">();</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="第三步-预处理uv">第三步： 预处理uv</h3>
+<h3 id="uv">第三步： 预处理uv</h3>
 <p>根据部件位置序列，设置相应uv, 先确保uv的区间在[0,1]之间，然后u加上部件的索引 uvOffsetX对应每个部位的枚举定义值[1-8], 至于为什么这么处理，我们对在后面shader中使用这些uv信息，拼接时装时会用到。</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">void</span> <span class="nf">CalculateUV</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">,</span> <span class="kt">int</span> <span class="n">uvOffsetX</span><span class="p">)</span>
@@ -158,9 +158,9 @@
     <span class="n">AssetDatabase</span><span class="p">.</span><span class="nf">ImportAsset</span><span class="p">(</span><span class="n">alphaTexPath</span><span class="p">,</span> <span class="n">ImportAssetOptions</span><span class="p">.</span><span class="n">ForceUpdate</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<h1 id="运行时组装时装">运行时，组装时装</h1>
+<h1 id="section-1">运行时，组装时装</h1>
 
-<h3 id="第一步shader处理-drawcall合并">第一步：Shader处理， DrawCall合并</h3>
+<h3 id="shader-drawcall">第一步：Shader处理， DrawCall合并</h3>
 
 <p><img src="/img/in-post/post-fashion/fashion3.jpg" alt="" /></p>
 
@@ -280,7 +280,7 @@
 </span>
 <span class="p">};</span></code></pre></figure>
 
-<h3 id="第二步-c动态拼接">第二步 c#动态拼接</h3>
+<h3 id="c">第二步 c#动态拼接</h3>
 <ul>
   <li>收集部件</li>
   <li>合并skinmesh</li>

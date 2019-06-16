@@ -62,7 +62,7 @@
 
 <p>本文对应的源码已经公开到github,点击<a href="https://github.com/huailiang/hud">地址</a>可以查阅。</p>
 
-<h2 id="绘制血条">绘制血条</h2>
+<h2 id="section">绘制血条</h2>
 
 <p>我们使用c#代码-Hud.cs动态创建一个mesh。首先动态创建一个mesh，我们画四个三角一共使用八个顶点。设置好他们对于的本地坐标。创建好的mesh如下图所示：</p>
 
@@ -138,7 +138,7 @@
 <span class="n">rend</span><span class="p">.</span><span class="n">lightProbeUsage</span> <span class="p">=</span> <span class="n">LightProbeUsage</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span>
 <span class="n">rend</span><span class="p">.</span><span class="n">reflectionProbeUsage</span> <span class="p">=</span> <span class="n">ReflectionProbeUsage</span><span class="p">.</span><span class="n">Off</span><span class="p">;</span></code></pre></figure>
 
-<h2 id="绘制文字">绘制文字</h2>
+<h2 id="section-1">绘制文字</h2>
 
 <p>绘制文字也不实用nGUI或者uGui使用的组件，而是使用Unity自带的组件TextMesh。我们把TextMesh挂在Hud组件下面，设置好文字大小和对齐方式。对应的代码实现如下：</p>
 
@@ -157,7 +157,7 @@
     <span class="n">font</span><span class="p">.</span><span class="n">color</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">black</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="控制血条进度">控制血条进度</h3>
+<h3 id="section-2">控制血条进度</h3>
 
 <p>控制血条进度，其实控制的就是顶点1、3、4、6的uv信息。这些顶点的位置在[-x,x] 之间（x=2),我们根据传进来的值在[-2,2]进行差值，算出最终的顶点位置，最后赋值给mesh，来达到控制血条进度的效果。</p>
 

@@ -64,7 +64,7 @@
 
 <p><img src="/img/in-post/post-cpp/cpp14.png" alt="" /></p>
 
-<h2 id="android-生成so">Android 生成so</h2>
+<h2 id="android-so">Android 生成so</h2>
 
 <p>Android平台下，c++代码生成.so库，我们这里主要是使用ndk的方法。 NDK 是在SDK前面又加上了“原生”二字，即Native Development Kit，因此又被Google称为NDK。  随着Android的蓬勃发展, CPU的架构也越来越多. 早期只支持ARMv5, 截至目前, 支持的架构已达三类七种: ARM(ARMv5，ARMv7 (从2010年起)，ARMv8), x86(x86 (从2011年起),x86_64 (从2014年起)) ,MIPS(MIPS (从2012年起),MIPS64). 众多架构使用的指令集不尽相同, 与相应的ABI关联: armeabi, armeabi-v7a, arm64-v8a, x86, x86_64, mips, mips64. 所以, NDK编译不同架构的库要选择不同的ABI。 不过Unity5之后，导出的包只会有ARMv7和x86两种架构了，我们在配置的时候，也就只需考虑这两种结构就可以了。 而大红大紫的《王者荣耀》就更过分了，我们解开他们的apk之后，发现他们只有arm-v7这一种so,说明不常用的x86手机已经被他们无情的抛弃了。</p>
 
@@ -170,7 +170,7 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>ndk-build clean
 <span class="gp">$ </span>ndk-build</code></pre></figure>
 
-<h3 id="mac下生成bundle">Mac下生成Bundle</h3>
+<h3 id="macbundle">Mac下生成Bundle</h3>
 
 <p>创建 mac支持的 c++库，我们新建一个 xcode 工程，选择 macOS一栏，选择 Bunlde 一侧. 如下图所示：<br />
 <img src="/img/in-post/post-cpp/cpp15.png" alt="" /></p>
@@ -185,7 +185,7 @@ cd 到jni的上一级目录，使用命令ndk-build, 自动生成了，libs目�
 
 <p>在 products 目录下右键*.bundle 在 Show in Finder ,将生成的 bundle 复制到 unity 项目 plugins 目录下，就大工告成了。</p>
 
-<h3 id="生成ios-a静态库">生成IOS .a静态库</h3>
+<h3 id="ios-a">生成IOS .a静态库</h3>
 
 <p>创建 ios支持的 c++库，我们新建一个 xcode 工程，选择 iOS一栏，选择 .a 一侧. 注意，ios 我们这里使用的是静态库，而非像其他平台是动态链接库。如下图所示：<br />
 <img src="/img/in-post/post-cpp/cpp20.png" alt="" /><br />
@@ -245,7 +245,7 @@ mv -f libGameCore.a <span class="k">${</span><span class="nv">path</span><span c
 
 <p>macos 和 ios 的库都是在xcode 中手动生成的，不符合我们自动化的流程，我们生成版本时，如果中间每次都是手动操作的话，也很容易出错。那有没有一套自动化的流程，既省时，又能保证版本质量呢，答案是肯定的。</p>
 
-<h3 id="cmake交差编译">cmake交差编译</h3>
+<h3 id="cmake">cmake交差编译</h3>
 <p>CMake是一个跨平台的安装（编译）工具，可以用简单的语句来描述所有平台的安装(编译过程)。他能够输出各种各样的makefile或者project文件，能测试编译器所支持的C++特性,类似UNIX下的automake。只是 CMake 的组态档取名为 CMakeLists.txt。这里使用的是CMake，官网地址为：<a href="https://cmake.org/">https://cmake.org/</a></p>
 
 <p>MAC默认是没有cmake指令的。要测试你的MAC是否已经装过cmake，可以这样做：打开Terminal，输入cmake –version，如果已经安装，则会显示具体的版本号；否则就是没安装或者没配置成功。</p>

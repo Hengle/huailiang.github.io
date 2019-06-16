@@ -67,7 +67,7 @@
   <p><br /><br /></p>
 </blockquote>
 
-<h2 id="训练集">训练集</h2>
+<h2 id="section">训练集</h2>
 
 <p>我们在python-tensorflow中实现了一种反向传播网络，我们使用Auto-Encoder替代GAN中Generator，用以生成风格化的图像， 而在Discriminator来鉴别图像。</p>
 
@@ -96,7 +96,7 @@
 
 <p><img src="/img/in-post/post-tf/loss.jpg" alt="" /></p>
 
-<h2 id="运行时">运行时</h2>
+<h2 id="section-1">运行时</h2>
 
 <p>在unity中， 我们使用compute shader实现了一套跟TensorFlow中的相同的前向传播网络。 这里只是实现了Encoder和Decoder， 并没有实现Discriminator, 因为只有训练的时候用到了Discriminator.</p>
 
@@ -118,7 +118,7 @@
 
 <p>在设计的CNN网络层中， 卷积核大都是3x3的， 所以这里我们定义了一个Matrix3x3.cs在csharp中， 这样给StructureBuffer传递数据的时候，一次性传递过去。</p>
 
-<h2 id="数据导出">数据导出</h2>
+<h2 id="section-2">数据导出</h2>
 
 <p>tensorflow 训练数据集有自己的序列化方式，大概是protobuf,  google也提供了一套api, 去获取里面的张量Tensor。</p>
 
@@ -130,7 +130,7 @@
 
 <p>通过上面的操作我们导出的参数规模大概是48M，由于可以去掉预算复杂且效率不高的残差网络模块，参数规模进一步缩小到十几兆。 这还是我们采用float存储的格式， 如果对精度要求不高， 采用half的数据格式 5M-6M之间， 我觉得这个大小都手机平台还是可以接受的。</p>
 
-<h2 id="数据调试">数据调试</h2>
+<h2 id="section-3">数据调试</h2>
 
 <p>为了清晰的看出Tensorflow Session里的每一层数据， 我们同时在python和unity环境中定义了printf 和 printh 函数， 分别用来输出二三维和一二维数据到控制台。  也可以检测python环境和unity环境运算结果是否具有一致性。</p>
 
@@ -145,7 +145,7 @@
 
 <p>我们通过一张图片看到， ganerator前期encoder前期更多的学到的是形状信息， 后期decoder学到的更多的是风格相关的信息。</p>
 
-<h2 id="性能分析">性能分析</h2>
+<h2 id="section-4">性能分析</h2>
 
 <ol>
   <li><b>参数规模:</b><br /></li>

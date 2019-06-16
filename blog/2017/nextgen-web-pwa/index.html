@@ -61,7 +61,7 @@
 本文首发于 <a href="http://geek.csdn.net/news/detail/135595">CSDN</a> 与《程序员》2017 年 2 月刊，同步发布于 <a href="https://huangxuan.me">Hux Blog</a>、<a href="https://zhuanlan.zhihu.com/FrontendMagazine">前端外刊评论 - 知乎专栏</a>，转载请保留链接 ;)</p>
 </blockquote>
 
-<h2 id="下一代-web-应用">下一代 Web 应用？</h2>
+<h2 id="web-">下一代 Web 应用？</h2>
 
 <p>近年来，Web 应用在整个软件与互联网行业承载的责任越来越重，软件复杂度和维护成本越来越高，Web 技术，尤其是 Web 客户端技术，迎来了爆发式的发展。</p>
 
@@ -99,9 +99,9 @@
 
 <p><strong>笔者相信，PWA 模型将继约 20 年前横空出世的 Ajax 与约 10 年前风靡移动互联网的响应式设计之后，掀起 web 应用模型的第三次根本性革命，将 web 应用带进一个全新的时代。</strong></p>
 
-<h2 id="pwa-关键技术的前世今生">PWA 关键技术的前世今生</h2>
+<h2 id="pwa-">PWA 关键技术的前世今生</h2>
 
-<h3 id="web-app-manifest"><a href="https://w3c.github.io/manifest/#use-cases-and-requirements" title="Web App Manifest">Web App Manifest</a></h3>
+<h3 id="web-app-manifestspec1"><a href="https://w3c.github.io/manifest/#use-cases-and-requirements" title="Web App Manifest">Web App Manifest</a></h3>
 
 <p>Web App Manifest，即通过一个清单文件向浏览器暴露 web 应用的元数据，包括名字、icon 的 URL 等，以备浏览器使用，比如在添加至主屏或推送通知时暴露给操作系统，从而增强 web 应用与操作系统的集成能力。</p>
 
@@ -171,7 +171,7 @@
 
 <p>这个清单的成员还有很多，比如用于声明「对应原生应用」的 <code class="highlighter-rouge">related_applications</code> 等等，本文就不一一列举了。作为 PWA 的「户口本」，承载着 web 应用与操作系统集成能力的重任，Web App Manifest 还将在日后不断扩展，以满足 web 应用高速演化的需要。</p>
 
-<h3 id="service-worker"><a href="https://w3c.github.io/ServiceWorker/" title="Service Worker">Service Worker</a></h3>
+<h3 id="service-workerspec2"><a href="https://w3c.github.io/ServiceWorker/" title="Service Worker">Service Worker</a></h3>
 
 <p>我们原有的整个 Web 应用模型，都是构建在「用户能上网」的前提之下的，所以一离线就只能玩小恐龙了。其实，对于「让 web 应用离线执行」这件事，Service Worker 至少是 web 社区的第三次尝试了。</p>
 
@@ -293,7 +293,7 @@ main.js</code></pre></figure>
 
 <p>如果你已经在使用 Google 的云服务（比如 Firebase），并且主要面向的是海外用户，那么在 web 应用上支持基于 GCM/FCM 的推送通知并不是一件费力的事情，笔者推荐你阅读一下 Google Developers 的<a href="https://developers.google.com/web/fundamentals/engage-and-retain/push-notifications/" title="Web Push Notifications - Google Developer">系列文章</a>，很多国外公司已经玩起来了。</p>
 
-<h2 id="从-hybrid-到-pwa从封闭到开放">从 Hybrid 到 PWA，从封闭到开放</h2>
+<h2 id="hybrid--pwa">从 Hybrid 到 PWA，从封闭到开放</h2>
 
 <p>2008 年，当移动时代来临，<a href="https://huangxuan.me/pwa-qcon2016/#/17" title="PWA@QCon2016 #17">唱衰移动 Web 的声音</a>开始出现，而浏览器的进化并不能跟上时，来自 Nitobi 的 Brian Leroux 等人创造了 <a href="https://cordova.apache.org/" title="Apache Cordova">Phonegap</a>，希望它能以 Polyfill 的形式、弥补目前浏览器与移动设备间的「鸿沟」，从此开启了<a href="https://en.wikipedia.org/wiki/Progressive_web_app#Hybrid_Apps">混合应用（Hybrid Apps）</a>的时代。</p>
 
@@ -312,7 +312,7 @@ main.js</code></pre></figure>
 
 <p>而又正因为 web 是一个整体，PWA 可以利用的技术远不止上述的几个而已：Ajax、响应式设计、JavaScript 框架、ECMAScript Next、CSS Next、Houdini、Indexed DB、Device APIs、Web Bluetooth、Web Socket、Web Payment、<a href="https://wicg.github.io/BackgroundSync/spec/" title="Web Background Synchronization - WICG">孵化</a>中的 <a href="developers.google.com/web/updates/2015/12/background-sync" title="Background Sync - Google Developers">Background Sync API</a>、<a href="https://streams.spec.whatwg.org/" title="Streams">Streams</a>、WebVR……开放 Web 世界 27 年来的发展以及未来的一切，都与 PWA 天作之合。</p>
 
-<h2 id="鱼与熊掌的兼得">鱼与熊掌的兼得</h2>
+<h2 id="section">鱼与熊掌的兼得</h2>
 
 <p>经过几年来的摸索，整个互联网行业仿佛在「Web 应用 vs. 原生应用」这个问题上达成了共识：</p>
 
@@ -330,11 +330,11 @@ main.js</code></pre></figure>
 
 <p>除此之外，PWA 还继承了 web 应用的另外两大优点：<strong>无需先付出几十兆的下载安装成本即可开始使用</strong>，以及<strong>不需要经过应用超市审核就可以发布新版本</strong>。所以，PWA 可以称得上是一种「流式应用（Streamable App）」与「常青应用（Evergreen App）」</p>
 
-<h2 id="未来到来了吗">未来到来了吗</h2>
+<h2 id="section-1">未来到来了吗</h2>
 
 <p>在笔者分享 PWA 的经历中，最不愿意回答的两个问题莫过于「PWA 已经被广泛支持了吗？」以及「PWA 与 ABCDEFG 这些技术方案相比有什么优劣？」，但是这确实是两个逃不开的问题。</p>
 
-<h3 id="pwa-的支持情况">PWA 的支持情况？</h3>
+<h3 id="pwa--1">PWA 的支持情况？</h3>
 
 <p>当我们说到 PWA 是否被支持时，其实我们在说的是 PWA 背后的几个关键技术都得到支持了没有。以浏览器内核来划分的话，Blink（Chrome、Oprea、Samsung Internet 等）与 Gecko（Firefox）都已经实现了 PWA 所需的所有关键技术（👏👏👏），并已经开始探寻更多的可能性。EdgeHTML（Edge）<a href="https://blogs.windows.com/msedgedev/2016/07/08/the-progress-of-web-apps/" title="The Progress of Web Apps - MSEdgeDev Blog">简直积极得不能更积极了</a>，所有的特性都已经处于「正在开发中」的<a href="https://developer.microsoft.com/en-us/microsoft-edge/platform/status/" title="Microsoft Edge web platform features status">状态</a>。最大的绊脚石仍然来自于 Webkit（Safari），尤其是在 iOS 上，上述的四个 API 都未得到支持，而且由于平台限制，第三方浏览器也无法在 iOS 上支持。（<a href="https://www.microsoft.com/en-us/WindowsForBusiness/End-of-IE-support" title="Internet Explorer End of Support">什么你说 IE？</a>）</p>
 
@@ -371,7 +371,7 @@ main.js</code></pre></figure>
 
 <p>反观印度，由于 Google 服务健全、标配 Chrome 的 Android 手机市占率非常高，PWA 的用户达到率简直直逼 100%，也难免获得无数好评与支持了。<strong>笔者奢望着本文能对推动 PWA 的国内环境有一定的贡献。</strong>不过无论如何，PWA 在国内的春天可能的确会来得稍微晚一点了。</p>
 
-<h2 id="结语">结语</h2>
+<h2 id="section-2">结语</h2>
 
 <p>「<a href="https://huangxuan.me/pwa-qcon2016/#/99" title="PWA@QCon2016 #97">我们信仰 Web，不仅仅在于软件、软件平台与单纯的技术</a>，还在于<a href="http://phonegap.com/blog/2012/05/09/phonegap-beliefs-goals-and-philosophy/" title="PhoneGap Beliefs, Goals, and Philosophy">『任何人，在任何时间任何地点，都可以在万维网上发布任何信息，并被世界上的任何一个人所访问到。』而这才是 web 的最为革命之处，堪称我们人类，作为一个物种的一次进化。</a>」</p>
 

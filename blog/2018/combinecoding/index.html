@@ -78,7 +78,7 @@
 
 <p>这三种方法当中，C++ Interop是针对托管C++使用的方法（说实话C++/CLI感觉没啥前途），COM Interop则是针对Window软件开发而采用的方式。所以我们只剩下一种解决方案：也就是PInvoke来进行托管环境与非托管环境的互操作。不过由于PInvoke本身内容也并不少，所以在这里我也就简单介绍一下其使用的方式，更详细的内容可以去查看官方文档，或者是下一个《精通.Net互操作》的pdf来阅读就可以了。</p>
 
-<h3 id="新手入门">新手入门</h3>
+<h3 id="section">新手入门</h3>
 <p>如何做到c# 能调用到c++代码呢，下面我们通过一个小的Demo展示。</p>
 
 <ul>
@@ -131,7 +131,7 @@
 
 <p><img src="/img/in-post/post-cpp/cpp2.jpg" alt="" /></p>
 
-<h3 id="断点调试">断点调试</h3>
+<h3 id="section-1">断点调试</h3>
 <p>在你的c++ 调试（D）-&gt;附加到进程（P)… ,在弹出的窗口作如下选择：</p>
 
 <p><img src="/img/in-post/post-cpp/cpp3.jpg" alt="" /></p>
@@ -140,9 +140,9 @@
 
 <p><img src="/img/in-post/post-cpp/cpp4.jpg" alt="" /></p>
 
-<h3 id="复杂的数据封送">复杂的数据封送</h3>
+<h3 id="section-2">复杂的数据封送</h3>
 
-<h4 id="指针传递">指针传递</h4>
+<h4 id="section-3">指针传递</h4>
 
 <figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
@@ -176,9 +176,9 @@
      <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<h4 id="c反调用c-使用指针函数c">c++反调用c# 使用指针函数（c++）</h4>
+<h4 id="cc-c">c++反调用c# 使用指针函数（c++）</h4>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">SharpCALLBACK</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">typedef</span> <span class="n">bool</span><span class="p">(</span><span class="o">*</span><span class="n">SharpCALLBACK</span><span class="p">)(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">);</span>
 
 <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">void</span> <span class="n">iInitCallbackCommand</span><span class="p">(</span><span class="n">SharpCALLBACK</span> <span class="n">cb</span><span class="p">)</span>
 <span class="p">{</span>
@@ -206,7 +206,7 @@
         <span class="n">XDebug</span><span class="p">.</span><span class="nf">CLog</span><span class="p">(</span><span class="n">command</span><span class="p">);</span>
     <span class="p">}</span></code></pre></figure>
 
-<h4 id="传送结构体">传送结构体</h4>
+<h4 id="section-4">传送结构体</h4>
 
 <figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">struct</span> <span class="n">Row</span>
 <span class="p">{</span>
@@ -238,7 +238,7 @@
 <span class="cp">#endif
 </span><span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">iGetFashionListRowByID</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="k">ref</span> <span class="n">RowData</span> <span class="n">row</span><span class="p">);</span></code></pre></figure>
 
-<h3 id="面向对象">面向对象</h3>
+<h3 id="section-5">面向对象</h3>
 
 <p>通过上面测试我们可以看到出c#里都是静态函数，c++都写在extern c中，需要自己去获取对应的实例，这些都是面向过程的。而c++天然是面对对象的OO,那我们如何实现c#里去new一个c++对象，c# new的对象又是如何析构的呢？</p>
 
@@ -313,7 +313,7 @@ C:<span class="se">\s</span>wigwin-3.0.12<span class="se">\s</span>wig.exe -c++ 
 <p>在c#里new c++里的对象，记得一定要Dispose(),否则的话，会造成内存泄漏，带来不必要的麻烦。上面的代码如果没有显示调用ins.Dispose() 可是可以的，ins在托管销毁的时候，swig已帮助我们在析构函数中调用Dispose(),但这样释放的不及时，并不是函数退出的时候就会释放。在生成的Invoik类的析构函数自动调用了Disposse()。最后说说swig的缺点，swig并不会帮助我们生成UNITY_IPHONE ios平台下外链调用，即DllImport 因为ios平台我们平常使用的都是静态库， 而不像Windows和Android平台一样是动态库。<br />
 <img src="/img/in-post/post-cpp/cpp11.jpg" alt="" /></p>
 
-<h3 id="swig常用语法">Swig常用语法</h3>
+<h3 id="swig">Swig常用语法</h3>
 <p>详细的文档请参考官方文档，这里只做简单的一些介绍。</p>
 
 <p>我在项目中写了一个简单的模板，用到了一些Swig的常用功能：</p>
@@ -335,7 +335,7 @@ module代表的是当前.i模板所在的模块，相对应的，该.i文件也�
 
 <figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">namespace</span> <span class="n">std</span> <span class="p">{</span>
 
-<span class="o">%</span><span class="k">template</span><span class="p">(</span><span class="n">BoolVector</span><span class="p">)</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="o">%</span><span class="k">template</span><span class="p">(</span><span class="n">BoolVector</span><span class="p">)</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">bool</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span></code></pre></figure>
 
@@ -346,7 +346,7 @@ module代表的是当前.i模板所在的模块，相对应的，该.i文件也�
 <p>使用指针<br />
 定义指针的方法如下：</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">pointer_class</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">BoolPointer</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="o">%</span><span class="n">pointer_class</span><span class="p">(</span><span class="n">bool</span><span class="p">,</span> <span class="n">BoolPointer</span><span class="p">);</span></code></pre></figure>
 
 <p>通过这个定义我们Swig会为我们生成指针相对应的类，Swig再会生成类似于SWIGTYPE_p_bool这样的未定义类型，而是直接使用BoolPointer，并且我们能够自己在目标语言中申请内存，并且自己对内存进行管理。</p>
 

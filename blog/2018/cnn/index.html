@@ -83,7 +83,7 @@
 <span class="k">def</span> <span class="nf">var_bias</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
 	<span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">))</span></code></pre></figure>
 
-<h3 id="卷积-conv2d-与池化-pooling-操作">卷积 conv2d 与池化 pooling 操作</h3>
+<h3 id="conv2d--pooling-">卷积 conv2d 与池化 pooling 操作</h3>
 
 <p>首先，关于什么是卷积，文章（3）有一牛人用一句话总结得很好：卷积就是带权的积分，看下面的一维卷积公式:</p>
 
@@ -121,7 +121,7 @@
 <span class="n">keep_prob</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 <span class="n">x_image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span></code></pre></figure>
 
-<h3 id="第一层神经网络-以5x5的-过滤器filter">第一层神经网络 以5x5的 过滤器（filter）</h3>
+<h3 id="x5-filter">第一层神经网络 以5x5的 过滤器（filter）</h3>
 
 <p>输出深度为32的卷积池化操作, 卷积之后得到的大小是28x28x32,池化之后得到的大小是14x14x32</p>
 
@@ -151,7 +151,7 @@
 
 <p>它们的函数式、优缺点度娘会告诉你，不多说。对于不同的需求，我们可以选择不同的激活函数，这也是模型训练可调整的一部分，运用之妙，存乎一心，请自忖之。</p>
 
-<h3 id="第二层继续卷积池化操作">第二层继续卷积池化操作</h3>
+<h3 id="section">第二层继续卷积池化操作</h3>
 
 <p>使图像继续长宽变小深度加厚,第二层输出的大小事7x7x64</p>
 
@@ -161,7 +161,7 @@
 <span class="n">h_conv2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">conv2d</span><span class="p">(</span><span class="n">h_pool1</span><span class="p">,</span> <span class="n">W_conv2</span><span class="p">)</span> <span class="o">+</span> <span class="n">b_conv2</span><span class="p">)</span> <span class="c"># output size 14x14x64</span>
 <span class="n">h_pool2</span> <span class="o">=</span> <span class="n">max_pool</span><span class="p">(</span><span class="n">h_conv2</span><span class="p">)</span>     <span class="c"># output size 7x7x64</span></code></pre></figure>
 
-<h3 id="第三层-全连接层dense-layer">第三层 全连接层（dense layer）</h3>
+<h3 id="dense-layer">第三层 全连接层（dense layer）</h3>
 
 <p>全连接层的作用就是用于分类或回归，对于我们来说就是分类。keras将全连接层定义为Dense层，其含义就是这里的神经元连接非常“稠密”。我们通过Dense()函数定义全连接层。这个函数的一个必填参数就是神经元个数，其实就是指定该层有多少个输出。在我们的代码中，第一个全连接层（#14 Dense层）指定了512个神经元，也就是保留了512个特征输出到下一层。这个参数可以根据实际训练情况进行调整，依然是没有可参考的调整标准，自调之。</p>
 
@@ -172,7 +172,7 @@
 <span class="n">h_fc1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">h_pool2_flat</span><span class="p">,</span> <span class="n">W_fc1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b_fc1</span><span class="p">)</span>
 <span class="n">h_fc1_drop</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">h_fc1</span><span class="p">,</span> <span class="n">keep_prob</span><span class="p">)</span></code></pre></figure>
 
-<h3 id="第四层-正则化-归类">第四层 正则化-归类</h3>
+<h3 id="section-1">第四层 正则化-归类</h3>
 
 <p>数据集先浮点后归一化的目的是提升网络收敛速度，减少训练时间，同时适应值域在（0,1）之间的激活函数，增大区分度。其实归一化有一个特别重要的原因是确保特征值权重一致。举个例子，我们使用mse这样的均方误差函数时，大的特征数值比如(5000-1000)2与小的特征值(3-1)2相加再求平均得到的误差值，显然大值对误差值的影响最大，但大部分情况下，特征值的权重应该是一样的，只是因为单位不同才导致数值相差甚大。因此，我们提前对特征数据做归一化处理，以解决此类问题。关于归一化的详细介绍有兴趣的请参考如下链接：<a href="https://www.thinksaas.cn/group/topic/491257/">深入理解CNN细节之数据预处理</a></p>
 

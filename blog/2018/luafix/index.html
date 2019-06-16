@@ -84,13 +84,11 @@
 
 <p>龙之谷使用的是基于ulua的热更方案，就目前手游市场使用的情况来看，《王者荣耀》apk包破解之后，也是基于此方案。</p>
 
-<h2 id="lua-做热修和开发小功能">lua 做热修和开发小功能</h2>
+<h2 id="lua-">lua 做热修和开发小功能</h2>
 
-<p>龙之谷使用ulua做了哪些事：</p>
-<ul>
-  <li>热修线上功能</li>
-  <li>开发小功能</li>
-</ul>
+<p>龙之谷使用ulua做了哪些事：<br />
+- 热修线上功能<br />
+- 开发小功能</p>
 
 <p>所有上面的实现都是基于埋点来实现的。比如说我们在发布前在每个view的显示函数（基类的虚函数）或者隐藏的地方，埋下如下所示的点：</p>
 
@@ -168,7 +166,7 @@
 
 <p>lua 模板内置的函数诸如BeforeRefresh，AfterRefresh，Unload这些函数都会带有返回值，如果返回false，则是不覆盖之前的c#的逻辑，如果返回true，则是覆盖原来c#写的代码。类似的原理，我们还可以重载掉所有的c#里的click事件，覆盖所有的c#里网络协议。</p>
 
-<h3 id="lua做新功能">Lua做新功能</h3>
+<h3 id="lua">Lua做新功能</h3>
 <p>用lua去实现一个新的系统<br />
 原理：<br />
 LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
@@ -256,7 +254,7 @@ LuaUIManager:Load(“UI/GameSystem/Prefab”)</p>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="xxxx_pb协议解析">xxxx_pb协议解析</h3>
+<h3 id="xxxxpb">xxxx_pb协议解析</h3>
 <p>协议解析文件 由protoc-gen-lua生成（不要手动编辑）<br />
 Protobuff不能解析ulong long 请转成string</p>
 
@@ -265,21 +263,19 @@ Protobuff不能解析ulong long 请转成string</p>
 <p>RPC的发送：Hotfix.SendLuaRPC(46227, TestProtol.data, this.CB1, this.CB2)<br />
 	CB1是网络回调 CB2是超时回调</p>
 
-<h2 id="il注入重写c逻辑">IL注入，重写c#逻辑</h2>
+<h2 id="ilc">IL注入，重写c#逻辑</h2>
 <p>借鉴于xlua可以利用IL注入的方式实现原c#代码覆盖，既不污染c#代码，也不需要埋点。现已在游戏中实现类似的功能。</p>
 
 <p>使用方式：<br />
 在新的功能模块中的类名或者方法名加上[Hotfix]标签 而如果忽略某个函数可以使用[HotfixIgnore]<br />
 如果线上对应的代码出现问题，可以在HotfixPatch.lua 的Regist函数注册你要重载的函数，在HotfixCallback.lua实现要重载的函数</p>
 
-<p>注意事项：</p>
-<ul>
-  <li>构造函数不能被热修</li>
-  <li>参数含有ref、out的不能被热修</li>
-  <li>加入[Hotfix]标签后执行LuaTools-&gt;Injector-&gt;Inject来注入，然后在编辑器里运行，确保注入成功没有错误后再执行LuaTools-&gt;Injector-&gt;Clean来清除IL注入。切记注入之后，不要上传dll，上传之前一定要清掉，避免污染代码</li>
-  <li>原先已经成熟的模块就不要在注入了 因为注入会增加额外的代码量</li>
-  <li>考虑到性能的问题 最好Update方法都主动加一个[HotfixIgnore] 不去热修</li>
-</ul>
+<p>注意事项：<br />
+- 构造函数不能被热修<br />
+- 参数含有ref、out的不能被热修<br />
+- 加入[Hotfix]标签后执行LuaTools-&gt;Injector-&gt;Inject来注入，然后在编辑器里运行，确保注入成功没有错误后再执行LuaTools-&gt;Injector-&gt;Clean来清除IL注入。切记注入之后，不要上传dll，上传之前一定要清掉，避免污染代码<br />
+- 原先已经成熟的模块就不要在注入了 因为注入会增加额外的代码量<br />
+- 考虑到性能的问题 最好Update方法都主动加一个[HotfixIgnore] 不去热修</p>
 
 <p><img src="/img/in-post/post-lua/lua2.jpg" alt="" /></p>
 

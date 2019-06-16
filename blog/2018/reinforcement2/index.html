@@ -60,15 +60,13 @@
   <p><a href="https://huailiang.github.io/2018/03/19/reinforcement/">上一节</a>我们介绍了如何 q_learning 强化学习算法， 但不好的地方是运算都在 Unity里，这节我们把 q_learning算法提取到 python 环境中，并且用 Sarsa算法实现一遍强化学习。所有本机的代码都可以在<a href="https://huailiang.github.io/2018/03/19/reinforcement/">Github 下载</a>。</p>
 </blockquote>
 
-<p>完成本节内容，你需要本地有如下环境：</p>
-<ul>
-  <li>Python2.x</li>
-  <li>Pandas</li>
-  <li>Numpy</li>
-  <li>Tensorflow</li>
-</ul>
+<p>完成本节内容，你需要本地有如下环境：<br />
+- Python2.x<br />
+- Pandas<br />
+- Numpy<br />
+- Tensorflow</p>
 
-<h3 id="unity设置">Unity设置</h3>
+<h3 id="unity">Unity设置</h3>
 
 <p>本地作者使用的 unity 版本是2017.3， 我们需要导出 Unity mac 平台上的包，我们在导出之前需要做如下设置：<br />
 在 GameManager 的 GameObject 上的脚本设置：IsTrainning需要勾上，Mode 选择 External。</p>
@@ -112,10 +110,8 @@
 
 <p>在environment.py 中实现了UnityEnvironment类。</p>
 
-<p>在它的构造函数中，做了以下几件事情：</p>
-<ul>
-  <li>使用atexit注册一个进程退出的函数，在退出的时候关闭 socket</li>
-</ul>
+<p>在它的构造函数中，做了以下几件事情：<br />
+- 使用atexit注册一个进程退出的函数，在退出的时候关闭 socket</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python">  <span class="kn">import</span> <span class="nn">atexit</span>
 

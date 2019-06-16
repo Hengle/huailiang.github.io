@@ -64,11 +64,11 @@
 另外，出于对 wiki 式阅读的偏爱，笔者为您添加了很多额外的链接，方便您查阅文档或出处</p>
 </blockquote>
 
-<h3 id="简而言之">简而言之</h3>
+<h3 id="section">简而言之</h3>
 
 <p>如果你不想阅读整篇文章，这里为你准备了一个总结：</p>
 
-<h6 id="新的设备特性">新的设备特性</h6>
+<h6 id="section-1">新的设备特性</h6>
 
 <ul>
   <li>iPhone 6s 与 6s Plus 拥有 <strong>“<a href="http://www.apple.com/iphone-6s/3d-touch/">3D Touch</a>”</strong>，这是一个全新的硬件特性，它可以侦测压力，是一个可以让你拿到手指压力数据的 API</li>
@@ -76,7 +76,7 @@
   <li>想在 iPad Pro 上支持新的 Apple Pen？不好意思，目前似乎并没有适用于网站的 API</li>
 </ul>
 
-<h6 id="新的操作系统特性与-web-相关的">新的操作系统特性（与 web 相关的）</h6>
+<h6 id="web-">新的操作系统特性（与 web 相关的）</h6>
 
 <ul>
   <li>iPad 上的 Safari 现在可以通过 <a href="https://developer.apple.com/library/prerelease/ios/documentation/WindowsViews/Conceptual/AdoptingMultitaskingOniPad/QuickStartForSlideOverAndSplitView.html#//apple_ref/doc/uid/TP40015145-CH13-SW1">Split View</a>（分屏视图）与其他应用一起使用，这意味着新的 viewport 尺寸将会越来越常见</li>
@@ -87,7 +87,7 @@
   <li>你的网站现在可以通过 JavaScript API 访问 iCloud 的用户数据</li>
 </ul>
 
-<h6 id="新的-api-支持">新的 API 支持</h6>
+<h6 id="api-">新的 API 支持</h6>
 
 <ul>
   <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance/timing">Performance Timing API</a> 在 iOS 9 得到回归</li>
@@ -101,7 +101,7 @@
   <li>我们仍然需要等待 Push Notification，camera access，Service Workers 这些现代 web API 的到来</li>
 </ul>
 
-<h6 id="新的操作系统">新的操作系统</h6>
+<h6 id="section-2">新的操作系统</h6>
 
 <ul>
   <li>新一代 Apple TV 的 <strong>tvOS</strong>： 没有浏览器，也没有 webview。但是 JavaScript、XHR 和 DOM 可以通过一个叫做 TVML 的标记语言来使用</li>
@@ -112,9 +112,9 @@
   <p><strong>再注！</strong> 由于原文写于 Apple 发布会之前，为了不让读者感到奇怪，笔者将会对文章进行适当改写与补充，以保证本文的连贯性</p>
 </blockquote>
 
-<h3 id="新的-ios-设备特性">新的 iOS 设备特性</h3>
+<h3 id="ios-">新的 iOS 设备特性</h3>
 
-<h5 id="iphones-6s-与-3d-touch">iPhones 6s 与 3D Touch</h5>
+<h5 id="iphones-6s--3d-touch">iPhones 6s 与 3D Touch</h5>
 
 <p>从 web 设计与开发的角度来说，新的 iPhone 6s 与 6s Plus 与之前的版本并没有太多差别。不过，有一个特性注定会吸引我们的目光：<strong>3D Touch</strong></p>
 
@@ -155,13 +155,13 @@
 
 <p>从交互的角度上来说，iPad Pro 虽然不支持 3D Touch，但是可以搭配 Smart Keyboard 与/或 Apple Pen（带有压力侦测）使用。对于键盘其实并没有什么好说的，如果一个网站在搭配键盘的桌面电脑上好用，它在 iPad Pro 上应该也不赖。而对于 Apple Pen，很可惜，目前似乎并没有 API 能让你在网站上获得这根笔的压力与角度。</p>
 
-<h3 id="新的-ios-操作系统特性">新的 iOS 操作系统特性</h3>
+<h3 id="ios--1">新的 iOS 操作系统特性</h3>
 
-<h5 id="ipad-上的多任务处理">iPad 上的多任务处理</h5>
+<h5 id="ipad-">iPad 上的多任务处理</h5>
 
 <p>自 iOS 9 起，iPad 允许两个应用在同一时刻并肩执行，有三种方式：<strong>Slide Over</strong>，<strong>Split View</strong> 与 <strong>Picture-in-Picture</strong>。不过，每一种方式都有其硬件需求，比如说 Slide Over 需要 iPad Air, iPad Mini 2 以上的设备，而 Split View 由于对内存的要求目前只支持 iPad Air 2 与 iPad Pro。</p>
 
-<h6 id="slide-over滑过来">Slide Over（滑过来！）</h6>
+<h6 id="slide-over">Slide Over（滑过来！）</h6>
 
 <p>Slide Over 支持的 App 并不多，不过 Safari 名列其中，这意味着我们的网站将可能在这个模式下被渲染。当网站处于 Slide Over 模式下时，它将在屏幕的右 1/4 位置渲染，并且置于其他 native app 之上。</p>
 
@@ -176,7 +176,7 @@
 <span class="cm">/* iPad Pro */</span>
 <span class="p">(</span><span class="n">device</span><span class="p">-</span><span class="n">width</span><span class="p">:</span> <span class="m">1024</span><span class="n">px</span><span class="p">)</span> <span class="nf">and</span> <span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="m">320</span><span class="n">px</span><span class="p">)</span></code></pre></figure>
 
-<h6 id="split-view分屏视图">Split View（分屏视图）</h6>
+<h6 id="split-view">Split View（分屏视图）</h6>
 
 <p>在较新版本的 iPad 上，你可以将 Slide Over 的 Side View（侧视图）升级为 Split View。此时，两个应用将以相同比例在你的屏幕上同时工作。</p>
 
@@ -190,13 +190,13 @@
 
 <p><img src="http://www.mobilexweb.com/wp-content/uploads/2015/09/splitview.png" alt="Split View" /></p>
 
-<h6 id="picture-in-picture画中画">Picture in Picture（画中画）</h6>
+<h6 id="picture-in-picture">Picture in Picture（画中画）</h6>
 
 <p>在一些较新版本的 iPad 上，使用 HTML5 video 标签的网站可以将其暴露到 Picture in Picture 机制中。通过 API（本文稍后会讲）或用户的触发，视频可以独立于网站在其他应用的上方继续播放。</p>
 
 <p><img src="http://www.mobilexweb.com/wp-content/uploads/2015/09/pip.png" alt="Picture in Picture" /></p>
 
-<h5 id="ios-9-下的响应式网页设计">iOS 9 下的响应式网页设计</h5>
+<h5 id="ios-9-">iOS 9 下的响应式网页设计</h5>
 
 <p>下图向你展示了 iOS 9 所有可能的 viewport 尺寸，检查检查你的响应式断点都包含它们了吗？</p>
 
@@ -231,13 +231,13 @@
 
 <p><img src="http://www.mobilexweb.com/wp-content/uploads/2015/09/purify.png" alt="purify" /></p>
 
-<h5 id="wkwebview-的增强">WKWebView 的增强</h5>
+<h5 id="wkwebview-">WKWebView 的增强</h5>
 
 <p>UIWebView 已经被官方弃用，虽然它还在在那，不过它再也不会得到什么升级。与此相反，WKWebView 正在取代它的位置。一个最受期待的特性现在终于推出：加载本地文件到 WKWebView。因此，现在 Apache Cordova 应用与其他 web 内容都可以直接从 iOS 包中使用本地文件了，不再需要各种诡异的 hack 了。</p>
 
 <p>此外，还有一些新特性也一并推出。比如说，通过 WKWebsiteDataStore，Objective-C 或 Swift 有能力查询与管理 webview 的本地存储（比如 localStorage 或 IndexedDB）。这就允许我们将原有的数据存储替换成新的某些东西，比如说替换成一个不永久的（Chrome for iOS 的隐身模式就需要这种东西）</p>
 
-<h5 id="universal-links通用链接">Universal Links（通用链接）</h5>
+<h5 id="universal-links">Universal Links（通用链接）</h5>
 
 <p>如果你既有一个网站，又有一个 native app，你现在可以通过 Universal Links 来增强用户体验。它允许你在操作系统内“占有”自己的域名，这样，一切指向你网站的链接都会被重定向到你的 app。</p>
 
@@ -247,7 +247,7 @@
 
 <p>目前唯一的缺点是用户好像并不能决定到底以哪种方式来打开内容（使用 web 还是 app），不过我们可以观望一段时间看看它会如何发展。在不远的这段时间里，你可能会发现在网站或 Google 搜索里点击一个链接时会没有任何预警的就跳进了 native app 里。</p>
 
-<h5 id="app-search应用搜索">App Search（应用搜索）</h5>
+<h5 id="app-search">App Search（应用搜索）</h5>
 
 <p>Apple 带着自己的 web 蜘蛛杀进了搜索的市场，而我们需要支持它得以在 Siri 与 Spotlight 中提升自己的曝光率。这在我们同时拥有网站与 app 时尤为重要，因为现在 Apple 会索引你网站的内容，但打开时却可能将用户带到了 app 里去。</p>
 
@@ -271,13 +271,13 @@
 
 <p><img src="http://www.mobilexweb.com/wp-content/uploads/2015/09/back.png" alt="backbutton" width="320" /></p>
 
-<h3 id="新的-api-支持-1">新的 API 支持</h3>
+<h3 id="api--1">新的 API 支持</h3>
 
 <h5 id="navigation-timing-api">Navigation Timing API</h5>
 
 <p>Navigation Timing API 在 iOS 9 迎来了回归。让我们回忆一下，这货添加于 8.0 却在一周后的 8.1 中去掉了。这对于 Web 性能是个好消息。通过这个 API，我们可以更精确的测量时间，还可以获得一系列有关加载过程的时间戳，它们对于追踪与在真实场景中做决策来改进用户体验都非常有用。</p>
 
-<h5 id="picture-in-picture">Picture in Picture</h5>
+<h5 id="picture-in-picture-1">Picture in Picture</h5>
 
 <p>PiP API（被称为 Presentation Mode API）目前只支持 iOS，它允许我们手动让一个 <code class="highlighter-rouge">&lt;video&gt;</code> 元素进入或离开 PiP 模式如果 <code class="highlighter-rouge">video.webkitSupportsPresentationMode</code> 是支持的。</p>
 
@@ -334,7 +334,7 @@
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">if</span> <span class="p">(</span><span class="nx">CSS</span><span class="p">.</span><span class="nx">supports</span><span class="p">(</span><span class="s2">"-webkit-scroll-snap-type"</span><span class="p">,</span> <span class="s2">"mandatory"</span><span class="p">))</span> <span class="p">{}</span></code></pre></figure>
 
-<h5 id="一些细微的改进">一些细微的改进</h5>
+<h5 id="section-3">一些细微的改进</h5>
 
 <ul>
   <li>ECMAScript 6 的更完善支持：classed、computed properties、template literial 与 week sets</li>
@@ -362,11 +362,11 @@
   <li>Speech Synthesis API （语音综合 API）不再工作了</li>
 </ul>
 
-<h3 id="仍在等待">仍在等待……</h3>
+<h3 id="section-4">仍在等待……</h3>
 
 <p>当 Mac 上的 Safari、桌面电脑与 Android 上的 Chrome 都已经为网站支持 Push Notification （通知推送）时，iOS 上的 Safari 仍然不支持这个特性。就 API 而言，我们仍然没有：WebRTC、getUserMedia、Service Worker、FileSystem API、Network Information API、Battery Status API、Vibration API 等等……你又在 iOS 上等待哪些特性呢？</p>
 
-<h3 id="watchos-与-tvos">watchOS 与 tvOS</h3>
+<h3 id="watchos--tvos">watchOS 与 tvOS</h3>
 
 <p>新发布的 watchOS 2.0 与 tvOS 9.0 都是基于 iOS 的操作系统，它们针对特定的设备发行（Apple Watch 与新的 Apple TV）。从用户的角度来说，那里并没有浏览器了。从开发者的角度，那里也没有 Webview 了。</p>
 
@@ -374,7 +374,7 @@
 
 <p>对于 Apple TV ，它支持使用 JavaScript、DOM API 与 XMLHttpRequest 来让我们构建某种类似 Client-Server webapp 的东西。没有 HTML 和 CSS，这是什么把戏？其实它支持的叫 TVML，是一种基于 XML、为那些可以被渲染在 TV 屏幕上的特定内容而优化后的标签。这些标签只可以在来自应用商店的 native app 中渲染，但是这些 TVML 是由服务器端来生成的。</p>
 
-<h3 id="著作权声明">著作权声明</h3>
+<h3 id="section-5">著作权声明</h3>
 
 <p>本文译自 <a href="http://www.mobilexweb.com/blog/ios9-safari-for-web-developers">iOS 9, Safari and the Web: 3D Touch, new Responsive Web Design, Native integration and HTML5 APIs — Breaking the Mobile Web</a>   <br />
 译者 <a href="http://weibo.com/huxpro">彭怀亮</a>，首次发布于 <a href="http://huangxuan.me">Hux Blog</a>，转载请保留以上链接</p>

@@ -56,7 +56,7 @@
     </header>
 
     <div class="post-content">
-      <h3 id="数学函数">数学函数</h3>
+      <h3 id="section">数学函数</h3>
 
 <p>abs(x)   返回输入参数的绝对值<br />
 acos(x)  反余切函数，输入参数范围为[-1,1]， 返回[0,π]区间的角度值<br />
@@ -104,7 +104,7 @@ step(a, x)   如果x&lt;a，返回0；否则，返回1sqrt(x)求x的平方根�
 tan(x)   计算x正切值tanh(x)计算x的双曲线切线<br />
 transpose(M)   矩阵M的转置矩阵如果M是一个AxB矩阵，M的转置是一个BxA矩阵，它的第一列是M的第一行，第二列是M的第二行，第三列是M的第三行，等等</p>
 
-<h3 id="几何函数">几何函数</h3>
+<h3 id="section-1">几何函数</h3>
 <p>distance(pt1, pt2)   两点之间的欧几里德距离（Euclidean distance）<br />
 faceforward(N,I,Ng)  如果Ng∙I&lt;0，返回N；否则返回-N。<br />
 length(v)    返回一个向量的模，即sqrt(dot(v,v))<br />
@@ -112,7 +112,7 @@ normalize(v)     返回v向量的单位向量<br />
 reflect(I, N)    根据入射光纤方向I和表面法向量N计算反射向量，仅对三元向量有效<br />
 refract(I,N,eta)     根据入射光线方向I，表面法向量N和折射相对系数eta,计算折射向量。如果对给定的eta,I和N之间的角度太大，返回(0,0,0)。只对三元向量有效</p>
 
-<h3 id="纹理映射函数">纹理映射函数</h3>
+<h3 id="section-2">纹理映射函数</h3>
 <p>tex1D(sampler1D tex, float s)    一维纹理查询<br />
 tex1D(sampler1D tex, float s, float dsdx, float dsdy)  使用导数值（derivatives）查询一维纹理<br />
 Tex1D(sampler1D tex, float2 sz)  一维纹理查询，并进行深度值比较<br />
@@ -144,15 +144,15 @@ z表示这是一个用来进行阴影贴图查找的深度比较值。<br />
 q表示这是一个透视值，在进行纹理查找之前，它被用来除以纹理坐标（s）。<br />
 当你使用的纹理函数允许你指定一个深度比较值的时候，与之相关联的纹理单元必须被设置成深度比较纹理。否则，深度比较实际上不会被执行。</p>
 
-<h3 id="偏导函数">偏导函数</h3>
+<h3 id="section-3">偏导函数</h3>
 <p>ddx(a)  近似a关于屏幕空间x轴的偏导数ddy(a)近似a关于屏幕空间y轴的偏导数</p>
 
-<h3 id="调试函数">调试函数</h3>
+<h3 id="section-4">调试函数</h3>
 <p>void debug(float4 x)  如果在编译时设置了DEBUG，片段着 色程序中调用该函数可以将值x作为COLOR语义的最终输出；否则该函数什么也不做。</p>
 
 <p><br /></p>
 
-<h3 id="hlsl函数和glsl映射">HLSL函数和glsl映射</h3>
+<h3 id="hlslglsl">HLSL函数和glsl映射</h3>
 
 <table border="1">
  <tr>
