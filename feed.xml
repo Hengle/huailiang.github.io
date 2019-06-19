@@ -5,9 +5,221 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 16 Jun 2019 23:35:35 +0800</pubDate>
-    <lastBuildDate>Sun, 16 Jun 2019 23:35:35 +0800</lastBuildDate>
+    <pubDate>Wed, 19 Jun 2019 20:43:44 +0800</pubDate>
+    <lastBuildDate>Wed, 19 Jun 2019 20:43:44 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
+    
+      <item>
+        <title>各种移动GPU压缩纹理的使用方法</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;介绍了各种移动设备所使用的GPU，以及各个GPU所支持的压缩纹理的格式和使用方法。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;gpu&quot;&gt;1. 移动GPU大全&lt;/h2&gt;
+
+&lt;p&gt;目前移动市场的GPU主要有四大厂商系列：&lt;/p&gt;
+
+&lt;h4 id=&quot;imagination-technologiespowervr-sgx&quot;&gt;1）Imagination Technologies的PowerVR SGX系列&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代表型号：PowerVR SGX 535、PowerVR SGX 540、PowerVR SGX 543MP、PowerVR SGX 554MP等&lt;br /&gt;
+代表作  ：Apple iPhone全系、iPad全系，三星I9000、P3100等&lt;/p&gt;
+
+&lt;h4 id=&quot;qualcommadreno&quot;&gt;2）Qualcomm(高通)的Adreno系列&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代表型号：Adreno 200、Adreno 205、Adreno 220、Adreno 320等&lt;br /&gt;
+代表作  ：HTC G10、G14，小米1、2等&lt;/p&gt;
+
+&lt;h4 id=&quot;armmali&quot;&gt;3）ARM的Mali系列&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代表型号：Mali-400、Mali-T604等&lt;br /&gt;
+代表作  ：三星Galaxy SII、Galaxy SIII、Galaxy Note1、Galaxy Note2(亚版)等&lt;/p&gt;
+
+&lt;h4 id=&quot;nvidiategra&quot;&gt;4）nVIDIA(英伟达)的Tegra系列&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;代表型号：nVIDIA Tegra2、nVIDIA Tegra3等&lt;br /&gt;
+代表作  ：Google Nexus 7，HTC One X等&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;2. 压缩纹理的必要性&lt;/h2&gt;
+
+&lt;p&gt;1）首先要说一下图像文件格式和纹理格式的区别。&lt;br /&gt;
+常用的图像文件格式有BMP，TGA，JPG，GIF，PNG等；&lt;br /&gt;
+常用的纹理格式有R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8, A8R8G8B8等。&lt;/p&gt;
+
+&lt;p&gt;文件格式是图像为了存储信息而使用的对信息的特殊编码方式，它存储在磁盘中，或者内存中，但是并不能被GPU所识别，因为以向量计算见长的GPU对于这些复杂的计算无能为力。这些文件格式当被游戏读入后，还是需要经过CPU解压成R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8, A8R8G8B8等像素格式，再传送到GPU端进行使用。&lt;br /&gt;
+纹理格式是能被GPU所识别的像素格式，能被快速寻址并采样。&lt;br /&gt;
+举个例子，DDS文件是游戏开发中常用的文件格式，它内部可以包含A4R4G4B4的纹理格式，也可以包含A8R8G8B8的纹理格式，甚至可以包含DXT1的纹理格式。在这里DDS文件有点容器的意味。&lt;/p&gt;
+
+&lt;p&gt;OpenGL ES 2.0支持以上提到的R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8，A8R8G8B8等纹理格式，其中 R5G6B5，A4R4G4B4，A1R5G5B5每个像素占用2个字节(BYTE)，R8G8B8每个像素占用3个字节，A8R8G8B8每个像素占用 4个字节。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;对于一张512&lt;em&gt;512的纹理的话，R5G6B5格式的文件需要占用512KB的容量，A8R8G8B8格式的文件需要占用1MB的容量；如果是1024&lt;/em&gt;1024的纹理，则各需要2M和4M的容量，这对于动辄需要几十、几百张甚至更多纹理的游戏，上G容量的游戏在移动平台上是不容易被接受的(当然，还是有1、2G的大作的，里面包含了几千张的纹理)。&lt;/p&gt;
+
+&lt;p&gt;聪明的设计师们在想，有没有其他办法，既能表现丰富的色彩和细节，又能是最小失真的情况下，达到更小的纹理容量呢。压缩纹理格式应运而生(当然，并不是在移动平台后才有的产物)。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;3. 常见的压缩纹理格式&lt;/h2&gt;
+&lt;p&gt;基于OpenGL ES的压缩纹理有常见的如下几种实现：&lt;br /&gt;
+1）ETC1（Ericsson texture compression)&lt;br /&gt;
+2）PVRTC (PowerVR texture compression)&lt;br /&gt;
+3）ATITC (ATI texture compression)&lt;br /&gt;
+4）S3TC (S3 texture compression)&lt;/p&gt;
+
+&lt;p&gt;ETC1:&lt;br /&gt;
+ETC1格式是OpenGL ES图形标准的一部分，并且被所有的Android设备所支持。&lt;br /&gt;
+扩展名为: GL_OES_compressed_ETC1_RGB8_texture，不支持透明通道，所以仅能用于不透明纹理。&lt;br /&gt;
+当加载压缩纹理时，&lt;internal format=&quot;&quot;&gt;参数支持如下格式：
+GL_ETC1_RGB8_OES(RGB，每个像素0.5个字节)&lt;/internal&gt;&lt;/p&gt;
+
+&lt;p&gt;PVRTC:&lt;br /&gt;
+支持的GPU为Imagination Technologies的PowerVR SGX系列。&lt;br /&gt;
+OpenGL ES的扩展名为: GL_IMG_texture_compression_pvrtc。&lt;br /&gt;
+当加载压缩纹理时，&lt;internal format=&quot;&quot;&gt;参数支持如下几种格式：
+GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG (RGB，每个像素0.5个字节)
+GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG (RGB，每个像素0.25个字节)
+GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG (RGBA，每个像素0.5个字节)
+GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG (RGBA，每个像素0.25个字节)&lt;/internal&gt;&lt;/p&gt;
+
+&lt;p&gt;ATITC:&lt;br /&gt;
+支持的GPU为Qualcomm的Adreno系列。&lt;br /&gt;
+支持的OpenGL ES扩展名为: GL_ATI_texture_compression_atitc。&lt;br /&gt;
+当加载压缩纹理时，&lt;internal format=&quot;&quot;&gt;参数支持如下类型的纹理：
+GL_ATC_RGB_AMD (RGB，每个像素0.5个字节)
+GL_ATC_RGBA_EXPLICIT_ALPHA_AMD (RGBA，每个像素1个字节)
+GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD (RGBA，每个像素1个字节)&lt;/internal&gt;&lt;/p&gt;
+
+&lt;p&gt;S3TC&lt;br /&gt;
+也被称为DXTC，在PC上广泛被使用，但是在移动设备上还是属于新鲜事物。支持的GPU为NVIDIA Tegra系列。&lt;br /&gt;
+OpenGL ES扩展名为:&lt;br /&gt;
+GL_EXT_texture_compression_dxt1和GL_EXT_texture_compression_s3tc。&lt;br /&gt;
+当加载压缩纹理时，&lt;internal format=&quot;&quot;&gt;的参数有如下几种格式：
+GL_COMPRESSED_RGB_S3TC_DXT1 (RGB，每个像素0.5个字节)
+GL_COMPRESSED_RGBA_S3TC_DXT1 (RGBA，每个像素0.5个字节)
+GL_COMPRESSED_RGBA_S3TC_DXT3 (RGBA，每个像素1个字节)
+GL_COMPRESSED_RGBA_S3TC_DXT5 (RGBA，每个像素1个字节)&lt;/internal&gt;&lt;/p&gt;
+
+&lt;p&gt;由此可见，Mali系列GPU只支持ETC1格式的压缩纹理，而且该纹理不支持透明通道，有一定局限性。&lt;/p&gt;
+
+&lt;p&gt;以上压缩纹理格式每个像素大小相对A8R8G8B8格式的比例，最高压缩比是16:1，最低压缩比是4:1，对于减小纹理的数据容量有明显作用，相应在显存带宽上也有明显优势，从而提高游戏的运行效率(此特性没有绝对数值，根据每个游戏的用法和瓶颈点不同而有差别)。&lt;/p&gt;
+
+&lt;h2 id=&quot;openglapi&quot;&gt;4. OpenGL中相关API的使用&lt;/h2&gt;
+
+&lt;p&gt;1） 获得GPU的型号&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;    &lt;span class=&quot;n&quot;&gt;glGetString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_RENDERER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;2） 获得GPU的生产厂商&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;    &lt;span class=&quot;n&quot;&gt;glGetString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_VENDOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;3） 获取GPU支持哪些压缩纹理&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;        &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;glGetString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_EXTENSIONS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;a. 判断是否支持ETC1格式的压缩纹理&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_OES_compressed_ETC1_RGB8_texture&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;b. 判断是否支持DXT格式的压缩纹理&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_EXT_texture_compression_dxt1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_EXT_texture_compression_s3tc&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;c. 判断是否支持PVRTC格式的压缩纹理&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_IMG_texture_compression_pvrtc&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;d. 判断是否支持ATITC格式的压缩纹理&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_AMD_compressed_ATC_texture&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;extensions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;“&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GL_ATI_texture_compression_atitc&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;”&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;npos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;4） 填充压缩纹理数据&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glCompressedTexImage2D&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLenum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLenum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;internalformat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLsizei&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLsizei&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;border&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;n&quot;&gt;GLsizei&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;imageSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GLvoid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这里的参数不做详细解释，其中internalformat即是压缩纹理格式的类型。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;5. 压缩纹理工具的使用&lt;/h2&gt;
+
+&lt;p&gt;每种压缩纹理以及相应的厂商都提供了压缩纹理的工具，工具都分两个版本：&lt;br /&gt;
+a. 可视化转换工具 (给美工或小白少量使用)&lt;br /&gt;
+b. 命令行转换工具 (给程序批量使用)&lt;/p&gt;
+
+&lt;p&gt;下面对每个工具的用法进行说明。&lt;/p&gt;
+
+&lt;h3 id=&quot;imagination-technologies-powervr&quot;&gt;1）Imagination Technologies PowerVR&lt;/h3&gt;
+&lt;p&gt;工具&lt;a href=&quot;http://www.imgtec.com/powervr/insider/sdkdownloads/index.asp?installer=Windows%20Installer&quot;&gt;下载地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命令行转换脚本&lt;br /&gt;
+for %%i in (*.tga) do PVRTexTool.exe -f PVRTC4 -i %%i&lt;br /&gt;
+(将本目录下的所有tga文件，转换成”PVRTC4″编码格式的pvr文件，不带mipmap)&lt;/p&gt;
+
+&lt;h3 id=&quot;qualcomm-adreno&quot;&gt;2）Qualcomm Adreno&lt;/h3&gt;
+&lt;p&gt;工具&lt;a href=&quot;https://developer.qualcomm.com/mobile-development/mobile-technologies/gaming-graphics-optimization-adreno/tools-and-resources&quot;&gt;下载地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex7.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命令行转换脚本&lt;br /&gt;
+for %%i in (*.tga) do QCompressCmd.exe %%i %%i.ktx “ATC RGBA Explicit” yes&lt;br /&gt;
+(将本目录下的所有tga文件，转换成”ATC RGBA Explicit”编码格式的ktx文件，带mipmap)&lt;/p&gt;
+
+&lt;h3 id=&quot;arm-mali&quot;&gt;3）ARM Mali&lt;/h3&gt;
+&lt;p&gt;工具&lt;a href=&quot;http://malideveloper.arm.com/develop-for-mali/mali-gpu-texture-compression-tool/&quot;&gt;下载地址&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex8.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命令行转换脚本&lt;br /&gt;
+for %%i in (*.tga) do PVRTexTool.exe -f ETC -i %%i&lt;br /&gt;
+(将本目录下的所有tga文件，转换成”ETC”编码格式的pvr文件，不带mipmap这里还是使用的PVRTexTool.exe，也可以使用QCompressCmd.exe)&lt;/p&gt;
+
+&lt;h3 id=&quot;nvidia-tegra&quot;&gt;4）nVIDIA Tegra&lt;/h3&gt;
+&lt;p&gt;可以使用DirectX SDK中自带的DirectX Texture Tool进行转换&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex9.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命令行转换脚本&lt;br /&gt;
+for %%i in (*.tga) do texconv.exe -f DXT5 %%i&lt;br /&gt;
+(将本目录下的所有tga文件，转换成”DXT5″编码格式的dds文件，不带mipmap)&lt;/p&gt;
+
+&lt;p&gt;转载自: http://www.cnblogs.com/luming1979/archive/2013/02/04/2891421.html&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 07 Jun 2019 11:00:00 +0800</pubDate>
+        <link>https://huailiang.github.io/blog/2019/texture/</link>
+        <guid isPermaLink="true">https://huailiang.github.io/blog/2019/texture/</guid>
+        
+        <category>前端开发</category>
+        
+        <category>OpenGL</category>
+        
+        <category>工具</category>
+        
+        
+      </item>
     
       <item>
         <title>矢量字是如何画出来的</title>
@@ -1209,179 +1421,6 @@ Main: size_t size mismatch in precompiled chunk&lt;br /&gt;
         <category>Unity</category>
         
         <category>工具</category>
-        
-        <category>前端开发</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Unity 植入 c++版protobuf</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;现在使用Unity引擎开发游戏使用的脚本语言越来越灵活了。就拿《王者荣耀》来说吧，战斗的核心都采取 c++的语言来实现，外围系统都是采用 csharp的开发的。使用 c++指针操作不断有更高的执行效率，作为 native 语言也不会有 mono 内存的开销。使用 csharp 语言语法简单，对面向对象的支持也比较好，适合快速开发和版本迭代。还有使用 lua 脚本来做游戏的热更新。这样问题来了，解析数据就需要三个版本的 protobuf 集成在游戏里了。这个暂且只讨论unity里集成c++版本 protobuf 的流程。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;首先去 google 的 github 网站下载稳定版本的 protobuf。读者需要的话，点击&lt;a href=&quot;https://github.com/google/protobuf&quot;&gt;这里&lt;/a&gt;。这里我们选择3.5.1版本，完整的 protobuf 包含了大量的测试的代码，这里我们只需要一个完整的 lib 项目就可以了，没有用的测试代码如果不想编进库里，可以删去测试代码部分。&lt;/p&gt;
-
-&lt;p&gt;先看下，c#与 c++交互的部分。我们传给 c++ protobuf 序列化的二进制数组，在 c++里解析二进制。所以传递参数是 char* 指针和 bytes数组对应的长度，csharp 里我们把二进制数组转换成可以 c++交互的Intptr 指针。定义如下：&lt;/p&gt;
-
-&lt;p&gt;csharp 与 c++交互接口定义如下：&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#if UNITY_IPHONE || UNITY_XBOX360
-&lt;/span&gt;	&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;DllImport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;__Internal&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#else
-&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;DllImport&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ptotobuf-lib&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#endif
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;iDeserial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IntPtr&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;csharp 获取 bytes 数组的首地址可以通过GCHandle来获取：&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt; &lt;span class=&quot;n&quot;&gt;GCHandle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GCHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Alloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bytes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GCHandleType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pinned&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;IntPtr&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;AddrOfPinnedObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;c++部分与 c#交互的部分需要写在 extern里, 参数传递指针和 bytes 数组的长度：&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-
-	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iDeserial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;XNet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Student&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;student&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;student&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ParseFromArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;parse student error&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;student&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-			&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;student&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;age: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;num:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;下面就是不同平台部分的编译 dll 部分&lt;/p&gt;
-
-&lt;p&gt;打进 dll里的内容包含两部分：1.google protobuf 的c++代码 2.与 c#交互的代码和游戏逻辑代码&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Windows 部分&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;首先编出来的 dll 得指定到 x64平台， c/c++附加包含目录指定到 google文件夹所在你的目录。SDL 检查选择否。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/in-post/post-cpp/1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;在 vs 工程点击生成即可以生成 64位 的 dll，把编译好的 dll copy 到unity plugins 目录里，就可以调试看到结果了。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Android 部分&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;手机平台比较复杂，特别是 Android 机型众多，区分 arm 和 x86。而 arm 还有各种细分的架构，不过通过解压 unity 生成的 apk 可以发现，libs的目录只有 armv7和 x86两种平台，其他高阶的构架兼容低阶架构，就不需要我们再去编了。&lt;/p&gt;
-
-&lt;p&gt;编译 android 的 c++代码，我们使用 android 原生支持的 NDK，我们只需要配置好Android.mk和Application.mk两个文件就好了。&lt;/p&gt;
-
-&lt;p&gt;所以在编译 so 之前，需要里下载好 ndk，google官方的下载地址点击&lt;a href=&quot;https://developer.android.google.cn/ndk/downloads/&quot;&gt;这里&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;在Application.mk 中声明编译的平台，使用的 Android 版本：&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;n&quot;&gt;APP_ABI&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;armeabi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v7a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x86&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;APP_OPTIM&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;release&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;APP_PLATFORM&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;android&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#APP_BUILD_SCRIPT := Android.mk
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;APP_STL&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_static&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;在Android.mk中配置所要编译的 c++文件，编译使用的宏。使用方式跟 linux 使用 gcc编译c++很类似。&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-cpp&quot; data-lang=&quot;cpp&quot;&gt;&lt;span class=&quot;n&quot;&gt;LOCAL_PATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-
-&lt;span class=&quot;n&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CLEAR_VARS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;LOCAL_CFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DHAVE_PTHREAD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#  c++目录的相对路径
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_FILES_PATH&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt;  &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOCAL_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# c++后缀
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_FILES_SUFFIX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# 递归遍历目录下的所有的文件
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rwildcard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wildcard&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wildcard&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rwildcard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# 获取相应的源文件
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_ALL_FILES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_FILES_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rwildcard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;MY_ALL_FILES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_ALL_FILES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_CPP_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/%=&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_CPP_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;MY_SRC_LIST&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_FILES_SUFFIX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_ALL_FILES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;MY_SRC_LIST&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_SRC_LIST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOCAL_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/%=%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# 去除字串的重复单词
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uniq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
-  &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}),,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
-  &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;endef&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# 递归遍历获取所有目录
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_ALL_DIRS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_FILES_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rwildcard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;*/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;MY_ALL_DIRS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uniq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_ALL_DIRS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;# 赋值给NDK编译系统
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOCAL_SRC_FILES&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MY_SRC_LIST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;LOCAL_C_INCLUDES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOCAL_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;LOCAL_SHARED_LIBRARIES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;LOCAL_MODULE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libprotobuf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lib&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;LOCAL_MODULE_TAGS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;optional&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;LOCAL_LDLIBS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;llog&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BUILD_SHARED_LIBRARY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;下载好 ndk，把路径配置到环境变量中，就可以使用了 ndk-build 来编译 so 了。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;osx 部分&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;osx 需要把 c++代码编译成 bundle格式的库文件，需要新建一个 xcode 工程，选项如下图如下所示：&lt;br /&gt;
-&lt;img src=&quot;/img/in-post/post-cpp/5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;我们把 c++引用到 xcode 工程， 然后设置好需要的宏：&lt;br /&gt;
-&lt;img src=&quot;/img/in-post/post-cpp/2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;设置文件搜索路径：&lt;br /&gt;
-&lt;img src=&quot;/img/in-post/post-cpp/3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;点击 build，bundle 文件就可以生成了。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;ios 部分&lt;br /&gt;
-osx 需要把 c++代码编译成 bundle格式的库文件，需要新建一个 xcode 工程，选项如下图如下所示：&lt;br /&gt;
-&lt;img src=&quot;/img/in-post/post-cpp/6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;ios 设置部分基本上和 osx 是一样的，记得一处地方要设置好，build 的对象要选择真机而不是模拟器，否则在真机上无法运行：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/in-post/post-cpp/4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;当所有平台的 c++库都编译完成之后，对应到 unity 的目录如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/in-post/post-cpp/7.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;可能介绍的语言比较简洁，不过对应的完整的工程我都上传到 github 去了，大家可以去下载下来，跑一遍流程之后，就一切都清楚了。&lt;/p&gt;
-
-&lt;p&gt;**github 对应的地址，点击&lt;a href=&quot;https://github.com/huailiang/game_pb&quot;&gt;这里&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 24 Jun 2018 11:00:00 +0800</pubDate>
-        <link>https://huailiang.github.io/blog/2018/protobuf/</link>
-        <guid isPermaLink="true">https://huailiang.github.io/blog/2018/protobuf/</guid>
-        
-        <category>Unity</category>
-        
-        <category>C++</category>
         
         <category>前端开发</category>
         
