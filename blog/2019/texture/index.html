@@ -117,14 +117,14 @@
 3）ATITC (ATI texture compression)<br />
 4）S3TC (S3 texture compression)</p>
 
-<p>ETC1:<br />
-ETC1格式是OpenGL ES图形标准的一部分，并且被所有的Android设备所支持。<br />
+<h4 id="etc1">ETC1</h4>
+<p>ETC1格式是OpenGL ES图形标准的一部分，并且被所有的Android设备所支持。<br />
 扩展名为: GL_OES_compressed_ETC1_RGB8_texture，不支持透明通道，所以仅能用于不透明纹理。<br />
 当加载压缩纹理时，<internal format="">参数支持如下格式：
 GL_ETC1_RGB8_OES(RGB，每个像素0.5个字节)</internal></p>
 
-<p>PVRTC:<br />
-支持的GPU为Imagination Technologies的PowerVR SGX系列。<br />
+<h4 id="pvrtc">PVRTC</h4>
+<p>支持的GPU为Imagination Technologies的PowerVR SGX系列。<br />
 OpenGL ES的扩展名为: GL_IMG_texture_compression_pvrtc。<br />
 当加载压缩纹理时，<internal format="">参数支持如下几种格式：
 GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG (RGB，每个像素0.5个字节)
@@ -132,16 +132,16 @@ GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG (RGB，每个像素0.25个字节)
 GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG (RGBA，每个像素0.5个字节)
 GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG (RGBA，每个像素0.25个字节)</internal></p>
 
-<p>ATITC:<br />
-支持的GPU为Qualcomm的Adreno系列。<br />
+<h4 id="atitc">ATITC</h4>
+<p>支持的GPU为Qualcomm的Adreno系列。<br />
 支持的OpenGL ES扩展名为: GL_ATI_texture_compression_atitc。<br />
 当加载压缩纹理时，<internal format="">参数支持如下类型的纹理：
 GL_ATC_RGB_AMD (RGB，每个像素0.5个字节)
 GL_ATC_RGBA_EXPLICIT_ALPHA_AMD (RGBA，每个像素1个字节)
 GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD (RGBA，每个像素1个字节)</internal></p>
 
-<p>S3TC<br />
-也被称为DXTC，在PC上广泛被使用，但是在移动设备上还是属于新鲜事物。支持的GPU为NVIDIA Tegra系列。<br />
+<h4 id="s3tc">S3TC</h4>
+<p>也被称为DXTC，在PC上广泛被使用，但是在移动设备上还是属于新鲜事物。支持的GPU为NVIDIA Tegra系列。<br />
 OpenGL ES扩展名为:<br />
 GL_EXT_texture_compression_dxt1和GL_EXT_texture_compression_s3tc。<br />
 当加载压缩纹理时，<internal format="">的参数有如下几种格式：
@@ -158,51 +158,52 @@ GL_COMPRESSED_RGBA_S3TC_DXT5 (RGBA，每个像素1个字节)</internal></p>
 
 <p>1） 获得GPU的型号</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">    <span class="n">glGetString</span><span class="p">(</span><span class="n">GL_RENDERER</span><span class="p">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">glGetString</span><span class="p">(</span><span class="n">GL_RENDERER</span><span class="p">)</span></code></pre></figure>
 
 <p>2） 获得GPU的生产厂商</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">    <span class="n">glGetString</span><span class="p">(</span><span class="n">GL_VENDOR</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="n">glGetString</span><span class="p">(</span><span class="n">GL_VENDOR</span><span class="p">);</span></code></pre></figure>
 
 <p>3） 获取GPU支持哪些压缩纹理</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">        <span class="n">string</span> <span class="n">extensions</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">glGetString</span><span class="p">(</span><span class="n">GL_EXTENSIONS</span><span class="p">);</span>
-    </code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"> <span class="n">string</span> <span class="n">extensions</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">glGetString</span><span class="p">(</span><span class="n">GL_EXTENSIONS</span><span class="p">);</span></code></pre></figure>
 
 <p>a. 判断是否支持ETC1格式的压缩纹理</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">        <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_OES_compressed_ETC1_RGB8_texture</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
-    </code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"> <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_OES_compressed_ETC1_RGB8_texture</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span></code></pre></figure>
 
 <p>b. 判断是否支持DXT格式的压缩纹理</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">        <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_EXT_texture_compression_dxt1</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span> <span class="o">||</span>
-                <span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_EXT_texture_compression_s3tc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
-    </code></pre></figure>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_EXT_texture_compression_dxt1</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span> <span class="o">||</span>
+        <span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_EXT_texture_compression_s3tc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>c. 判断是否支持PVRTC格式的压缩纹理</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">        <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_IMG_texture_compression_pvrtc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
-    </code></pre></figure>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"> <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_IMG_texture_compression_pvrtc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
+ </code></pre></figure>
 
 <p>d. 判断是否支持ATITC格式的压缩纹理</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">        <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_AMD_compressed_ATC_texture</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span> <span class="o">||</span>
-            <span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_ATI_texture_compression_atitc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
-    </code></pre></figure>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="k">return</span> <span class="p">(</span><span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_AMD_compressed_ATC_texture</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span> <span class="o">||</span>
+    <span class="n">extensions</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="err">“</span><span class="n">GL_ATI_texture_compression_atitc</span><span class="err">”</span><span class="p">)</span><span class="o">!=</span> <span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>4） 填充压缩纹理数据</p>
 
-<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp">    <span class="kt">void</span> <span class="n">glCompressedTexImage2D</span> <span class="p">(</span>
-         <span class="n">GLenum</span> <span class="n">target</span><span class="p">,</span>
-         <span class="n">GLint</span> <span class="n">level</span><span class="p">,</span>
-         <span class="n">GLenum</span> <span class="n">internalformat</span><span class="p">,</span>
-         <span class="n">GLsizei</span> <span class="n">width</span><span class="p">,</span>
-         <span class="n">GLsizei</span> <span class="n">height</span><span class="p">,</span>
-         <span class="n">GLint</span> <span class="n">border</span><span class="p">,</span>
-         <span class="n">GLsizei</span> <span class="n">imageSize</span><span class="p">,</span>
-         <span class="k">const</span> <span class="n">GLvoid</span> <span class="o">*</span> <span class="n">data</span><span class="p">);</span>
-    </code></pre></figure>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="kt">void</span> <span class="n">glCompressedTexImage2D</span> <span class="p">(</span>
+        <span class="n">GLenum</span> <span class="n">target</span><span class="p">,</span>
+        <span class="n">GLint</span> <span class="n">level</span><span class="p">,</span>
+        <span class="n">GLenum</span> <span class="n">internalformat</span><span class="p">,</span>
+        <span class="n">GLsizei</span> <span class="n">width</span><span class="p">,</span>
+        <span class="n">GLsizei</span> <span class="n">height</span><span class="p">,</span>
+        <span class="n">GLint</span> <span class="n">border</span><span class="p">,</span>
+        <span class="n">GLsizei</span> <span class="n">imageSize</span><span class="p">,</span>
+        <span class="k">const</span> <span class="n">GLvoid</span> <span class="o">*</span> <span class="n">data</span><span class="p">);</span>
+</code></pre>
+</div>
 
 <p>这里的参数不做详细解释，其中internalformat即是压缩纹理格式的类型。</p>
 
