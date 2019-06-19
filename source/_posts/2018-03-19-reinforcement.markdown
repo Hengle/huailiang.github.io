@@ -55,7 +55,7 @@ EPSILON 是一种策略，0.8代表的意思就是我们有80%的概率来选择
 
 我们将第次增加难度，来增加难度。
 
-难度一：
+### 难度一：
 
 游戏过程是这样的，一只刚出生的雏鸟还不会飞。现在妈妈教它飞行。小鸟拍一下翅膀，它将可以向上飞行一段时间，但飞得过高，会消耗太多的能量，最终累死；如果没有拍翅膀，它将滑翔降落，最终跌到地上摔死。小鸟死亡，游戏结束。通过训练，小鸟掌握了拍翅膀的节奏，我们每15帧替小鸟做一次决策，看是否拍打翅膀，通过训练，我们将使小鸟能一直在天空中平衡地飞行。
 
@@ -67,7 +67,7 @@ EPSILON 是一种策略，0.8代表的意思就是我们有80%的概率来选择
 
 首先呢，我们在 Unity 实现 q_learning算法。在后面的章节中，我们将导出包，在 python 中训练，并且通过 Tensorboard，我们观察模型的学习率（alpha）,衰减（gamma）以及生存时间的变化。
 
-{% highlight csharp %}
+```  csharp 
 
 // greedy police
  float epsilon = 0.9f;
@@ -78,11 +78,11 @@ EPSILON 是一种策略，0.8代表的意思就是我们有80%的概率来选择
  //discount factor
  float gamma = 0.9f;
 
-{% endhighlight %}
+``` 
 
 首先我们定义 q_learning里面的几个变量值，如上所示，接着我们定义 Q_Table:
 
-{% highlight csharp %}
+```  csharp 
 
 /// <summary>
 /// Dictionary做二维表，key 是代表的状态，
@@ -102,7 +102,7 @@ public class Row
     /// </summary>
     public float stay;
 }
-{% endhighlight %}
+``` 
 
 首先呢，我们把鸟position 的 y 坐标取值范围是[-5,5]分为十种种状态，我们定义鸟的状态1-10，由鸟的坐标转换状态。
 
@@ -142,7 +142,7 @@ public void UpdateState(int state, int state_, int rewd, bool action)
 
 我们以每15帧一个心跳(Tick), 根据 q_table 做出相应的动作，并且根据公式和 Reward 更新 q_table。
 
-{% highlight csharp %}
+```  csharp 
   /*
    comment: tick time is 15f
     */
@@ -163,11 +163,11 @@ public void UpdateState(int state, int state_, int rewd, bool action)
        last_action = action;
    }
 
-{% endhighlight %}
+``` 
 
 在训练完成后，我们导出 q_table,在下次加载的时候再导入，我们就可以迁移到别的设备上了。导出的时候，为了方便观察，现在我们到处 csv 结构的，可以直接在 Excel 里看每个状态的 q 值。 由于当前难度较低，我们的状态（state）比较有限, 所以我们存成 csv 这样的。后面随着状态的急速增加，我们考虑使用 protobuff （二进制）的格式来导出。
 
-{% highlight csharp %}
+``` csharp 
 /// <summary>
 /// 导出q_table
 /// </summary>
@@ -215,10 +215,10 @@ private void loadQTable()
     }
 }
 
-{% endhighlight %}
+``` 
 
 
-难度二：
+### 难度二：
 
 在难度一的基础上，我们增加一块柱子。 通过训练，使小鸟不但能够平衡飞行，而且可以穿越过柱子。使用github 工程展示的时候，你需要在设置中添加宏ENABLE_PILLAR，如下图所示：
 
@@ -228,7 +228,7 @@ private void loadQTable()
 
 我们把 Pillar（柱子）的状态（state）也计算在内，Pillar 一共有五个状态，即我们根据和鸟的相对位置划分五个状态（state）,Bird 的 position x坐标始终为0，移动的是 Pillar, Bird和 Pillar 运动是相对的。如下代码：
 
-{% highlight csharp %}
+```  csharp 
 public int GetPillarMiniState()
 {
     int ret = 0;
@@ -244,10 +244,12 @@ public int GetPillarMiniState()
     return ret * 10;
 }
 
-{% endhighlight %}
+``` 
 
 Pillar 和Bird 一共组合了9X5=45种状态， 我们在构建 q_table的时候，代码如下：
-{% highlight csharp %}
+
+
+```  csharp 
 /// <summary>
 /// Bird [0-9)一共九个状态
 /// Pillar [0-5) 一共5个状态
@@ -284,7 +286,7 @@ public void Build_Q_Table()
         return GameManager.S.mainBird.GetState();
 #endif
     }
-{% endhighlight %}
+``` 
 
 Reinforcement做选择还是和之前一样，由 epsilon概率来由 q_table 来决定，1-epsilon概率随机决定。
 
@@ -292,7 +294,7 @@ Reinforcement做选择还是和之前一样，由 epsilon概率来由 q_table �
 
 
 
-难度三：
+### 难度三：
 
 循环增加柱子，且缺口不固定。通过训练，使小鸟能够穿越所有的柱子。所下图 所示：
 

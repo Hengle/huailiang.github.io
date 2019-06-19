@@ -73,13 +73,13 @@ OpenGL ES 2.0支持以上提到的R5G6B5，A4R4G4B4，A1R5G5B5，R8G8B8，A8R8G8
 3）ATITC (ATI texture compression)
 4）S3TC (S3 texture compression)
 
-ETC1:
+#### ETC1
 ETC1格式是OpenGL ES图形标准的一部分，并且被所有的Android设备所支持。
 扩展名为: GL_OES_compressed_ETC1_RGB8_texture，不支持透明通道，所以仅能用于不透明纹理。
 当加载压缩纹理时，<internal format>参数支持如下格式：
 GL_ETC1_RGB8_OES(RGB，每个像素0.5个字节)
 
-PVRTC:
+#### PVRTC
 支持的GPU为Imagination Technologies的PowerVR SGX系列。
 OpenGL ES的扩展名为: GL_IMG_texture_compression_pvrtc。
 当加载压缩纹理时，<internal format>参数支持如下几种格式：
@@ -88,7 +88,7 @@ GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG (RGB，每个像素0.25个字节)
 GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG (RGBA，每个像素0.5个字节)
 GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG (RGBA，每个像素0.25个字节)
 
-ATITC:
+#### ATITC
 支持的GPU为Qualcomm的Adreno系列。
 支持的OpenGL ES扩展名为: GL_ATI_texture_compression_atitc。
 当加载压缩纹理时，<internal format>参数支持如下类型的纹理：
@@ -96,7 +96,7 @@ GL_ATC_RGB_AMD (RGB，每个像素0.5个字节)
 GL_ATC_RGBA_EXPLICIT_ALPHA_AMD (RGBA，每个像素1个字节)
 GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD (RGBA，每个像素1个字节)
 
-S3TC
+#### S3TC
 也被称为DXTC，在PC上广泛被使用，但是在移动设备上还是属于新鲜事物。支持的GPU为NVIDIA Tegra系列。
 OpenGL ES扩展名为:
 GL_EXT_texture_compression_dxt1和GL_EXT_texture_compression_s3tc。

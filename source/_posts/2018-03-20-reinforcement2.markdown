@@ -77,7 +77,7 @@ proc1 = subprocess.Popen([launch_string,'--port', str(self.port)])
 {% endhighlight %}
 - 建立 Socket， 用于监听的 Unity 侧发过来的参数，设置好超时时间。
 
-{% highlight python %}
+``` python 
 
   self.port = base_port
   self._buffer_size = 10240
@@ -111,10 +111,11 @@ proc1 = subprocess.Popen([launch_string,'--port', str(self.port)])
               "launch and that the Academy and the external Brain(s) are attached to objects in the Scene."
               .format(str(file_name)))
 
-{% endhighlight %}
+``` 
+
 - 解析 socket 发过来的参数，同时初始化 Brain， 在 Brain 中构建一张 q_table。
 
-{% highlight python %}
+``` python 
   p = self._conn.recv(self._buffer_size).decode('utf-8')
   p = json.loads(p)
   self._data = {}
@@ -134,7 +135,7 @@ proc1 = subprocess.Popen([launch_string,'--port', str(self.port)])
   self.close()
   raise
 
-{% endhighlight %}
+``` 
 
 在 brain.py中实现了 q_learning和 Sarsa的 reinforcement算法， 二者在根据 state 做选择的是一样的，差别就是二者学习的过程，即更新 q_table 的方式。 q_learning在下一个 state_ 的选择的是action 值最大的 q 值来算 q_target, 而 sarsa是根据 下一个 state_和下一个action_来算 q_target。class RL是基类，显现了二者共同的choose_action，export，而QLearningTable和SarsaTable都继承 RL,并实现了各自的 learn()，即更新 q_Table 的方法。具体的代码实现如下：
 
@@ -215,7 +216,9 @@ class SarsaTable(RL):
 
 在 Unity 侧，我们使用ExternalEnv.cs 与 python 交互，所有通信的数据结构都定义在ExternalData.cs 中。
 我们使用ExternalEnv中，我们在 socket建立起来就会把 q_learning 需要的参数同步到 python, 比如说：  
-{% highlight csharp %}
+
+``` csharp 
+
 //迭代概率
 paramerters.epsilon = epsilon;
 
@@ -228,7 +231,7 @@ paramerters.alpha = alpha;
 //日志位置
 paramerters.logPath = this.save_path;
 
-{% endhighlight %}
+```
 
 游戏每15帧触发一个心跳-Tick， 每个心跳做一个决定和更新一次 q_table，这些数据都是通过 socket 连接起来的。然后根据 python 返回的 action 去表现。
 

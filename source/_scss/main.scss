@@ -58,12 +58,19 @@ img {
 
 
 h2,
-h3,
+h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: normal;
+  color: $section-headings-color;
+}
+
+
 h4,
 h5,
 h6 {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: 1.0rem;
+  margin-bottom: 0.4rem;
   font-weight: normal;
   color: $section-headings-color;
 }
