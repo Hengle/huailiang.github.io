@@ -24,15 +24,16 @@ tags:
 
 csharp 与 c++交互接口定义如下：
 
-{% highlight csharp %}
+``` csharp
 #if UNITY_IPHONE || UNITY_XBOX360
-	[DllImport("__Internal")]
+    [DllImport("__Internal")]
 #else
     [DllImport("ptotobuf-lib")]
 #endif
+
     public static extern int iDeserial(IntPtr pb, int length);
 
-{% endhighlight %}
+```
 
 
 csharp 获取 bytes 数组的首地址可以通过GCHandle来获取：
@@ -44,10 +45,9 @@ IntPtr pObject = hObject.AddrOfPinnedObject();
 
 c++部分与 c#交互的部分需要写在 extern里, 参数传递指针和 bytes 数组的长度：
 
-{% highlight cpp %}
+``` cpp
 extern "C"
 {
-
 	int iDeserial(const char* pb, int length)
 	{
 		XNet::Student student;
@@ -66,7 +66,7 @@ extern "C"
 		return 0;
 	}
 }
-{% endhighlight %}
+``` 
 
 
 下面就是不同平台部分的编译 dll 部分
@@ -90,16 +90,18 @@ extern "C"
 所以在编译 so 之前，需要里下载好 ndk，google官方的下载地址点击[这里][i3].
 
 在Application.mk 中声明编译的平台，使用的 Android 版本：
-{% highlight cpp %}
+
+``` cpp
 APP_ABI          := armeabi-v7a x86
 APP_OPTIM         := release
 APP_PLATFORM      := android-14
 #APP_BUILD_SCRIPT := Android.mk
 APP_STL       := c++_static
-{% endhighlight %}
+``` 
+
  在Android.mk中配置所要编译的 c++文件，编译使用的宏。使用方式跟 linux 使用 gcc编译c++很类似。
 
-{% highlight cpp %}
+``` cpp
 
 LOCAL_PATH := $(call my-dir)  
 
@@ -143,7 +145,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_LDLIBS += -llog
 include $(BUILD_SHARED_LIBRARY)
 
-{% endhighlight %}
+```
 
  下载好 ndk，把路径配置到环境变量中，就可以使用了 ndk-build 来编译 so 了。
 

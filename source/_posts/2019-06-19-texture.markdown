@@ -115,60 +115,60 @@ GL_COMPRESSED_RGBA_S3TC_DXT5 (RGBA，每个像素1个字节)
 1） 获得GPU的型号
 
 {% highlight cpp %}
-    glGetString(GL_RENDERER)
+glGetString(GL_RENDERER)
 {% endhighlight %}
 
 2） 获得GPU的生产厂商
 
 {% highlight cpp %}
-    glGetString(GL_VENDOR);
+glGetString(GL_VENDOR);
 {% endhighlight %}
 
 3） 获取GPU支持哪些压缩纹理
 
-    {% highlight cpp %}
-        string extensions = (const char*)glGetString(GL_EXTENSIONS);
-    {% endhighlight %}
+{% highlight cpp %}
+ string extensions = (const char*)glGetString(GL_EXTENSIONS);
+{% endhighlight %}
 
 a. 判断是否支持ETC1格式的压缩纹理
 
-    {% highlight cpp %}
-        return (extensions.find(“GL_OES_compressed_ETC1_RGB8_texture”)!= string::npos);
-    {% endhighlight %}
+{% highlight cpp %}
+ return (extensions.find(“GL_OES_compressed_ETC1_RGB8_texture”)!= string::npos);
+{% endhighlight %}
 
 b. 判断是否支持DXT格式的压缩纹理
 
-    {% highlight cpp %}
-        return (extensions.find(“GL_EXT_texture_compression_dxt1”)!= string::npos ||
-                extensions.find(“GL_EXT_texture_compression_s3tc”)!= string::npos);
-    {% endhighlight %}
+``` cpp
+ return (extensions.find(“GL_EXT_texture_compression_dxt1”)!= string::npos ||
+        extensions.find(“GL_EXT_texture_compression_s3tc”)!= string::npos);
+```
 
 c. 判断是否支持PVRTC格式的压缩纹理
 
-    {% highlight cpp %}
-        return (extensions.find(“GL_IMG_texture_compression_pvrtc”)!= string::npos);
-    {% endhighlight %}
+{% highlight cpp %}
+ return (extensions.find(“GL_IMG_texture_compression_pvrtc”)!= string::npos);
+ {% endhighlight %}
 
 d. 判断是否支持ATITC格式的压缩纹理
 
-    {% highlight cpp %}
-        return (extensions.find(“GL_AMD_compressed_ATC_texture”)!= string::npos ||
-            extensions.find(“GL_ATI_texture_compression_atitc”)!= string::npos);
-    {% endhighlight %}
+``` cpp
+ return (extensions.find(“GL_AMD_compressed_ATC_texture”)!= string::npos ||
+    extensions.find(“GL_ATI_texture_compression_atitc”)!= string::npos);
+```
 
 4） 填充压缩纹理数据
 
-    {% highlight cpp %}
-    void glCompressedTexImage2D (
-         GLenum target,
-         GLint level,
-         GLenum internalformat,
-         GLsizei width,
-         GLsizei height,
-         GLint border,
-         GLsizei imageSize,
-         const GLvoid * data);
-    {% endhighlight %}
+``` cpp
+ void glCompressedTexImage2D (
+        GLenum target,
+        GLint level,
+        GLenum internalformat,
+        GLsizei width,
+        GLsizei height,
+        GLint border,
+        GLsizei imageSize,
+        const GLvoid * data);
+```
 
 这里的参数不做详细解释，其中internalformat即是压缩纹理格式的类型。
 

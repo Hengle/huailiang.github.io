@@ -103,19 +103,18 @@ with tf.name_scope('inputs'):
 
 即：loss= -log(prob)*vt
 
-{% highlight python %}
+```  python 
  with tf.name_scope('loss'):
     neg_log_prob = tf.reduce_sum(-tf.log(self.all_act_prob)*tf.one_hot(self.tf_acts, self.n_actions), axis=1)
     loss = tf.reduce_mean(neg_log_prob * self.tf_vt)  # reward guided loss
-
-{% endhighlight %}
+``` 
 
 训练的过程就是减少loss，即沿着梯度下降的方向跟新网咯中的参数：
 
-{% highlight python %}
+```  python 
 with tf.name_scope('train'):
     self.train_op = tf.train.AdamOptimizer(self.lr).minimize(loss)
-{% endhighlight %}
+``` 
 
 在tensorboard我们可以清楚看到整个网络的结构：
 
@@ -132,7 +131,7 @@ with tf.name_scope('train'):
 
 我们实现�如下：
 
-{% highlight python %}
+``` python
 #critic
 with tf.variable_scope('critic'):
     l1 = tf.layers.dense(self.tfs, 100, tf.nn.relu)
@@ -154,11 +153,11 @@ def _build_anet(self, name, trainable):
     params = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope=name)
     return a_prob, params
 
-{% endhighlight %}
+``` 
 
 我们根据pi和old pi之间测差异�决定Loss：
 
-{% highlight python %}
+```  python 
 a_indices = tf.stack([tf.range(tf.shape(self.tfa)[0], dtype=tf.int32), self.tfa], axis=1)
 pi_prob = tf.gather_nd(params=self.pi, indices=a_indices)   # shape=(None, )
 oldpi_prob = tf.gather_nd(params=oldpi, indices=a_indices)  # shape=(None, )
@@ -169,7 +168,7 @@ with tf.variable_scope('loss'):
     self.aloss = -tf.reduce_mean(tf.minimum(        # clipped surrogate objective
     surr,
     tf.clip_by_value(ratio, 1. - EPSILON, 1. + EPSILON) * self.tfadv))
-{% endhighlight %}
+``` 
 
 在tensorboard观察网络结构：
 
