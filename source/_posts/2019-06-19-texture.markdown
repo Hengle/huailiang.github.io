@@ -172,6 +172,35 @@ d. 判断是否支持ATITC格式的压缩纹理
 
 这里的参数不做详细解释，其中internalformat即是压缩纹理格式的类型。
 
+查看设备支持的texture压缩格式，可以使用如下代码获取：
+
+``` cpp
+int num_formats;
+glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &num_formats);
+std::cout<<"Texture extensions: "<<num_formats<<std::endl;
+
+int *formats = (int*)alloca(num_formats * sizeof(int));
+glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats);
+for(int i=0; i<num_formats; i++)
+{
+    std::cout<<i<<" 0x"<<hex<<formats[i]<<dec<<std::endl;
+} 
+```
+
+
+需要注意的是，使用glCompressedTexImage2D时(PVRTC)，FilterMode不能设置为 GL_LINEAR_MIPMAP_LINEAR, 否则的话加载出来的画线显示黑色, [这里][i4]有提到, 就是这个问题困扰了我一大天。
+
+``` cpp
+
+// 能正确加载PVRTC
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+// 不能正确加载
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+```
+
+
 ## 5. 压缩纹理工具的使用
 
 每种压缩纹理以及相应的厂商都提供了压缩纹理的工具，工具都分两个版本：
@@ -189,6 +218,19 @@ b. 命令行转换工具 (给程序批量使用)
 for %%i in (*.tga) do PVRTexTool.exe -f PVRTC4 -i %%i
 (将本目录下的所有tga文件，转换成”PVRTC4″编码格式的pvr文件，不带mipmap)
 
+
+在mac平台下，也可以使用xcode 自带的texturetool，结合命令行的方式来进行格式转换.
+
+``` sh
+IXCODE=`xcode-select -print-path`
+ISDK=$IXCODE/Platforms/iPhoneOS.platform/Developer
+ITEXTURE=$ISDK/usr/bin/texturetool
+
+# ${1} 代表外部传入的图片路径
+${ITEXTURE}  -m -f pvr -e PVRTC --bits-per-pixel-2 ${1} -o ${1%%.*}".pvr" -p ${1%%.*}"_prev.pvr"
+```
+
+你可以在[这里][i5]下载到完整的脚本.
 
 ### 2）Qualcomm Adreno
 工具[下载地址][i2]
@@ -219,8 +261,11 @@ for %%i in (*.tga) do PVRTexTool.exe -f ETC -i %%i
 for %%i in (*.tga) do texconv.exe -f DXT5 %%i
 (将本目录下的所有tga文件，转换成”DXT5″编码格式的dds文件，不带mipmap)
 
-转载自: http://www.cnblogs.com/luming1979/archive/2013/02/04/2891421.html
+
+
 
 [i1]: http://www.imgtec.com/powervr/insider/sdkdownloads/index.asp?installer=Windows%20Installer
 [i2]: https://developer.qualcomm.com/mobile-development/mobile-technologies/gaming-graphics-optimization-adreno/tools-and-resources
 [i3]: http://malideveloper.arm.com/develop-for-mali/mali-gpu-texture-compression-tool/
+[i4]: https://stackoverflow.com/questions/14488005/pvrtc-texture-with-mipmaps-stays-black
+[i5]: https://github.com/huailiang/OpenGLEngine/blob/dev/tools/texture.sh
