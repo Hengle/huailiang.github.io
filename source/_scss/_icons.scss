@@ -1,16 +1,14 @@
-$icons-family: 'end2end-icons';
+$icons-family: 'ico';
 $icons-path: '../fonts/';
 $icon-home: "\e900";
-$icon-search: "\e906";
-$icon-share: "\e909";
-$icon-google-plus: "\e901";
-$icon-facebook: "\e90a";
-$icon-facebook-rounded: "\e90b";
-$icon-twitter: "\e90c";
-$icon-twitter-rounded: "\e90d";
-$icon-feed: "\e90e";
-$icon-github: "\e90f";
-$icon-linkedin: "\e905";
+$icon-zhihu: "\e900";
+$icon-share: "\ea7d";
+$icon-sina: "\ea9a";
+$icon-facebook: "\ea90";
+$icon-twitter: "\ea96";
+$icon-feed: "\ea9b";
+$icon-github: "\eab0";
+$icon-linkedin: "\eaca";
 
 @font-face {
   font-family: $icons-family;
@@ -18,7 +16,7 @@ $icon-linkedin: "\e905";
   src:url('#{$icons-path}#{$icons-family}.eot?vs69d0#iefix') format('embedded-opentype'),
       url('#{$icons-path}#{$icons-family}.ttf?vs69d0') format('truetype'),
       url('#{$icons-path}#{$icons-family}.woff?vs69d0') format('woff'),
-      url('#{$icons-path}#{$icons-family}.svg?vs69d0#end2end-icons') format('svg');
+      url('#{$icons-path}#{$icons-family}.svg?vs69d0#ico') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -36,13 +34,11 @@ $icon-linkedin: "\e905";
 }
 
 .icon-home:before { content: $icon-home; }
-.icon-search:before { content: $icon-search; }
+.icon-zhihu:before { content: $icon-zhihu; }
 .icon-share:before { content: $icon-share; }
-.icon-google-plus:before { content: $icon-google-plus; }
+.icon-sina:before { content: $icon-sina; }
 .icon-facebook:before { content: $icon-facebook; }
-.icon-facebook-rounded:before { content: $icon-facebook-rounded; }
 .icon-twitter:before { content: $icon-twitter; }
-.icon-twitter-rounded:before { content: $icon-twitter-rounded; }
 .icon-feed:before { content: $icon-feed; }
 .icon-github:before { content: $icon-github; }
 .icon-linkedin:before { content: $icon-linkedin; }
