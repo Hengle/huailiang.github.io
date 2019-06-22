@@ -340,6 +340,17 @@ body.home {
   }
 }
 
+.site-share {
+  background-color: $white-color;
+  border-top: 0px solid rgba($light-gray-color, .5);
+  padding: $base-spacing;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
 .github-corner {
   &:hover .octo-arm {
     animation: octocat-wave 560ms ease-in-out;
