@@ -25,15 +25,15 @@ tags:
 根据前面对环境光照的描述，环境光照也应该符合这个公式，只不过相对于直接光照，它需要计算更多的入射光线。 
 
 
-$$ L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{1}$$
+$$ L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i $$
 
 同时从渲染方程可以看出，我们可以把渲染方程拆成两个部分进行处理：
 
-$$ L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i + \int\limits_{\Omega} (k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{2}$$
+$$ L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i + \int\limits_{\Omega} (k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i $$
 
 本篇文章集中于处理： 
 
-$$ L_o(p,\omega_o) = k_d\frac{c}{\pi} \int\limits_{\Omega} L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{3}$$
+$$ L_o(p,\omega_o) = k_d\frac{c}{\pi} \int\limits_{\Omega} L_i(p,\omega_i) n \cdot \omega_i d\omega_i $$
 
 对于这个方程，我们就可以将周围环境的所有光照信息保存在一张环境贴图中，而这个环境贴图就模拟了所有的。
 
@@ -90,14 +90,14 @@ $$ dwi=sinθdθdϕ $$
 
 所以，方程转变为如下形式： 
 
-$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{5}$$
+$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{1}$$
 
 
 上述公式转换为Riemann Sum(黎曼和)的表述：
 
 Riemann Sum是一种很简单的积分方法，当我们的步进值越小的时候，通过这种方法计算出来的h值就越加的接近真实值。 
 
-$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{6}$$
+$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{2}$$
 
 
 
