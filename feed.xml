@@ -5,8 +5,8 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 23 Jun 2019 19:50:09 +0800</pubDate>
-    <lastBuildDate>Sun, 23 Jun 2019 19:50:09 +0800</lastBuildDate>
+    <pubDate>Sun, 23 Jun 2019 23:16:16 +0800</pubDate>
+    <lastBuildDate>Sun, 23 Jun 2019 23:16:16 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
@@ -21,15 +21,15 @@
 
 &lt;p&gt;根据前面对环境光照的描述，环境光照也应该符合这个公式，只不过相对于直接光照，它需要计算更多的入射光线。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{1}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i&lt;/script&gt;
 
 &lt;p&gt;同时从渲染方程可以看出，我们可以把渲染方程拆成两个部分进行处理：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i + \int\limits_{\Omega} (k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{2}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = \int\limits_{\Omega} (k_d\frac{c}{\pi}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i + \int\limits_{\Omega} (k_s\frac{DFG}{4(\omega_o \cdot n)(\omega_i \cdot n)}) L_i(p,\omega_i) n \cdot \omega_i d\omega_i&lt;/script&gt;
 
 &lt;p&gt;本篇文章集中于处理：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = k_d\frac{c}{\pi} \int\limits_{\Omega} L_i(p,\omega_i) n \cdot \omega_i d\omega_i  \tag{3}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\omega_o) = k_d\frac{c}{\pi} \int\limits_{\Omega} L_i(p,\omega_i) n \cdot \omega_i d\omega_i&lt;/script&gt;
 
 &lt;p&gt;对于这个方程，我们就可以将周围环境的所有光照信息保存在一张环境贴图中，而这个环境贴图就模拟了所有的。&lt;/p&gt;
 
@@ -82,13 +82,13 @@
 
 &lt;p&gt;所以，方程转变为如下形式：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{5}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{1}&lt;/script&gt;
 
 &lt;p&gt;上述公式转换为Riemann Sum(黎曼和)的表述：&lt;/p&gt;
 
 &lt;p&gt;Riemann Sum是一种很简单的积分方法，当我们的步进值越小的时候，通过这种方法计算出来的h值就越加的接近真实值。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{6}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{2}&lt;/script&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;vec3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irradiance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;vec3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
 
