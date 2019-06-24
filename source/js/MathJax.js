@@ -1485,23 +1485,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return a;
       },
       loadFile: function(b, d, e) {
-        e = MathJax.Callback(e);
-        b = d.file || b;
-        if (!b.match(/\.js$/)) {
-          b += '.js';
-        }
-        if (!b.match(/^([a-z]+:|\[MathJax\])/)) {
-          var a =
-            this.strings[this.locale].directory ||
-            this.directory + '/' + this.locale ||
-            '[MathJax]/localization/' + this.locale;
-          b = a + '/' + b;
-        }
-        var c = MathJax.Ajax.Require(b, function() {
-          d.isLoaded = true;
-          return e();
-        });
-        return c.called ? null : c;
+              return null;
       },
       loadDomain: function(c, e) {
         var b,
