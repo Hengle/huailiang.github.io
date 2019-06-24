@@ -84,20 +84,21 @@ vec2 sampling_equirectangular_map(vec3 n) {
 
 为了方便进行积分运算，一般都将渲染方程改为球面坐标的积分形式，其中： 
 
-$$ n⋅wi=cosθ $$
+$$ n⋅\omega_i=\cos\theta $$
 
-$$ dwi=sinθdθdϕ $$ 
+
+$$ d\omega_i=\sin\theta d\phi d\theta $$  
 
 所以，方程转变为如下形式： 
 
-$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{1}$$
+$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos\theta \sin\theta d\phi d\theta $$
 
 
 上述公式转换为Riemann Sum(黎曼和)的表述：
 
 Riemann Sum是一种很简单的积分方法，当我们的步进值越小的时候，通过这种方法计算出来的h值就越加的接近真实值。 
 
-$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{2}$$
+$$ L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \frac{1}{n1 n2} \sum_{\phi = 0}^{n1} \sum_{\theta = 0}^{n2} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta $$
 
 
 
