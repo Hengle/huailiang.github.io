@@ -1,9 +1,12 @@
-# ==============================================
+# ================================================================================
 # This tool is for fast deploy 
-# ----------------------------------------------
+# --------------------------------------------------------------------------------
 # Author: Huailiang.Peng
 # Data:   2019.05.03
-# ==============================================
+# Usage:
+#	sh deploy.sh arg1  
+#		如果arg1是1 会重新生成_site, 不带arg1或者arg1是其他值的时候回工作目录的cached _site
+# =================================================================================
 #!/bin/sh
 
 
@@ -14,17 +17,23 @@ echo $name
 
 cd $path
 
-# echo "重新生成_site"
+if [[ ${1} == 1 ]]; then
 
-# bundle exec jekyll b
+echo "重新生成_site"
 
-# if [ $? -ne 0 ]; then
-# 	echo "sorry, build _site failure, job terminal!"
-#     exit 1
-# fi
+bundle exec jekyll b
+
+if [ $? -ne 0 ]; then
+	echo "sorry, build _site failure, job terminal!"
+    exit 1
+fi
+fi
 
 
 cd /tmp/
+
+# 清理之前残留的目录
+rm -rf temp.*
 
 tempdir=`mktemp -d temp.XXXXXX`
 
@@ -82,11 +91,5 @@ git add .
 git commit -m "deploy "`date +"%Y-%m-%d"`
 
 git push
-
-open .
-
-cd ../../
-
-rm -rf ${tempdir}
 
 echo "job done, bye"
