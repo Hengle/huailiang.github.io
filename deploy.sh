@@ -14,21 +14,21 @@ echo $name
 
 cd $path
 
-echo "重新生成_site"
+# echo "重新生成_site"
 
-bundle exec jekyll b
+# bundle exec jekyll b
 
-if [ $? -ne 0 ]; then
-	echo "sorry, build _site failure, job terminal!"
-    exit 1
-fi
+# if [ $? -ne 0 ]; then
+# 	echo "sorry, build _site failure, job terminal!"
+#     exit 1
+# fi
 
 
-cd ../
+cd /tmp/
 
 tempdir=`mktemp -d temp.XXXXXX`
 
-cp -R $name $tempdir
+cp -R ${path} ${tempdir}
 
 cd  ${tempdir}/${name}
 
@@ -67,9 +67,9 @@ done
 
 cd ../
 
-mv LICENSE $name
+mv LICENSE ${name}
 
-mv README.md $name
+mv README.md ${name}
 
 cd $name
 
@@ -87,6 +87,6 @@ open .
 
 cd ../../
 
-rm -rf $tempdir
+rm -rf ${tempdir}
 
 echo "job done, bye"
