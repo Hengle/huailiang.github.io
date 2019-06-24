@@ -141,13 +141,13 @@ MathJax.Hub.Config({
 
 <p>为了方便进行积分运算，一般都将渲染方程改为球面坐标的积分形式，其中：</p>
 
-<script type="math/tex; mode=display">n⋅wi=cosθ</script>
+<script type="math/tex; mode=display">n⋅\omega_i=\cos\theta</script>
 
-<script type="math/tex; mode=display">dwi=sinθdθdϕ</script>
+<script type="math/tex; mode=display">d\omega_i=\sin\theta d\phi d\theta</script>
 
 <p>所以，方程转变为如下形式：</p>
 
-<script type="math/tex; mode=display">L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{1}</script>
+<script type="math/tex; mode=display">L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos\theta \sin\theta d\phi d\theta \tag{1}</script>
 
 <p>上述公式转换为Riemann Sum(黎曼和)的表述：</p>
 

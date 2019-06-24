@@ -5,8 +5,8 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 24 Jun 2019 09:44:51 +0800</pubDate>
-    <lastBuildDate>Mon, 24 Jun 2019 09:44:51 +0800</lastBuildDate>
+    <pubDate>Mon, 24 Jun 2019 16:33:49 +0800</pubDate>
+    <lastBuildDate>Mon, 24 Jun 2019 16:33:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
@@ -76,13 +76,13 @@
 
 &lt;p&gt;为了方便进行积分运算，一般都将渲染方程改为球面坐标的积分形式，其中：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;n⋅wi=cosθ&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;n⋅\omega_i=\cos\theta&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;dwi=sinθdθdϕ&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;d\omega_i=\sin\theta d\phi d\theta&lt;/script&gt;
 
 &lt;p&gt;所以，方程转变为如下形式：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos(\theta) \sin(\theta) d\phi d\theta \tag{1}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_o(p,\phi_o, \theta_o) = k_d\frac{c}{\pi} \int_{\phi = 0}^{2\pi} \int_{\theta = 0}^{\frac{1}{2}\pi} L_i(p,\phi_i, \theta_i) \cos\theta \sin\theta d\phi d\theta \tag{1}&lt;/script&gt;
 
 &lt;p&gt;上述公式转换为Riemann Sum(黎曼和)的表述：&lt;/p&gt;
 

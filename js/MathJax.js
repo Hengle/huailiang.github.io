@@ -1485,23 +1485,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return a;
       },
       loadFile: function(b, d, e) {
-        e = MathJax.Callback(e);
-        b = d.file || b;
-        if (!b.match(/\.js$/)) {
-          b += '.js';
-        }
-        if (!b.match(/^([a-z]+:|\[MathJax\])/)) {
-          var a =
-            this.strings[this.locale].directory ||
-            this.directory + '/' + this.locale ||
-            '[MathJax]/localization/' + this.locale;
-          b = a + '/' + b;
-        }
-        var c = MathJax.Ajax.Require(b, function() {
-          d.isLoaded = true;
-          return e();
-        });
-        return c.called ? null : c;
+              return null;
       },
       loadDomain: function(c, e) {
         var b,
@@ -2501,72 +2485,72 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
       },
       processError: function(b, c, a) {
-      //   if (!b.restart) {
-      //     if (!this.config.errorSettings.message) {
-      //       throw b;
-      //     }
-      //     this.formatError(c.scripts[c.i], b);
-      //     c.i++;
-      //   }
-      //   this.processMessage(c, a);
-      //   return MathJax.Callback.After(['process' + a, this, c], b.restart);
-      // },
-      // formatError: function(b, f) {
-      //   var h = function(l, k, j, i) {
-      //     return MathJax.Localization._(l, k, j, i);
-      //   };
-      //   var e = h('ErrorMessage', 'Error: %1', f.message) + '\n';
-      //   if (f.sourceURL || f.fileName) {
-      //     e += '\n' + h('ErrorFile', 'file: %1', f.sourceURL || f.fileName);
-      //   }
-      //   if (f.line || f.lineNumber) {
-      //     e += '\n' + h('ErrorLine', 'line: %1', f.line || f.lineNumber);
-        // }
-        // e +=
-        //   '\n\n' +
-        //   h(
-        //     'ErrorTips',
-        //     'Debugging tips: use %1, inspect %2 in the browser console',
-        //     "'unpacked/MathJax.js'",
-        //     "'MathJax.Hub.lastError'"
-        //   );
-        // b.MathJax.error = MathJax.OutputJax.Error.Jax(e, b);
-        // if (b.MathJax.elementJax) {
-        //   b.MathJax.error.inputID = b.MathJax.elementJax.inputID;
-        // }
-        // var g = this.config.errorSettings;
-        // var a = h(g.messageId, g.message);
-        // var c = MathJax.HTML.Element(
-        //   'span',
-        //   {
-        //     className: 'MathJax_Error',
-        //     jaxID: 'Error',
-        //     isMathJax: true,
-        //     id: b.MathJax.error.inputID + '-Frame'
-        //   },
-        //   [['span', null, a]]
-        // );
-        // MathJax.Ajax.Require('[MathJax]/extensions/MathEvents.js', function() {
-        //   var j = MathJax.Extension.MathEvents.Event,
-        //     i = MathJax.Hub;
-        //   c.oncontextmenu = j.Menu;
-        //   c.onmousedown = j.Mousedown;
-        //   c.onkeydown = j.Keydown;
-        //   c.tabIndex = i.getTabOrder(i.getJaxFor(b));
-        // });
-        // var d = document.getElementById(c.id);
-        // if (d) {
-        //   d.parentNode.removeChild(d);
-        // }
-        // if (b.parentNode) {
-        //   b.parentNode.insertBefore(c, b);
-        // }
-        // if (b.MathJax.preview) {
-        //   b.MathJax.preview.innerHTML = '';
-        //   b.MathJax.preview.style.display = 'none';
-        // }
-        // this.lastError = f;
-        // this.signal.Post(['Math Processing Error', b, f]);
+        if (!b.restart) {
+          if (!this.config.errorSettings.message) {
+            throw b;
+          }
+          this.formatError(c.scripts[c.i], b);
+          c.i++;
+        }
+        this.processMessage(c, a);
+        return MathJax.Callback.After(['process' + a, this, c], b.restart);
+      },
+      formatError: function(b, f) {
+        var h = function(l, k, j, i) {
+          return MathJax.Localization._(l, k, j, i);
+        };
+        var e = h('ErrorMessage', 'Error: %1', f.message) + '\n';
+        if (f.sourceURL || f.fileName) {
+          e += '\n' + h('ErrorFile', 'file: %1', f.sourceURL || f.fileName);
+        }
+        if (f.line || f.lineNumber) {
+          e += '\n' + h('ErrorLine', 'line: %1', f.line || f.lineNumber);
+        }
+        e +=
+          '\n\n' +
+          h(
+            'ErrorTips',
+            'Debugging tips: use %1, inspect %2 in the browser console',
+            "'unpacked/MathJax.js'",
+            "'MathJax.Hub.lastError'"
+          );
+        b.MathJax.error = MathJax.OutputJax.Error.Jax(e, b);
+        if (b.MathJax.elementJax) {
+          b.MathJax.error.inputID = b.MathJax.elementJax.inputID;
+        }
+        var g = this.config.errorSettings;
+        var a = h(g.messageId, g.message);
+        var c = MathJax.HTML.Element(
+          'span',
+          {
+            className: 'MathJax_Error',
+            jaxID: 'Error',
+            isMathJax: true,
+            id: b.MathJax.error.inputID + '-Frame'
+          },
+          [['span', null, a]]
+        );
+        MathJax.Ajax.Require('[MathJax]/extensions/MathEvents.js', function() {
+          var j = MathJax.Extension.MathEvents.Event,
+            i = MathJax.Hub;
+          c.oncontextmenu = j.Menu;
+          c.onmousedown = j.Mousedown;
+          c.onkeydown = j.Keydown;
+          c.tabIndex = i.getTabOrder(i.getJaxFor(b));
+        });
+        var d = document.getElementById(c.id);
+        if (d) {
+          d.parentNode.removeChild(d);
+        }
+        if (b.parentNode) {
+          b.parentNode.insertBefore(c, b);
+        }
+        if (b.MathJax.preview) {
+          b.MathJax.preview.innerHTML = '';
+          b.MathJax.preview.style.display = 'none';
+        }
+        this.lastError = f;
+        this.signal.Post(['Math Processing Error', b, f]);
       },
       RestartAfter: function(a) {
         throw this.Insert(Error('restart'), { restart: MathJax.Callback(a) });
