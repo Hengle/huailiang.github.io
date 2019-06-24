@@ -104,9 +104,11 @@ MathJax.Hub.Config({
 
 <p>现在业界,对于IBL普遍使用的是Cube Map的形式。本篇文章也将主要使用Cube Map来进行IBL。</p>
 
-<p>从前面一篇文章描述中我们知道，HDR对于PBR的重要性，没有了HDR，PBR的效果将大大折扣。所以，对于IBL来说，我们依然需要使用HDR。也就说，对于周围环境光照的描述，需要通过HDR的格式文件来保存。</p>
+<p>HDR对于PBR非常重要，没有了HDR，PBR的效果将大大折扣。所以，对于IBL来说，我们依然需要使用HDR。也就说，对于周围环境光照的描述，需要通过HDR的格式文件来保存。</p>
 
-<p>本文的所有使用的环境光照贴图将从sIBL中获取，这个网站里面有很多免费使用的HDR光照贴图，我们将从这些图中选择一些进行测试。</p>
+<p>本文的所有使用的环境光照贴图将从<a href="http://www.hdrlabs.com/sibl/archive.html">sIBL</a>中获取，这个网站里面有很多免费使用的HDR光照贴图，我们将从这些图中选择一些进行测试。</p>
+
+<p><img src="/img/in-post/post-engine/tex11.jpg" alt="" /></p>
 
 <p>需要注意的是，这个网站里面的HDR贴图并不是CubeMap的形式，而是EquirectangularMap的形式进行保存的，所以接下来我们需要解决两个问题：如何读取.hdr文件，如何对这个贴图进行filter。</p>
 
@@ -120,24 +122,39 @@ MathJax.Hub.Config({
 
 <p>我们前面说过，我们将使用Cube Map来进行IBL。所以，我们需要一种方法来将该Equirectangular Map转换为Cube Map。为此，我们先简单的绘制一个球体，然后将这个Equirectangular Map贴上去，然后使用传统的创建Cube Map的方式产生一张Cube Map。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">vec2</span> <span class="nf">sampling_equirectangular_map</span><span class="p">(</span><span class="n">vec3</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">float</span> <span class="n">u</span> <span class="o">=</span> <span class="n">atan</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">n</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="n">PI</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">PI</span><span class="p">);</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#version 330 core
+</span><span class="k">out</span> <span class="kt">vec4</span> <span class="n">FragColor</span><span class="p">;</span>
+<span class="k">in</span> <span class="kt">vec3</span> <span class="n">WorldPos</span><span class="p">;</span>
 
-    <span class="kt">float</span> <span class="n">v</span> <span class="o">=</span> <span class="n">asin</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">PI</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">PI</span><span class="p">);</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">equirectangularMap</span><span class="p">;</span>
 
-    <span class="k">return</span> <span class="n">vec2</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+<span class="k">const</span> <span class="kt">vec2</span> <span class="n">invAtan</span> <span class="o">=</span> <span class="kt">vec2</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">1591</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3183</span><span class="p">);</span>
+<span class="kt">vec2</span> <span class="nf">SampleSphericalMap</span><span class="p">(</span><span class="kt">vec3</span> <span class="n">v</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="kt">vec2</span><span class="p">(</span><span class="n">atan</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="n">asin</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+    <span class="n">uv</span> <span class="o">*=</span> <span class="n">invAtan</span><span class="p">;</span>
+    <span class="n">uv</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">uv</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>		
+    <span class="kt">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="n">SampleSphericalMap</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">WorldPos</span><span class="p">));</span>
+    <span class="kt">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">texture</span><span class="p">(</span><span class="n">equirectangularMap</span><span class="p">,</span> <span class="n">uv</span><span class="p">).</span><span class="n">rgb</span><span class="p">;</span>
+    
+    <span class="n">FragColor</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre>
 </div>
 
 <p>通过计算atan(n.z, n.x)就能够得到具有该法线顶点的UV坐标的U值，通过计算asin(n.y)就能够得到具有该法线顶点的UV坐标的V值。同时，由于atan函数返回的结果在[−π,π]<br />
-之间，而asin返回的结果在[−π2,π2]之间，所有需要把它们都映射到[0,1]之间。</p>
+之间，而asin返回的结果在[−π/2,π/2]之间，所有需要把它们都映射到[0,1]之间。</p>
 
 <p>在得到了这个球体之后，我们就可以简单的使用传统的方法来创建CubeMap，主要就是通过设置FOV为90度的摄像机，分别朝着+X,-X,+Y,-Y,+Z,-Z去观察该球体，然后渲染CubeMap的6个面，从而得到一张HDR的CubeMap。</p>
 
 <h2 id="section-1">预计算辐射光照贴图</h2>
+
+<p><img src="/img/in-post/post-engine/tex10.png" alt="" /></p>
 
 <p>为了方便进行积分运算，一般都将渲染方程改为球面坐标的积分形式，其中：</p>
 
@@ -198,17 +215,10 @@ $$
     \end{matrix}
 $$
 
-
-$\frac{d}{dx}e^{ax}=ae^{ax}\quad \sum_{i=1}^{n}{(X_i - \overline{X})^2}$
-
-$\lbrace \sum_{i=0}^{n}i^{2}=\frac{2a}{x^2+1} \rbrace$
-
-$\int ^2_3 x^2 {\rm d}x$
-
-
 $$\lim_{n\rightarrow+\infty} n \tag{3}$$
 
 $$e^{i\theta}=cos\theta+\sin\theta i\tag{1}$$  -->
+
 
     </div>
 
