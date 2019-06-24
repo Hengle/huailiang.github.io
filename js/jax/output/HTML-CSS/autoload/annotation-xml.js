@@ -1,14 +1,19 @@
-/*
- *  /MathJax/jax/output/HTML-CSS/autoload/annotation-xml.js
+/*************************************************************
  *
- *  Copyright (c) 2009-2018 The MathJax Consortium
+ *  MathJax/jax/output/HTML-CSS/autoload/annotation-xm;l.js
+ *  
+ *  Implements the HTML-CSS output for <annotation-xml> elements.
  *
+ *  ---------------------------------------------------------------------
+ *  
+ *  Copyright (c) 2011-2012 Design Science, Inc.
+ * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,39 +21,38 @@
  *  limitations under the License.
  */
 
-MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready', function() {
-  var c = '2.7.5';
-  var a = MathJax.ElementJax.mml,
-    b = MathJax.OutputJax['HTML-CSS'];
-  a['annotation-xml'].Augment({
-    toHTML: function(f) {
-      f = this.HTMLhandleSize(this.HTMLcreateSpan(f));
-      var g = this.Get('encoding');
-      for (var e = 0, d = this.data.length; e < d; e++) {
-        this.data[e].toHTML(f, g);
-      }
-      this.HTMLhandleSpace(f);
-      this.HTMLhandleColor(f);
-      return f;
+MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+  var VERSION = "2.0";
+  var MML = MathJax.ElementJax.mml,
+      HTMLCSS = MathJax.OutputJax["HTML-CSS"];
+
+  MML["annotation-xml"].Augment({
+    toHTML: function (span) {
+      span = this.HTMLhandleSize(this.HTMLcreateSpan(span));
+      var encoding = this.Get("encoding");
+      for (var i = 0, m = this.data.length; i < m; i++)
+        {this.data[i].toHTML(span,encoding)}
+      this.HTMLhandleSpace(span);
+      this.HTMLhandleColor(span);
+      return span;
     },
-    HTMLgetScale: function() {
-      return this.SUPER(arguments).HTMLgetScale.call(this) / b.scale;
+    HTMLgetScale: function () {
+      return this.SUPER(arguments).HTMLgetScale.call(this) / HTMLCSS.scale;
     }
   });
-  a.xml.Augment({
-    toHTML: function(f, g) {
-      for (var e = 0, d = this.data.length; e < d; e++) {
-        f.appendChild(this.data[e].cloneNode(true));
-      }
-      var j = f.bbox;
-      f.bbox = null;
-      j.rw = j.w = b.getW(f);
-      var h = b.getHD(f);
-      j.h = h.h;
-      j.d = h.d;
-      f.bbox = j;
+  
+  MML.xml.Augment({
+    toHTML: function (span,encoding) {
+      for (var i = 0, m = this.data.length; i < m; i++) 
+        {span.appendChild(this.data[i].cloneNode(true))}
+      span.bbox.w = HTMLCSS.getW(span); span.bbox.rw = span.bbox.w;
+      var HD = HTMLCSS.getHD(span);
+      span.bbox.h = HD.h; span.bbox.d = HD.d;
     }
   });
-  MathJax.Hub.Startup.signal.Post('HTML-CSS annotation-xml Ready');
-  MathJax.Ajax.loadComplete(b.autoloadDir + '/annotation-xml.js');
+  
+  MathJax.Hub.Startup.signal.Post("HTML-CSS annotation-xml Ready");
+  MathJax.Ajax.loadComplete(HTMLCSS.autoloadDir+"/annotation-xml.js");
+
 });
+

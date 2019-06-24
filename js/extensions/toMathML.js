@@ -1,316 +1,178 @@
+/*************************************************************
+ *
+ *  MathJax/extensions/toMathML.js
+ *  
+ *  Implements a toMathML() method for the mml Element Jax that returns
+ *  a MathML string from a given math expression.
+ *
+ *  ---------------------------------------------------------------------
+ *  
+ *  Copyright (c) 2010-2012 Design Science, Inc.
+ * 
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
-MathJax.Hub.Register.LoadHook('[MathJax]/jax/element/mml/jax.js', function() {
-  var c = '2.7.5';
-  var a = MathJax.ElementJax.mml,
-    b = MathJax.Hub.config.menuSettings;
-  a.mbase.Augment({
-    toMathML: function(l) {
-      var h = this.inferred && this.parent.inferRow;
-      if (l == null) {
-        l = '';
+MathJax.Hub.Register.LoadHook("[MathJax]/jax/element/mml/jax.js",function () {
+  var VERSION = "2.0";
+  
+  var MML = MathJax.ElementJax.mml
+      SETTINGS = MathJax.Hub.config.menuSettings;
+  
+  MML.mbase.Augment({
+
+    toMathML: function (space) {
+      var inferred = (this.inferred && this.parent.inferRow);
+      if (space == null) {space = ""}
+      var tag = this.type, attr = this.toMathMLattributes();
+      if (tag === "mspace") {return space + "<"+tag+attr+" />"}
+      var data = []; var SPACE = (this.isToken ? "" : space+(inferred ? "" : "  "));
+      for (var i = 0, m = this.data.length; i < m; i++) {
+        if (this.data[i]) {data.push(this.data[i].toMathML(SPACE))}
+          else if (!this.isToken) {data.push(SPACE+"<mrow />")}
       }
-      var f = this.type,
-        e = this.toMathMLattributes();
-      if (f === 'mspace') {
-        return l + '<' + f + e + ' />';
-      }
-      var k = [],
-        j = this.isToken ? '' : l + (h ? '' : '  ');
-      for (var g = 0, d = this.data.length; g < d; g++) {
-        if (this.data[g]) {
-          k.push(this.data[g].toMathML(j));
-        } else {
-          if (!this.isToken && !this.isChars) {
-            k.push(j + '<mrow />');
-          }
-        }
-      }
-      if (this.isToken || this.isChars) {
-        return l + '<' + f + e + '>' + k.join('') + '</' + f + '>';
-      }
-      if (h) {
-        return k.join('\n');
-      }
-      if (k.length === 0 || (k.length === 1 && k[0] === '')) {
-        return l + '<' + f + e + ' />';
-      }
-      return l + '<' + f + e + '>\n' + k.join('\n') + '\n' + l + '</' + f + '>';
+      if (this.isToken) {return space + "<"+tag+attr+">"+data.join("")+"</"+tag+">"}
+      if (inferred) {return data.join("\n")}
+      if (data.length === 0 || (data.length === 1 && data[0] === ""))
+        {return space + "<"+tag+attr+" />"}
+      return space + "<"+tag+attr+">\n"+data.join("\n")+"\n"+ space +"</"+tag+">";
     },
-    toMathMLattributes: function() {
-      var j =
-        this.type === 'mstyle' ? a.math.prototype.defaults : this.defaults;
-      var h = this.attrNames || a.copyAttributeNames,
-        g = a.skipAttributes,
-        l = a.copyAttributes;
-      var e = [];
-      if (this.type === 'math' && (!this.attr || !('xmlns' in this.attr))) {
-        e.push('xmlns="http://www.w3.org/1998/Math/MathML"');
-      }
+
+    toMathMLattributes: function () {
+      var attr = [], defaults = this.defaults;
+      var copy = (this.attrNames||MML.copyAttributeNames), skip = MML.skipAttributes;
+
+      if (this.type === "math") {attr.push('xmlns="http://www.w3.org/1998/Math/MathML"')}
       if (!this.attrNames) {
-        for (var k in j) {
-          if (!g[k] && !l[k] && j.hasOwnProperty(k)) {
-            if (this[k] != null && this[k] !== j[k]) {
-              if (this.Get(k, null, 1) !== this[k]) {
-                e.push(k + '="' + this.toMathMLattribute(this[k]) + '"');
-              }
-            }
+        if (this.type === "mstyle") {defaults = MML.math.prototype.defaults}
+        for (var id in defaults) {if (!skip[id] && defaults.hasOwnProperty(id)) {
+          var force = (id === "open" || id === "close");
+          if (this[id] != null && (force || this[id] !== defaults[id])) {
+            var value = this[id]; delete this[id];
+            if (force || this.Get(id) !== value)
+              {attr.push(id+'="'+this.toMathMLattribute(value)+'"')}
+            this[id] = value;
           }
-        }
+        }}
       }
-      for (var f = 0, d = h.length; f < d; f++) {
-        if (l[h[f]] === 1 && !j.hasOwnProperty(h[f])) {
-          continue;
-        }
-        value = (this.attr || {})[h[f]];
-        if (value == null) {
-          value = this[h[f]];
-        }
-        if (value != null) {
-          e.push(h[f] + '="' + this.toMathMLquote(value) + '"');
-        }
+      for (var i = 0, m = copy.length; i < m; i++) {
+        if (copy[i] === "class") continue;  // this is handled separately below
+        value = (this.attr||{})[copy[i]]; if (value == null) {value = this[copy[i]]}
+        if (value != null) {attr.push(copy[i]+'="'+this.toMathMLquote(value)+'"')}
       }
-      this.toMathMLclass(e);
-      if (e.length) {
-        return ' ' + e.join(' ');
-      } else {
-        return '';
-      }
+      this.toMathMLclass(attr);
+      if (attr.length) {return " "+attr.join(" ")} else {return ""}
     },
-    toMathMLclass: function(d) {
-      var f = [];
-      if (this['class']) {
-        f.push(this['class']);
+    toMathMLclass: function (attr) {
+      var CLASS = []; if (this["class"]) {CLASS.push(this["class"])}
+      if (this.isa(MML.TeXAtom) && SETTINGS.texHints) {
+        var TEXCLASS = ["ORD","OP","BIN","REL","OPEN","CLOSE","PUNCT","INNER","VCENTER"][this.texClass];
+        if (TEXCLASS) {CLASS.push("MJX-TeXAtom-"+TEXCLASS)}
       }
-      if (this.isa(a.TeXAtom) && b.texHints) {
-        var e = [
-          'ORD',
-          'OP',
-          'BIN',
-          'REL',
-          'OPEN',
-          'CLOSE',
-          'PUNCT',
-          'INNER',
-          'VCENTER'
-        ][this.texClass];
-        if (e) {
-          f.push('MJX-TeXAtom-' + e);
-          if (e === 'OP' && !this.movablelimits) {
-            f.push('MJX-fixedlimits');
-          }
-        }
-      }
-      if (this.mathvariant && this.toMathMLvariants[this.mathvariant]) {
-        f.push('MJX' + this.mathvariant);
-      }
-      if (this.variantForm) {
-        f.push('MJX-variant');
-      }
-      if (f.length) {
-        d.unshift('class="' + this.toMathMLquote(f.join(' ')) + '"');
-      }
+      if (this.mathvariant && this.toMathMLvariants[this.mathvariant])
+        {CLASS.push("MJX"+this.mathvariant)}
+      if (this.arrow) {CLASS.push("MJX-arrow")}
+      if (this.variantForm) {CLASS.push("MJX-variant")}
+      if (CLASS.length) {attr.unshift('class="'+CLASS.join(" ")+'"')}
     },
-    toMathMLattribute: function(d) {
-      if (
-        typeof d === 'string' &&
-        d.replace(/ /g, '').match(/^(([-+])?(\d+(\.\d*)?|\.\d+))mu$/)
-      ) {
-        return (
-          (RegExp.$2 || '') +
-          ((1 / 18) * RegExp.$3).toFixed(3).replace(/\.?0+$/, '') +
-          'em'
-        );
-      } else {
-        if (this.toMathMLvariants[d]) {
-          return this.toMathMLvariants[d];
-        }
+    toMathMLattribute: function (value) {
+      if (typeof(value) === "string" &&
+          value.replace(/ /g,"").match(/^(([-+])?(\d+(\.\d*)?|\.\d+))mu$/)) {
+        // FIXME:  should take scriptlevel into account
+        return ((1/18)*RegExp.$1).toFixed(3).replace(/\.?0+$/,"")+"em";
       }
-      return this.toMathMLquote(d);
+      else if (this.toMathMLvariants[value]) {return this.toMathMLvariants[value]}
+      return this.toMathMLquote(value);
     },
     toMathMLvariants: {
-      '-tex-caligraphic': a.VARIANT.SCRIPT,
-      '-tex-caligraphic-bold': a.VARIANT.BOLDSCRIPT,
-      '-tex-oldstyle': a.VARIANT.NORMAL,
-      '-tex-oldstyle-bold': a.VARIANT.BOLD,
-      '-tex-mathit': a.VARIANT.ITALIC
+      "-tex-caligraphic":      MML.VARIANT.SCRIPT,
+      "-tex-caligraphic-bold": MML.VARIANT.BOLDSCRIPT,
+      "-tex-oldstyle":         MML.VARIANT.NORMAL,
+      "-tex-oldstyle-bold":    MML.VARIANT.BOLD,
+      "-tex-mathit":           MML.VARIANT.ITALIC
     },
-    toMathMLquote: function(f) {
-      f = String(f).split('');
-      for (var g = 0, d = f.length; g < d; g++) {
-        var k = f[g].charCodeAt(0);
-        if (k <= 55295 || 57344 <= k) {
-          if (k > 126 || (k < 32 && k !== 10 && k !== 13 && k !== 9)) {
-            f[g] = '&#x' + k.toString(16).toUpperCase() + ';';
-          } else {
-            var j = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[
-              f[g]
-            ];
-            if (j) {
-              f[g] = j;
-            }
-          }
+    
+    toMathMLquote: function (string) {
+      string = String(string).split("");
+      for (var i = 0, m = string.length; i < m; i++) {
+        var n = string[i].charCodeAt(0);
+        if (n < 0x20 || n > 0x7E) {
+          string[i] = "&#x"+n.toString(16).toUpperCase()+";";
         } else {
-          if (g + 1 < d) {
-            var h = f[g + 1].charCodeAt(0);
-            var e = ((k - 55296) << 10) + (h - 56320) + 65536;
-            f[g] = '&#x' + e.toString(16).toUpperCase() + ';';
-            f[g + 1] = '';
-            g++;
-          } else {
-            f[g] = '';
-          }
+          var c = {'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;'}[string[i]];
+          if (c) {string[i] = c}
         }
       }
-      return f.join('');
+      return string.join("");
     }
   });
-  a.math.Augment({
-    toMathML: function(d, e) {
-      var g;
-      if (d == null) {
-        d = '';
-      }
-      if (e && e.originalText && b.semantics) {
-        g = MathJax.InputJax[e.inputJax].annotationEncoding;
-      }
-      var n = this.data[0] && this.data[0].data.length > 1;
-      var p = this.type,
-        k = this.toMathMLattributes();
-      var j = [],
-        o = d + (g ? '  ' + (n ? '  ' : '') : '') + '  ';
-      for (var h = 0, f = this.data.length; h < f; h++) {
-        if (this.data[h]) {
-          j.push(this.data[h].toMathML(o));
-        } else {
-          j.push(o + '<mrow />');
-        }
-      }
-      if (j.length === 0 || (j.length === 1 && j[0] === '')) {
-        if (!g) {
-          return '<' + p + k + ' />';
-        }
-        j.push(o + '<mrow />');
-      }
-      if (g) {
-        if (n) {
-          j.unshift(d + '    <mrow>');
-          j.push(d + '    </mrow>');
-        }
-        j.unshift(d + '  <semantics>');
-        var l = e.originalText.replace(/[&<>]/g, function(i) {
-          return { '>': '&gt;', '<': '&lt;', '&': '&amp;' }[i];
-        });
-        j.push(
-          d +
-            '    <annotation encoding="' +
-            this.toMathMLquote(g) +
-            '">' +
-            l +
-            '</annotation>'
-        );
-        j.push(d + '  </semantics>');
-      }
-      return d + '<' + p + k + '>\n' + j.join('\n') + '\n' + d + '</' + p + '>';
-    }
-  });
-  a.msubsup.Augment({
-    toMathML: function(j) {
-      var f = this.type;
-      if (this.data[this.sup] == null) {
-        f = 'msub';
-      }
-      if (this.data[this.sub] == null) {
-        f = 'msup';
-      }
-      var e = this.toMathMLattributes();
+  
+  MML.msubsup.Augment({
+    toMathML: function (space) {
+      var tag = this.type;
+      if (this.data[this.sup] == null) {tag = "msub"}
+      if (this.data[this.sub] == null) {tag = "msup"}
+      var attr = this.toMathMLattributes();
       delete this.data[0].inferred;
-      var h = [];
-      for (var g = 0, d = this.data.length; g < d; g++) {
-        if (this.data[g]) {
-          h.push(this.data[g].toMathML(j + '  '));
-        }
-      }
-      return j + '<' + f + e + '>\n' + h.join('\n') + '\n' + j + '</' + f + '>';
+      var data = [];
+      for (var i = 0, m = this.data.length; i < m; i++)
+        {if (this.data[i]) {data.push(this.data[i].toMathML(space+"  "))}}
+      return space + "<"+tag+attr+">\n" + data.join("\n") + "\n" + space + "</"+tag+">";
     }
   });
-  a.munderover.Augment({
-    toMathML: function(k) {
-      var f = this.type;
-      var j = this.data[this.base];
-      if (j && j.isa(a.TeXAtom) && j.movablelimits && !j.Get('displaystyle')) {
-        type = 'msubsup';
-        if (this.data[this.under] == null) {
-          f = 'msup';
-        }
-        if (this.data[this.over] == null) {
-          f = 'msub';
-        }
-      } else {
-        if (this.data[this.under] == null) {
-          f = 'mover';
-        }
-        if (this.data[this.over] == null) {
-          f = 'munder';
-        }
-      }
-      var e = this.toMathMLattributes();
+  
+  MML.munderover.Augment({
+    toMathML: function (space) {
+      var tag = this.type;
+      if (this.data[this.under] == null) {tag = "mover"}
+      if (this.data[this.over] == null)  {tag = "munder"}
+      var attr = this.toMathMLattributes();
       delete this.data[0].inferred;
-      var h = [];
-      for (var g = 0, d = this.data.length; g < d; g++) {
-        if (this.data[g]) {
-          h.push(this.data[g].toMathML(k + '  '));
-        }
-      }
-      return k + '<' + f + e + '>\n' + h.join('\n') + '\n' + k + '</' + f + '>';
+      var data = [];
+      for (var i = 0, m = this.data.length; i < m; i++)
+        {if (this.data[i]) {data.push(this.data[i].toMathML(space+"  "))}}
+      return space + "<"+tag+attr+">\n" + data.join("\n") + "\n" + space + "</"+tag+">";
     }
   });
-  a.TeXAtom.Augment({
-    toMathML: function(e) {
-      var d = this.toMathMLattributes();
-      if (!d && this.data[0].data.length === 1) {
-        return e.substr(2) + this.data[0].toMathML(e);
-      }
-      return (
-        e +
-        '<mrow' +
-        d +
-        '>\n' +
-        this.data[0].toMathML(e + '  ') +
-        '\n' +
-        e +
-        '</mrow>'
-      );
+  
+  MML.TeXAtom.Augment({
+    toMathML: function (space) {
+      // FIXME:  Handle spacing using mpadded?
+      var attr = this.toMathMLattributes();
+      if (!attr && this.data[0].data.length === 1) {return space.substr(2) + this.data[0].toMathML(space)}
+      return space+"<mrow"+attr+">\n" + this.data[0].toMathML(space+"  ")+"\n"+space+"</mrow>";
     }
   });
-  a.chars.Augment({
-    toMathML: function(d) {
-      return (d || '') + this.toMathMLquote(this.toString());
-    }
+  
+  MML.chars.Augment({
+    toMathML: function (space) {return (space||"") + this.toMathMLquote(this.toString())}
   });
-  a.entity.Augment({
-    toMathML: function(d) {
-      return (
-        (d || '') +
-        '&' +
-        this.toMathMLquote(this.data[0]) +
-        ';<!-- ' +
-        this.toString() +
-        ' -->'
-      );
-    }
+  
+  MML.entity.Augment({
+    toMathML: function (space) {return (space||"") + "&"+this.data[0]+";<!-- "+this.toString()+" -->"}
   });
-  a.xml.Augment({
-    toMathML: function(d) {
-      return (d || '') + this.toString();
-    }
+  
+  MML.xml.Augment({
+   toMathML: function (space) {return (space||"") + this.toString()}
   });
-  MathJax.Hub.Register.StartupHook('TeX mathchoice Ready', function() {
-    a.TeXmathchoice.Augment({
-      toMathML: function(d) {
-        return this.Core().toMathML(d);
-      }
+  
+  MathJax.Hub.Register.StartupHook("TeX mathchoice Ready",function () {
+    MML.TeXmathchoice.Augment({
+      toMathML: function (space) {return this.Core().toMathML(space)}
     });
   });
-  MathJax.Hub.Startup.signal.Post('toMathML Ready');
+  
+  MathJax.Hub.Startup.signal.Post("toMathML Ready");
+  
 });
-MathJax.Ajax.loadComplete('[MathJax]/extensions/toMathML.js');
+
+MathJax.Ajax.loadComplete("[MathJax]/extensions/toMathML.js");
