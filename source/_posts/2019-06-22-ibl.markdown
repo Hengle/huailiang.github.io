@@ -146,15 +146,26 @@ for(float phi = 0.0; phi < 2.0 * PI; phi += sampleDelta)
 irradiance = PI * irradiance * (1.0 / float(nrSamples));
 ```
 
+
+
+预计算辐射光照贴图(irradianceMap). 这个计算过程输入为一张环境贴图 CubeMap .输出也是一张 CubeMap. 如下图所示.
+
+![](/img/in-post/post-engine/tex12.png)
+
+
+在球谐面卷积采样， 生成的图像有点类似模糊的效果。离线生成的irradianceMap大小就32x32, 精度不需要那么高, 中间值使用插值就可以得到。
+
+
+整个流程: 
+
+equirectangularmap(.hdr) -> envCubemap -> irradianceMap
+
+在引擎里看到的效果，就是如下所示:
+
+![](/img/in-post/post-engine/tex13.jpg)
+
+
 <!--
-$x+y=z$
-
-$\frac{7x+5}{1+y^2}$
-
-$\langle x \rangle$
-
- 
-2. 移动GPU大全
 
 $$
     \begin{matrix}
@@ -163,8 +174,6 @@ $$
     1 & z & z^2 \\
     \end{matrix}
 $$
-
-$$\lim_{n\rightarrow+\infty} n \tag{3}$$
 
 $$e^{i\theta}=cos\theta+\sin\theta i\tag{1}$$  -->
 
