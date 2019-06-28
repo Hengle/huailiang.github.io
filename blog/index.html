@@ -71,14 +71,36 @@ MathJax.Hub.Config({
     <article class="post">
   <header class="post-header">
     <h1 class="post-title2">
-      <a class="post-link" href="/blog/2019/ibl/">基于物理的渲染PBR之基于图像的光照IBL(Diffuse篇)</a>
+      <a class="post-link" href="/blog/2019/ibl2/">PBR之基于图像的光照IBL (Specular)</a>
+    </h1>
+    <div class="post-meta">
+      <time>Jun 27, 2019</time>
+    </div>
+  </header>
+
+  <p><a href="/blog/2019/ibl2/" title="Permalink to: PBR之基于图像的光照IBL (Specular)"
+      class="read-more">理论
+
+Hammersley采样
+
+
+  在图形学里面，用到了很多的采样算法。特别当你在写一个光线追踪器的时候，会使用大量的采样算法来对BRDF，光源等进行采样。这些采样操作，一般是先通过创建一个具有均匀分布的2D随机点集合，然后通过变换，将这些2D随机点变换到具体的采样数据上去，如BRDF的方向等等。其中经常被使用到的均匀分布的2D随机采样方式–Hammersley采样。
+
+
+Hammer...</a></p>
+</article>
+  
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title2">
+      <a class="post-link" href="/blog/2019/ibl/">PBR之基于图像的光照IBL (Diffuse)</a>
     </h1>
     <div class="post-meta">
       <time>Jun 22, 2019</time>
     </div>
   </header>
 
-  <p><a href="/blog/2019/ibl/" title="Permalink to: 基于物理的渲染PBR之基于图像的光照IBL(Diffuse篇)"
+  <p><a href="/blog/2019/ibl/" title="Permalink to: PBR之基于图像的光照IBL (Diffuse)"
       class="read-more">基于图像的光照(Image Based Lighting)
 
 在开始之前，我们先来了解下什么是基于图像的光照(IBL)。一个物体，不会单独的存在一个空空的环境里面，它的周围一定有其他的物体。当光源照射到其他物体上的时候，一定也会反射，其中就有很多反射的光线会反射到该物体上去。上一篇文章中我们模拟的是直接光照。对于直接光照系统，像上面那种其他物体反射过来的光，我们一般就只是使用一个Ambien...</a></p>
@@ -197,26 +219,6 @@ asin(x)  反正弦函数,输入参数取值区间为[−1,1]，返回角度值�
 
 
 为了实现类似的效果，我们在手游在还原端游的同时，也加入了染色系统。下面是一个自己实现的染色例...</a></p>
-</article>
-  
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title2">
-      <a class="post-link" href="/blog/2018/ppo/">强化学习-游戏AI Trainning (四)</a>
-    </h1>
-    <div class="post-meta">
-      <time>Nov 10, 2018</time>
-    </div>
-  </header>
-
-  <p><a href="/blog/2018/ppo/" title="Permalink to: 强化学习-游戏AI Trainning (四)"
-      class="read-more">
-  记得半年前，我介绍过强化学习的算法，比如说Q-learning, sara, DQN. 今天我们来介绍两种新的强化学习的算法Policy Gradient。  相较于之前的方法，今天的两种方式更加深入的使用深度神经网络。
-
-
-本文对应到github工程代码地址：https://github.com/huailiang/bird
-
-git clone https://github.com...</a></p>
 </article>
   
 
