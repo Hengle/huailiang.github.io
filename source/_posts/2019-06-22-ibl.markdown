@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "基于物理的渲染PBR之基于图像的光照IBL(Diffuse篇)"
+title:      "PBR之基于图像的光照IBL (Diffuse)"
 date:       2019-06-22 03:00:00
 author:     "Huailiang"
 tags:
