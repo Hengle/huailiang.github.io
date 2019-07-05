@@ -5,13 +5,17 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 04 Jul 2019 17:59:08 +0800</pubDate>
-    <lastBuildDate>Thu, 04 Jul 2019 17:59:08 +0800</lastBuildDate>
+    <pubDate>Fri, 05 Jul 2019 15:49:30 +0800</pubDate>
+    <lastBuildDate>Fri, 05 Jul 2019 15:49:30 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
         <title>球谐光照</title>
-        <description>&lt;h2 id=&quot;section&quot;&gt;球谐函数&lt;/h2&gt;
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;游戏中的光照可以被简单分为两个部分，直接光和间接光。直接光中我们研究各种不同的BRDF材质，甚至BSDF，BSSSRDF等等。这些模型据有很不错的表现力，足够我们区分金属，皮肤，木头等等不同物体的着色表现。但这并不能满足我们，因为光并不是那么简单，光会被反射，会被折射，会被透射，会被吸收，所以物体的受光情况同时又由这个场景的其他物体决定，这部分光照同时拥有着更加富强的表现力，被我们称作间接光。用来做这部分光照的算法也有很多，如raytracing，photonmap。这些算法很复杂也很有趣，不过这些并非我们讨论的重点。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;球谐函数&lt;/h2&gt;
 
 &lt;p&gt;球谐光照实际上是一种对光照的简化，对于空间上的一点，受到的光照在各个方向上是不同的，也即各向异性，所以空间上一点如果要完全还原光照情况，那就需要记录周围球面上所有方向的光照。注意这里考虑的周围环境往往是复杂的情况，而不是几个简单的光源，如果是那样的话，直接用光源的光照模型求和就可以了。&lt;/p&gt;
 
@@ -20,9 +24,12 @@
 &lt;p&gt;考虑一个简单场景中有个点，他周围的各个方向上的环境光照就是上面的cubemap呈现的，假如我想知道这个点各个方向的光照情况，那么就必须在cubemap对应的各个方向进行采样。对于一个大的场景来说，每个位置点的环境光都有可能不同，如果把每个点的环境光贴图储存起来，并且每次获取光照都从相应的贴图里面采样，可想而知这样的方法是非常昂贵的。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-Y_l^m = {\sqrt{2}} \left( K_l^msin(-m\phi)P_l^m(cos\theta) \right) \quad(m&gt;0) \\
-Y_l^m = {\sqrt{2}} \left( K_l^{m}sin(-m\phi)P_l^{-m}(cos\theta) \right) \quad(m&lt;0) \\ 
-Y_l^m = K_l^0P_l^0(cos\theta)\quad\quad\quad\quad\quad\quad\quad (m=0) %]]&gt;&lt;/script&gt;
+Y_l^m=
+\begin{cases}
+{\sqrt{2}}  K_l^mcos(m\phi)P_l^m(cos\theta)&amp; \text{(m&gt;0)}\\
+{\sqrt{2}}  K_l^{m}sin(-m\phi)P_l^{-m}(cos\theta)&amp; \text{(m&lt;0)}\\
+K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
+\end{cases} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;K为SH球谐函数的缩放因子，其公式表述如下：&lt;/p&gt;
 
@@ -76,7 +83,31 @@ Y_l^m = K_l^0P_l^0(cos\theta)\quad\quad\quad\quad\quad\quad\quad (m=0) %]]&gt;&l
 
 &lt;p&gt;这里面每个曲面都是用球坐标系表示的，球谐基都是定义在球坐标系上的函数，r（也就是离中心的距离）表示的就是这个球谐基在这个方向分量的重要程度。我是用类比傅里叶变换的方法来理解的，其实球谐函数本身就是拉普拉斯变换在球坐标系下的表示，这里的每个球谐基可以类比成傅里叶变换中频域的各个离散的频率，各个球谐基乘以对应的系数就可以还原出原来的球面函数。一个复杂的波形可以用简单的谐波和相应系数表示，同样的，一个复杂的球面上的函数也可以用简单的球谐基和相应的系数表示。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;球谐投影与重建&lt;/h2&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;采样&lt;/h2&gt;
+
+&lt;p&gt;在球面上均匀采样的映射的表达式, 并不是均匀的变化球面参数$\theta$ 和 $\phi$， 或者说如果我们直接给 [公式] 赋两个标准随机变量的话：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\left\{
+\begin{aligned}
+\theta &amp; = \xi_x \\
+\phi &amp; = \xi_y
+\end{aligned}
+\right. %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;产生的采样不会是均匀分布在球面上的，而是在两个极点处比较密集：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex22.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但是如果在$\theta-\phi$坐标系是均匀分布的：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex23.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;基于此， 我们在自己的&lt;a href=&quot;https://github.com/huailiang/OpenGLEngine&quot;&gt;引擎&lt;/a&gt;中我们采用了基于正太分布的采样（中间稠密， 两边稀疏），来近似实现均匀采样。但还不是严格的球面均匀采样的。&lt;/p&gt;
+
+&lt;p&gt;若要严格的均匀采样，可以参考这篇&lt;a href=&quot;http://corysimon.github.io/articles/uniformdistn-on-sphere/&quot;&gt;论文&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;球谐投影与重建&lt;/h2&gt;
 
 &lt;p&gt;根据蒙特卡罗尔积分:&lt;/p&gt;
 
@@ -84,11 +115,11 @@ Y_l^m = K_l^0P_l^0(cos\theta)\quad\quad\quad\quad\quad\quad\quad (m=0) %]]&gt;&l
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\int f(x) \,{\rm dx} = \sum_{l=0}^n \sum_{m={-l}}^l c_l^m y_l^m, \quad c_l^m = \int_S f(s)y_l^m(s) \,{\rm ds} \tag{1}&lt;/script&gt;
 
-&lt;p&gt;将l,m索引化为i=l(l+1)+m后可得：&lt;/p&gt;
+&lt;p&gt;再来解释一下l,m两项，这里l,m对应着不同的球谐基函数，通常l被称为带，而我们定义第i个球谐基函数为第l*(l+1)+m个。将l,m索引化为i=l(l+1)+m后可得：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;f(s) = \sum_{i=0}^{n^2} c_iy_i(s), \quad c_i = \int_S f(s)y_i(s) \,{\rm ds} \tag{2}&lt;/script&gt;
 
-&lt;p&gt;再对ci中的积分式用上述蒙特卡洛方法离散化后即可得&lt;/p&gt;
+&lt;p&gt;其中ci的过程又被称为投影， 再对ci中的积分式用上述蒙特卡洛方法离散化后即可得&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;c_i = \int_S f(s)y_i(s) \,{\rm ds} ≈ \frac{1}{N} \sum_{j=1}^{N}f(s_j)\omega(s_j)y_i(s_j)&lt;/script&gt;
 
@@ -101,6 +132,35 @@ Y_l^m = K_l^0P_l^0(cos\theta)\quad\quad\quad\quad\quad\quad\quad (m=0) %]]&gt;&l
 &lt;p&gt;从图中可以看出随着变换波段的不断增大，对原始函数的投影与重建质量就越高，但相应的球谐因子也就不断增多。&lt;/p&gt;
 
 &lt;p&gt;此外，球谐变换还有一个非常重要的特性[特性1]，即两个函数的乘积在球面空间上的积分值与它们的球谐系数向量组的点积相同。&lt;/p&gt;
+
+&lt;h2 id=&quot;unity&quot;&gt;Unity中的球谐光照应用&lt;/h2&gt;
+
+&lt;p&gt;unity中至少在光照探头和前向渲染的大量顶点光照这两个地方上使用了球谐光照的技术。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;光照探头：&lt;/h4&gt;
+&lt;p&gt;unity的光照探头在烘焙的时候为每个探头点附近采样光照值，然后计算每个点的球谐函数基底系数，用于运行时对于动态物体计算当前点的烘焙时的全局光照。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;前向渲染中的实时的顶点光照：&lt;/h4&gt;
+&lt;p&gt;前向渲染中光源数量太多，会降低运行效率。unity的正向渲染严格控制了光照的运算数量，具体的规则是，最亮的那盏直线光一定是像素光，其他标记了important的光源在数量不超过settimng里面pixel count的情况下是像素光，否则是顶点光，unity对于第一盏最亮的直线光在第一个bass pass 计算，并计算阴影，然后选择4盏顶点光在也在第一个pass同时计算，对于其他的像素光每个多加一个额外的add pass，对于再剩下的那些顶点光则按照球谐光照的方式在一个bass pass计算。这里面可以认为超过了一定限制的光最后都变成了球谐光照 。可以认为只要你设置了pixel count的限制，你打再多的光也不会把性能拖垮，因为最终他们会转变为球谐光照来伪实现实时光照。这里面的球谐光照的做法可以认为是当场景光源每次变化时将重新在场景上采样一个大的球面，然后计算球谐基底系数，因为这时候采样已经完全忽略了光源的位置，所以在unity中过多的实时的位置光将失去位置信息。&lt;/p&gt;
+
+&lt;h4 id=&quot;unity-1&quot;&gt;unity中参数的表示&lt;/h4&gt;
+
+&lt;p&gt;中ShadeSH9 是选择了全部的L0-L2的三组共9个系数，而在unity的实现中每组系数需要3个参数，这样全部的sh9就需要27 各参数，unity将其封装在7个rgba的color中传到shader里，这7个rgba在unity的shade中分别用unity_SHAr unity_SHAg unity_SHAb unity_SHBr unity_SHBg unity_SHBb unity_SHC来表示&lt;br /&gt;
+而上面的SHEvalLinearL0L1 表示只用L0L1的四组基底的球谐函数，half3 SHEvalLinearL2 表示只选用L2的五组基底的球谐函数。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// SH lighting environment
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHAr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHAg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHAb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHBr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHBg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHBb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;half4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unity_SHC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;通过unity的接口LightProbes.GetInterpolatedProbe即可以拿到场景某处的这组9&lt;em&gt;3的L0-L2的基底系数，他是一个结构体SphericalHarmonicsL2，访问它的3&lt;/em&gt;9的数组可以把他封装成7个rgba的color。&lt;/p&gt;
+
 </description>
         <pubDate>Thu, 04 Jul 2019 11:00:00 +0800</pubDate>
         <link>https://huailiang.github.io/blog/2019/harmonics/</link>
@@ -125,9 +185,7 @@ Y_l^m = K_l^0P_l^0(cos\theta)\quad\quad\quad\quad\quad\quad\quad (m=0) %]]&gt;&l
   &lt;p&gt;在图形学里面，用到了很多的采样算法。特别当你在写一个光线追踪器的时候，会使用大量的采样算法来对BRDF，光源等进行采样。这些采样操作，一般是先通过创建一个具有均匀分布的2D随机点集合，然后通过变换，将这些2D随机点变换到具体的采样数据上去，如BRDF的方向等等。其中经常被使用到的均匀分布的2D随机采样方式–Hammersley采样。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Hammersley采样，听上去好像很深奥的样子，实际上是一个十分简单的操作。&lt;/p&gt;
-
-&lt;p&gt;我们知道，在计算机里面大量使用了二进制来表示数据，如下表所示的一些十进制与二进制的对应关系：&lt;/p&gt;
+&lt;p&gt;Hammersley采样是在计算机里面大量使用了二进制来表示数据，如下表所示的一些十进制与二进制的对应关系：&lt;/p&gt;
 
 &lt;table&gt;
   &lt;thead&gt;
