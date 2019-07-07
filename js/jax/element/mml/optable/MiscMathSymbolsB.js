@@ -1,31 +1,12 @@
-/*************************************************************
- *
- *  MathJax/jax/output/HTML-CSS/optable/MiscMathSymbolsB.js
- *
- *  Copyright (c) 2010 Design Science, Inc.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
 
 (function (MML) {
   var MO = MML.mo.OPTYPES;
   var TEXCLASS = MML.TEXCLASS;
 
-  MathJax.Hub.Insert(MML.mo.prototype,{
+  MathJax.Hub.Insert(MML.mo.prototype, {
     OPTABLE: {
       prefix: {
-        '\u2980': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // triple vertical bar delimiter
+        '\u2980': [0, 0, TEXCLASS.ORD, { fence: true, stretchy: true }], // triple vertical bar delimiter
         '\u2983': MO.OPEN,     // left white curly bracket
         '\u2985': MO.OPEN,     // left white parenthesis
         '\u2987': MO.OPEN,     // z notation left image bracket
@@ -40,7 +21,7 @@
         '\u29FC': MO.OPEN      // left-pointing curved angle bracket
       },
       postfix: {
-        '\u2980': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // triple vertical bar delimiter
+        '\u2980': [0, 0, TEXCLASS.ORD, { fence: true, stretchy: true }], // triple vertical bar delimiter
         '\u2984': MO.CLOSE,    // right white curly bracket
         '\u2986': MO.CLOSE,    // right white parenthesis
         '\u2988': MO.CLOSE,    // z notation right image bracket
@@ -163,6 +144,6 @@
     }
   });
 
-  MathJax.Ajax.loadComplete(MML.optableDir+"/MiscMathSymbolsB.js");
+  MathJax.Ajax.loadComplete(MML.optableDir + "/MiscMathSymbolsB.js");
 
 })(MathJax.ElementJax.mml);
