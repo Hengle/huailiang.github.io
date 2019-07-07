@@ -1,4 +1,3 @@
-
 (function (MATHML) {
   MathJax.Hub.Insert(MATHML.Parse.Entity,{
     'IEcy': '\u0415',

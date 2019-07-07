@@ -916,8 +916,8 @@ MathJax.Hub.Config({
     //  Preferences", "Contextual Menu", and "Discoverable" menu items will
     //  be displayed or not.
     //
-    showRenderer: false,
-    showMathPlayer: false,
+    showRenderer: true,
+    showMathPlayer: true,
     showFontMenu: false,
     showContext: false,
     showDiscoverable: false,

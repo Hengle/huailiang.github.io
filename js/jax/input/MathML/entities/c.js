@@ -1,4 +1,5 @@
 
+
 (function (MATHML) {
   MathJax.Hub.Insert(MATHML.Parse.Entity,{
     'CHcy': '\u0427',

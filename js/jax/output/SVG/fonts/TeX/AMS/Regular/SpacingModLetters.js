@@ -1,5 +1,4 @@
 
-
 MathJax.Hub.Insert(
   MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
   {

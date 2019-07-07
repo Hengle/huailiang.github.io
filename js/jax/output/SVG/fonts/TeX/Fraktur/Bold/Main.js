@@ -1,5 +1,4 @@
 
-
 MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Fraktur-bold'] = {
   directory: 'Fraktur/Bold',
   family: 'MathJax_Fraktur',
