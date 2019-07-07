@@ -1,5 +1,3 @@
-
-
 MathJax.InputJax.MathML = MathJax.InputJax({
   id: "MathML",
   version: "2.0",
