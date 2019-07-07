@@ -57,8 +57,6 @@ author:
 navbar:
   - slug: about
     title: About
-  # - slug: resume
-  #   title: Skills
   - slug: blog
     title: Blog
 

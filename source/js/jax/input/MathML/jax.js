@@ -1,95 +1,70 @@
-/*************************************************************
- *
- *  MathJax/jax/input/MathML/jax.js
- *  
- *  Implements the MathML InputJax that reads mathematics in
- *  MathML format and converts it to the MML ElementJax
- *  internal format.
- *
- *  ---------------------------------------------------------------------
- *  
- *  Copyright (c) 2010-2012 Design Science, Inc.
- * 
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 
-(function (MATHML,BROWSER) {
+(function (MATHML, BROWSER) {
   var MML;
-  
+
   MATHML.Parse = MathJax.Object.Subclass({
 
-    Init: function (string) {this.Parse(string)},
-    
+    Init: function (string) { this.Parse(string) },
+
     //
     //  Parse the MathML and check for errors
     //
     Parse: function (math) {
       var doc;
-      if (typeof math !== "string") {doc = math.parentNode} else {
-        if (math.match(/^<[a-z]+:/i) && !math.match(/^<[^<>]* xmlns:/))
-          {math = math.replace(/^<([a-z]+)(:math)/i,'<$1$2 xmlns:$1="http://www.w3.org/1998/Math/MathML"')}
+      if (typeof math !== "string") { doc = math.parentNode } else {
+        if (math.match(/^<[a-z]+:/i) && !math.match(/^<[^<>]* xmlns:/)) { math = math.replace(/^<([a-z]+)(:math)/i, '<$1$2 xmlns:$1="http://www.w3.org/1998/Math/MathML"') }
         // HTML5 removes xmlns: namespaces, so put them back for XML
         var match = math.match(/^(<math( ('.*?'|".*?"|[^>])+)>)/i);
         if (match && match[2].match(/ (?!xmlns=)[a-z]+=\"http:/i)) {
-	  math = match[1].replace(/ (?!xmlns=)([a-z]+=(['"])http:.*?\2)/ig," xmlns:$1 $1") +
-	         math.substr(match[0].length);
+          math = match[1].replace(/ (?!xmlns=)([a-z]+=(['"])http:.*?\2)/ig, " xmlns:$1 $1") +
+            math.substr(match[0].length);
         }
-        math = math.replace(/^\s*(?:\/\/)?<!(--)?\[CDATA\[((.|\n)*)(\/\/)?\]\]\1>\s*$/,"$2");
-        math = math.replace(/&([a-z][a-z0-9]*);/ig,this.replaceEntity);
-        doc = MATHML.ParseXML(math); if (doc == null) {MATHML.Error("Error parsing MathML")}
+        math = math.replace(/^\s*(?:\/\/)?<!(--)?\[CDATA\[((.|\n)*)(\/\/)?\]\]\1>\s*$/, "$2");
+        math = math.replace(/&([a-z][a-z0-9]*);/ig, this.replaceEntity);
+        doc = MATHML.ParseXML(math); if (doc == null) { MATHML.Error("Error parsing MathML") }
       }
       var err = doc.getElementsByTagName("parsererror")[0];
-      if (err) MATHML.Error("Error parsing MathML: "+err.textContent.replace(/This page.*?errors:|XML Parsing Error: |Below is a rendering of the page.*/g,""));
+      if (err) MATHML.Error("Error parsing MathML: " + err.textContent.replace(/This page.*?errors:|XML Parsing Error: |Below is a rendering of the page.*/g, ""));
       if (doc.childNodes.length !== 1) MATHML.Error("MathML must be formed by a single element");
       if (doc.firstChild.nodeName.toLowerCase() === "html") {
         var h1 = doc.getElementsByTagName("h1")[0];
         if (h1 && h1.textContent === "XML parsing error" && h1.nextSibling)
-          MATHML.Error("Error parsing MathML: "+String(h1.nextSibling.nodeValue).replace(/fatal parsing error: /,""));
+          MATHML.Error("Error parsing MathML: " + String(h1.nextSibling.nodeValue).replace(/fatal parsing error: /, ""));
       }
-      if (doc.firstChild.nodeName.toLowerCase().replace(/^[a-z]+:/,"") !== "math")
-        MATHML.Error("MathML must be formed by a <math> element, not <"+doc.firstChild.nodeName+">");
+      if (doc.firstChild.nodeName.toLowerCase().replace(/^[a-z]+:/, "") !== "math")
+        MATHML.Error("MathML must be formed by a <math> element, not <" + doc.firstChild.nodeName + ">");
       this.mml = this.MakeMML(doc.firstChild);
     },
-    
+
     //
     //  Convert the MathML structure to the MathJax Element jax structure
     //
     MakeMML: function (node) {
-      var CLASS = String(node.getAttribute("class")||""); // make sure CLASS is a string
-      var mml, type = node.nodeName.toLowerCase().replace(/^[a-z]+:/,"");
+      var CLASS = String(node.getAttribute("class") || ""); // make sure CLASS is a string
+      var mml, type = node.nodeName.toLowerCase().replace(/^[a-z]+:/, "");
       var match = (CLASS.match(/(^| )MJX-TeXAtom-([^ ]*)/));
       if (match) {
         mml = this.TeXAtom(match[2]);
       } else if (!(MML[type] && MML[type].isa && MML[type].isa(MML.mbase))) {
-        MathJax.Hub.signal.Post(["MathML Jax - unknown node type",type]);
-        return MML.merror("Unknown node type: "+type);
+        MathJax.Hub.signal.Post(["MathML Jax - unknown node type", type]);
+        return MML.merror("Unknown node type: " + type);
       } else {
         mml = MML[type]();
       }
-      this.AddAttributes(mml,node); this.CheckClass(mml,CLASS);
-      this.AddChildren(mml,node);
-      if (MATHML.config.useMathMLspacing) {mml.useMMLspacing = 0x08}
+      this.AddAttributes(mml, node); this.CheckClass(mml, CLASS);
+      this.AddChildren(mml, node);
+      if (MATHML.config.useMathMLspacing) { mml.useMMLspacing = 0x08 }
       return mml;
     },
     TeXAtom: function (mclass) {
-      var mml = MML.TeXAtom().With({texClass:MML.TEXCLASS[mclass]});
-      if (mml.texClass === MML.TEXCLASS.OP) {mml.movesupsub = mml.movablelimits = true}
+      var mml = MML.TeXAtom().With({ texClass: MML.TEXCLASS[mclass] });
+      if (mml.texClass === MML.TEXCLASS.OP) { mml.movesupsub = mml.movablelimits = true }
       return mml;
     },
-    CheckClass: function (mml,CLASS) {
+    CheckClass: function (mml, CLASS) {
       CLASS = CLASS.split(/ /); var NCLASS = [];
       for (var i = 0, m = CLASS.length; i < m; i++) {
-        if (CLASS[i].substr(0,4) === "MJX-") {
+        if (CLASS[i].substr(0, 4) === "MJX-") {
           if (CLASS[i] === "MJX-arrow") {
             mml.arrow = true;
           } else if (CLASS[i] === "MJX-variant") {
@@ -98,196 +73,193 @@
             //  Variant forms come from AMSsymbols, and it sets up the
             //  character mappings, so load that if needed.
             //
-            if (!MathJax.Extension["TeX/AMSsymbols"])
-              {MathJax.Hub.RestartAfter(MathJax.Ajax.Require("[MathJax]/extensions/TeX/AMSsymbols.js"))}
-          } else if (CLASS[i].substr(0,11) !== "MJX-TeXAtom") {
+            if (!MathJax.Extension["TeX/AMSsymbols"]) { MathJax.Hub.RestartAfter(MathJax.Ajax.Require("[MathJax]/extensions/TeX/AMSsymbols.js")) }
+          } else if (CLASS[i].substr(0, 11) !== "MJX-TeXAtom") {
             mml.mathvariant = CLASS[i].substr(3);
             //
             //  Caligraphic and oldstyle bold are set up in the boldsymbol
             //  extension, so load it if it isn't already loaded.
             //  
             if (mml.mathvariant === "-tex-caligraphic-bold" ||
-                mml.mathvariant === "-tex-oldstyle-bold") {
-              if (!MathJax.Extension["TeX/boldsymbol"])
-                {MathJax.Hub.RestartAfter(MathJax.Ajax.Require("[MathJax]/extensions/TeX/boldsymbol.js"))}
+              mml.mathvariant === "-tex-oldstyle-bold") {
+              if (!MathJax.Extension["TeX/boldsymbol"]) { MathJax.Hub.RestartAfter(MathJax.Ajax.Require("[MathJax]/extensions/TeX/boldsymbol.js")) }
             }
           }
-        } else {NCLASS.push(CLASS[i])}
+        } else { NCLASS.push(CLASS[i]) }
       }
-      if (NCLASS.length) {mml["class"] = NCLASS.join(" ")} else {delete mml["class"]}
+      if (NCLASS.length) { mml["class"] = NCLASS.join(" ") } else { delete mml["class"] }
     },
-    
+
     //
     //  Add the attributes to the mml node
     //
-    AddAttributes: function (mml,node) {
+    AddAttributes: function (mml, node) {
       mml.attr = {}; mml.attrNames = [];
       for (var i = 0, m = node.attributes.length; i < m; i++) {
         var name = node.attributes[i].name;
-        if (name == "xlink:href") {name = "href"}
+        if (name == "xlink:href") { name = "href" }
         if (name.match(/:/)) continue;
         var value = node.attributes[i].value;
-        if (value.toLowerCase() === "true") {value = true}
-          else if (value.toLowerCase() === "false") {value = false}
-        if (mml.defaults[name] != null || MML.copyAttributes[name])
-          {mml[name] = value} else {mml.attr[name] = value}
+        if (value.toLowerCase() === "true") { value = true }
+        else if (value.toLowerCase() === "false") { value = false }
+        if (mml.defaults[name] != null || MML.copyAttributes[name]) { mml[name] = value } else { mml.attr[name] = value }
         mml.attrNames.push(name);
       }
     },
-    
+
     //
     //  Create the children for the mml node
     //
-    AddChildren: function (mml,node) {
+    AddChildren: function (mml, node) {
       for (var i = 0, m = node.childNodes.length; i < m; i++) {
         var child = node.childNodes[i];
         if (child.nodeName === "#comment") continue;
         if (child.nodeName === "#text") {
           if (mml.isToken && !mml.mmlSelfClosing) {
-            var text = child.nodeValue.replace(/&([a-z][a-z0-9]*);/ig,this.replaceEntity);
+            var text = child.nodeValue.replace(/&([a-z][a-z0-9]*);/ig, this.replaceEntity);
             mml.Append(MML.chars(this.trimSpace(text)));
           } else if (child.nodeValue.match(/\S/)) {
-            MATHML.Error("Unexpected text node: '"+child.nodeValue+"'");
+            MATHML.Error("Unexpected text node: '" + child.nodeValue + "'");
           }
         } else if (mml.type === "annotation-xml") {
           mml.Append(MML.xml(child));
         } else {
           var cmml = this.MakeMML(child); mml.Append(cmml);
-          if (cmml.mmlSelfClosing && cmml.data.length)
-            {mml.Append.apply(mml,cmml.data); cmml.data = []}
+          if (cmml.mmlSelfClosing && cmml.data.length) { mml.Append.apply(mml, cmml.data); cmml.data = [] }
         }
       }
     },
-    
+
     //
     //  Remove attribute whitespace
     //
     trimSpace: function (string) {
-      return string.replace(/[\t\n\r]/g," ")    // whitespace to spaces
-                   .replace(/^ +/,"")           // initial whitespace
-                   .replace(/ +$/,"")           // trailing whitespace
-                   .replace(/  +/g," ");        // internal multiple whitespace
+      return string.replace(/[\t\n\r]/g, " ")    // whitespace to spaces
+        .replace(/^ +/, "")           // initial whitespace
+        .replace(/ +$/, "")           // trailing whitespace
+        .replace(/  +/g, " ");        // internal multiple whitespace
     },
-    
+
     //
     //  Replace a named entity by its value
     //  (look up from external files if necessary)
     //
-    replaceEntity: function (match,entity) {
-      if (entity.match(/^(lt|amp|quot)$/)) {return match} // these mess up attribute parsing
-      if (MATHML.Parse.Entity[entity]) {return MATHML.Parse.Entity[entity]}
+    replaceEntity: function (match, entity) {
+      if (entity.match(/^(lt|amp|quot)$/)) { return match } // these mess up attribute parsing
+      if (MATHML.Parse.Entity[entity]) { return MATHML.Parse.Entity[entity] }
       var file = entity.charAt(0).toLowerCase();
       var font = entity.match(/^[a-zA-Z](fr|scr|opf)$/);
-      if (font) {file = font[1]}
+      if (font) { file = font[1] }
       if (!MATHML.Parse.loaded[file]) {
         MATHML.Parse.loaded[file] = true;
-        MathJax.Hub.RestartAfter(MathJax.Ajax.Require(MATHML.entityDir+"/"+file+".js"));
+        MathJax.Hub.RestartAfter(MathJax.Ajax.Require(MATHML.entityDir + "/" + file + ".js"));
       }
       return match;
     }
   }, {
-    loaded: []    // the entity files that are loaded
-  });
-  
+      loaded: []    // the entity files that are loaded
+    });
+
   /************************************************************************/
 
   MATHML.Augment({
     sourceMenuTitle: "Original MathML",
-    
-    prefilterHooks:    MathJax.Callback.Hooks(true),   // hooks to run before processing MathML
-    postfilterHooks:   MathJax.Callback.Hooks(true),   // hooks to run after processing MathML
+
+    prefilterHooks: MathJax.Callback.Hooks(true),   // hooks to run before processing MathML
+    postfilterHooks: MathJax.Callback.Hooks(true),   // hooks to run after processing MathML
 
     Translate: function (script) {
-      if (!this.ParseXML) {this.ParseXML = this.createParser()}
-      var mml, math, data = {script:script};
+      if (!this.ParseXML) { this.ParseXML = this.createParser() }
+      var mml, math, data = { script: script };
       if (script.firstChild &&
-          script.firstChild.nodeName.toLowerCase().replace(/^[a-z]+:/,"") === "math") {
+        script.firstChild.nodeName.toLowerCase().replace(/^[a-z]+:/, "") === "math") {
         data.math = script.firstChild;
         this.prefilterHooks.Execute(data); math = data.math;
       } else {
         math = MathJax.HTML.getScript(script);
-        if (BROWSER.isMSIE) {math = math.replace(/(&nbsp;)+$/,"")}
+        if (BROWSER.isMSIE) { math = math.replace(/(&nbsp;)+$/, "") }
         data.math = math; this.prefilterHooks.Execute(data); math = data.math;
       }
       try {
         mml = MATHML.Parse(math).mml;
-      } catch(err) {
-        if (!err.mathmlError) {throw err}
-        mml = this.formatError(err,math,script);
+      } catch (err) {
+        if (!err.mathmlError) { throw err }
+        mml = this.formatError(err, math, script);
       }
       data.math = MML(mml); this.postfilterHooks.Execute(data);
       return data.math;
     },
-    prefilterMath: function (math,script) {return math},
-    prefilterMathML: function (math,script) {return math},
-    formatError: function (err,math,script) {
-      var message = err.message.replace(/\n.*/,"");
-      MathJax.Hub.signal.Post(["MathML Jax - parse error",message,math,script]);
+    prefilterMath: function (math, script) { return math },
+    prefilterMathML: function (math, script) { return math },
+    formatError: function (err, math, script) {
+      var message = err.message.replace(/\n.*/, "");
+      MathJax.Hub.signal.Post(["MathML Jax - parse error", message, math, script]);
       return MML.merror(message);
     },
     Error: function (message) {
-      throw MathJax.Hub.Insert(Error(message),{mathmlError: true});
+      throw MathJax.Hub.Insert(Error(message), { mathmlError: true });
     },
     //
     //  Parsers for various forms (DOMParser, Windows ActiveX object, other)
     //
-    parseDOM: function (string) {return this.parser.parseFromString(string,"text/xml")},
-    parseMS: function (string) {return (this.parser.loadXML(string) ? this.parser : null)},
+    parseDOM: function (string) { return this.parser.parseFromString(string, "text/xml") },
+    parseMS: function (string) { return (this.parser.loadXML(string) ? this.parser : null) },
     parseDIV: function (string) {
-      this.div.innerHTML = string.replace(/<([a-z]+)([^>]*)\/>/g,"<$1$2></$1>");
+      this.div.innerHTML = string.replace(/<([a-z]+)([^>]*)\/>/g, "<$1$2></$1>");
       return this.div;
     },
-    parseError: function (string) {return null},
+    parseError: function (string) { return null },
     //
     //  Create the parser using a DOMParser, or other fallback method
     //
     createParser: function () {
       if (window.DOMParser) {
         this.parser = new DOMParser();
-        return(this.parseDOM);
+        return (this.parseDOM);
       } else if (window.ActiveXObject) {
-        var xml = ["MSXML2.DOMDocument.6.0","MSXML2.DOMDocument.5.0","MSXML2.DOMDocument.4.0",
-                   "MSXML2.DOMDocument.3.0","MSXML2.DOMDocument.2.0","Microsoft.XMLDOM"];
-        for (var i = 0, m = xml.length; i < m && !this.parser; i++)
-          {try {this.parser = new ActiveXObject(xml[i])} catch (err) {}}
+        var xml = ["MSXML2.DOMDocument.6.0", "MSXML2.DOMDocument.5.0", "MSXML2.DOMDocument.4.0",
+          "MSXML2.DOMDocument.3.0", "MSXML2.DOMDocument.2.0", "Microsoft.XMLDOM"];
+        for (var i = 0, m = xml.length; i < m && !this.parser; i++) { try { this.parser = new ActiveXObject(xml[i]) } catch (err) { } }
         if (!this.parser) {
-          alert("MathJax can't create an XML parser for MathML.  Check that\n"+
-                "the 'Script ActiveX controls marked safe for scripting' security\n"+
-                "setting is enabled (use the Internet Options item in the Tools\n"+
-                "menu, and select the Security panel, then press the Custom Level\n"+
-                "button to check this).\n\n"+
-                "MathML equations will not be able to be processed by MathJax.");
-          return(this.parseError);
+          alert("MathJax can't create an XML parser for MathML.  Check that\n" +
+            "the 'Script ActiveX controls marked safe for scripting' security\n" +
+            "setting is enabled (use the Internet Options item in the Tools\n" +
+            "menu, and select the Security panel, then press the Custom Level\n" +
+            "button to check this).\n\n" +
+            "MathML equations will not be able to be processed by MathJax.");
+          return (this.parseError);
         }
         this.parser.async = false;
-        return(this.parseMS);
+        return (this.parseMS);
       }
-      this.div = MathJax.Hub.Insert(document.createElement("div"),{
-           style:{visibility:"hidden", overflow:"hidden", height:"1px",
-                  position:"absolute", top:0}
+      this.div = MathJax.Hub.Insert(document.createElement("div"), {
+        style: {
+          visibility: "hidden", overflow: "hidden", height: "1px",
+          position: "absolute", top: 0
+        }
       });
-      if (!document.body.firstChild) {document.body.appendChild(this.div)}
-        else {document.body.insertBefore(this.div,document.body.firstChild)}
-      return(this.parseDIV);
+      if (!document.body.firstChild) { document.body.appendChild(this.div) }
+      else { document.body.insertBefore(this.div, document.body.firstChild) }
+      return (this.parseDIV);
     },
     //
     //  Initialize the parser object (whichever type is used)
     //
     Startup: function () {
       MML = MathJax.ElementJax.mml;
-      MML.mspace.Augment({mmlSelfClosing: true});
-      MML.none.Augment({mmlSelfClosing: true});
-      MML.mprescripts.Augment({mmlSelfClosing:true});
+      MML.mspace.Augment({ mmlSelfClosing: true });
+      MML.none.Augment({ mmlSelfClosing: true });
+      MML.mprescripts.Augment({ mmlSelfClosing: true });
     }
   });
-  
+
   //
   //  Add the default pre-filter (for backward compatibility)
   //
   MATHML.prefilterHooks.Add(function (data) {
-    data.math = (typeof(data.math) === "string" ?
-      MATHML.prefilterMath(data.math,data.script) :
-      MATHML.prefilterMathML(data.math,data.script));
+    data.math = (typeof (data.math) === "string" ?
+      MATHML.prefilterMath(data.math, data.script) :
+      MATHML.prefilterMathML(data.math, data.script));
   });
 
   MATHML.Parse.Entity = {
@@ -693,7 +665,7 @@
     zeta: '\u03B6',
     zigrarr: '\u21DD'
   };
-  
+
   MATHML.loadComplete("jax.js");
-  
-})(MathJax.InputJax.MathML,MathJax.Hub.Browser);
+
+})(MathJax.InputJax.MathML, MathJax.Hub.Browser);
