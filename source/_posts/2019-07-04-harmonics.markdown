@@ -175,6 +175,56 @@ $$  c_i = \frac{4\pi}{N}\sum_{j=1}^{N}f(s_j)y_i(s_j)  \tag{3}$$
 
 此外，球谐变换还有一个非常重要的特性[特性1]，即两个函数的乘积在球面空间上的积分值与它们的球谐系数向量组的点积相同。
 
+$$
+
+\int_S f1(s)f2(s)ds = \vec{c1}  \cdot \vec{c2} = \sum_{i=0}^{N}\vec{c1_i} \cdot \vec{c2_i}
+
+$$
+
+我们在glsl中重建球谐函数如下：
+
+``` glsl
+void main(void)
+{
+    float basis[16];
+    
+    float x = normal.x;
+    float y = normal.y;
+    float z = normal.z;
+    float x2 = x*x;
+    float y2 = y*y;
+    float z2 = z*z;
+    
+    basis[0]  = 1.f / 2.f * sqrt(1.f / PI);
+    basis[1]  = sqrt(3.f / (4.f*PI))*z;
+    basis[2]  = sqrt(3.f / (4.f*PI))*y;
+    basis[3]  = sqrt(3.f / (4.f*PI))*x;
+    basis[4]  = 1.f / 2.f * sqrt(15.f / PI) * x * z;
+    basis[5]  = 1.f / 2.f * sqrt(15.f / PI) * z * y;
+    basis[6]  = 1.f / 4.f * sqrt(5.f / PI) * (-x*x - z*z + 2 * y*y);
+    basis[7]  = 1.f / 2.f * sqrt(15.f / PI) * y * x;
+    basis[8]  = 1.f / 4.f * sqrt(15.f / PI) * (x*x - z*z);
+    basis[9]  = 1.f / 4.f * sqrt(35.f / (2.f*PI))*(3 * x2 - z2)*z;
+    basis[10] = 1.f / 2.f * sqrt(105.f / PI)*x*z*y;
+    basis[11] = 1.f / 4.f * sqrt(21.f / (2.f*PI))*z*(4 * y2 - x2 - z2);
+    basis[12] = 1.f / 4.f * sqrt(7.f / PI)*y*(2 * y2 - 3 * x2 - 3 * z2);
+    basis[13] = 1.f / 4.f * sqrt(21.f / (2.f*PI))*x*(4 * y2 - x2 - z2);
+    basis[14] = 1.f / 4.f * sqrt(105.f / PI)*(x2 - z2)*y;
+    basis[15] = 1.f / 4.f * sqrt(35.f / (2 * PI))*(x2 - 3 * z2)*x;
+    
+    vec3 c = vec3(0,0,0);
+    for (int i = 0; i < 16; i++)
+    {
+        c += coef[i] * basis[i];
+    }
+    
+    FragColor = vec4(c, 1);
+}
+```
+
+在[引擎][i1]里运行的效果如下图:
+
+![](/img/in-post/post-engine/tex24.jpg)
 
 ## Unity中的球谐光照应用
 
@@ -182,6 +232,8 @@ unity中至少在光照探头和前向渲染的大量顶点光照这两个地方
 
 #### 光照探头：
 unity的光照探头在烘焙的时候为每个探头点附近采样光照值，然后计算每个点的球谐函数基底系数，用于运行时对于动态物体计算当前点的烘焙时的全局光照。
+
+![](/img/in-post/post-engine/tex.jpg)
 
 #### 前向渲染中的实时的顶点光照：
 前向渲染中光源数量太多，会降低运行效率。unity的正向渲染严格控制了光照的运算数量，具体的规则是，最亮的那盏直线光一定是像素光，其他标记了important的光源在数量不超过settimng里面pixel count的情况下是像素光，否则是顶点光，unity对于第一盏最亮的直线光在第一个bass pass 计算，并计算阴影，然后选择4盏顶点光在也在第一个pass同时计算，对于其他的像素光每个多加一个额外的add pass，对于再剩下的那些顶点光则按照球谐光照的方式在一个bass pass计算。这里面可以认为超过了一定限制的光最后都变成了球谐光照 。可以认为只要你设置了pixel count的限制，你打再多的光也不会把性能拖垮，因为最终他们会转变为球谐光照来伪实现实时光照。这里面的球谐光照的做法可以认为是当场景光源每次变化时将重新在场景上采样一个大的球面，然后计算球谐基底系数，因为这时候采样已经完全忽略了光源的位置，所以在unity中过多的实时的位置光将失去位置信息。
@@ -191,7 +243,7 @@ unity的光照探头在烘焙的时候为每个探头点附近采样光照值，
 中ShadeSH9 是选择了全部的L0-L2的三组共9个系数，而在unity的实现中每组系数需要3个参数，这样全部的sh9就需要27 各参数，unity将其封装在7个rgba的color中传到shader里，这7个rgba在unity的shade中分别用unity_SHAr unity_SHAg unity_SHAb unity_SHBr unity_SHBg unity_SHBb unity_SHC来表示
 而上面的SHEvalLinearL0L1 表示只用L0L1的四组基底的球谐函数，half3 SHEvalLinearL2 表示只选用L2的五组基底的球谐函数。
 
-``` glsl
+``` c++
 // SH lighting environment
 half4 unity_SHAr;
 half4 unity_SHAg;
