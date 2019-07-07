@@ -1885,12 +1885,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
       //  if needed later on.
       //
       MenuZoom: function () {
-        if (!MathJax.Extension.MathMenu) {
-          setTimeout(
-            MathJax.Callback(["Require", MathJax.Ajax, "[MathJax]/extensions/MathMenu.js", {}]),
-            1000
-          );
-        }
+        if (!MathJax.Extension.MathMenu) { }
         if (!MathJax.Extension.MathZoom) {
           setTimeout(
             MathJax.Callback(["Require", MathJax.Ajax, "[MathJax]/extensions/MathZoom.js", {}]),
