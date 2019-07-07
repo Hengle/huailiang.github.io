@@ -530,8 +530,7 @@
     HUB.Register.StartupHook("End Config", {}), // wait until config is complete
     ["getImages", MENU],
     ["Styles", AJAX, CONFIG.styles],
-    ["Post", HUB.Startup.signal, "MathMenu Ready"],
-    ["loadComplete", AJAX, "[MathJax]/extensions/MathMenu.js"]
+    ["Post", HUB.Startup.signal, "MathMenu Ready"]
   );
 
 })(MathJax.Hub, MathJax.HTML, MathJax.Ajax, MathJax.CallBack, MathJax.OutputJax);
