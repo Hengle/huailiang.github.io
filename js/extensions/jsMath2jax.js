@@ -1,12 +1,6 @@
-
 MathJax.Extension.jsMath2jax = {
   version: "2.0",
-
-  config: {
-    preview: "TeX"    // Set to "none" to prevent preview strings from being inserted
-    //   or to an array that specifies an HTML snippet to use for
-    //   the preview.
-  },
+  config: { preview: "TeX"  },
 
   PreProcess: function (element) {
     if (!this.configured) {
