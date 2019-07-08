@@ -2,12 +2,7 @@
 MathJax.Extension.mml2jax = {
   version: "2.0",
   config: {
-    preview: "alttext"      // Use the <math> element's alttext as the 
-    //   preview.  Set to "none" for no preview,
-    //   or set to an array specifying an HTML snippet
-    //   to use a fixed preview for all math
-
-  },
+    preview: "alttext" },
   MMLnamespace: "http://www.w3.org/1998/Math/MathML",
 
   PreProcess: function (element) {

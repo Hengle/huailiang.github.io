@@ -5,23 +5,9 @@ MathJax.Extension.asciimath2jax = {
     delimiters: [['`', '`']],   // The star/stop delimiter pairs for asciimath code
 
     skipTags: ["script", "noscript", "style", "textarea", "pre", "code"],
-    // The names of the tags whose contents will not be
-    // scanned for math delimiters
-
-    ignoreClass: "asciimath2jax_ignore",   // the class name of elements whose contents should
-    // NOT be processed by asciimath2jax.  Note that this
-    // is a regular expression, so be sure to quote any
-    // regexp special characters
-
-    processClass: "asciimath2jax_process", // the class name of elements whose contents SHOULD
-    // be processed when they appear inside ones that
-    // are ignored.  Note that this is a regular expression,
-    // so be sure to quote any regexp special characters
-
-    preview: "AsciiMath"        // set to "none" to not insert MathJax_Preview spans
-    //   or set to an array specifying an HTML snippet
-    //   to use the same preview for every equation.
-
+    ignoreClass: "asciimath2jax_ignore",   
+    processClass: "asciimath2jax_process", 
+    preview: "AsciiMath"       
   },
 
   PreProcess: function (element) {

@@ -7,9 +7,6 @@
   HUB.Register.StartupHook("MathZoom Ready", function () { ZOOM = MathJax.Extension.MathZoom });
 
   nMML.Augment({
-    //
-    //  User can configure styles
-    //
     config: {
       styles: {
         ".MathJax_mmlExBox": {
