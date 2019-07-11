@@ -7,8 +7,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
     MathJax.version = "2.0";
     MathJax.fileversion = "2.0";
 
-    /**********************************************************/
-
     (function (BASENAME) {
       var BASE = window[BASENAME];
       if (!BASE) { BASE = window[BASENAME] = {} }
@@ -22,10 +20,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
       var CONSTRUCTOR = function () {
         return new Function("return arguments.callee.Init.call(this,arguments)");
       };
-      //
-      //  Test for Safari 2.x bug (can't replace prototype for result of new Function()).
-      //  (We don't use this version for everyone since it is a closure and we don't need that).
-      //
+
       var BUGTEST = CONSTRUCTOR(); BUGTEST.prototype = { bug_test: 1 };
       if (!BUGTEST.prototype.bug_test) {
         CONSTRUCTOR = function () {
@@ -131,63 +126,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     })("MathJax");
 
-    /**********************************************************/
-
-    /*
-     *  Create a callback function from various forms of data:
-     *  
-     *     MathJax.Callback(fn)    -- callback to a function
-     *
-     *     MathJax.Callback([fn])  -- callback to function
-     *     MathJax.Callback([fn,data...])
-     *                             -- callback to function with given data as arguments
-     *     MathJax.Callback([object,fn])
-     *                             -- call fn with object as "this"
-     *     MathJax.Callback([object,fn,data...])
-     *                             -- call fn with object as "this" and data as arguments
-     *     MathJax.Callback(["method",object])
-     *                             -- call method of object wth object as "this"
-     *     MathJax.Callback(["method",object,data...])
-     *                             -- as above, but with data as arguments to method
-     *
-     *     MathJax.Callback({hook: fn, data: [...], object: this})
-     *                             -- give function, data, and object to act as "this" explicitly
-     *
-     *     MathJax.Callback("code")  -- callback that compiles and executes a string
-     *
-     *     MathJax.Callback([...],i)
-     *                             -- use slice of array starting at i and interpret
-     *                                result as above.  (Used for passing "arguments" array
-     *                                and trimming initial arguments, if any.)
-     */
-
-    /*
-     *    MathJax.Callback.After([...],cb1,cb2,...)
-     *                             -- make a callback that isn't called until all the other
-     *                                ones are called first.  I.e., wait for a union of
-     *                                callbacks to occur before making the given callback.
-     */
-
-    /*
-     *  MathJax.Callback.Queue([callback,...])
-     *                             -- make a synchronized queue of commands that process
-     *                                sequentially, waiting for those that return uncalled
-     *                                callbacks.
-     */
-
-    /*
-     *  MathJax.Callback.Signal(name)
-     *                             -- finds or creates a names signal, to which listeners
-     *                                can be attached and are signaled by messages posted
-     *                                to the signal.  Responses can be asynchronous.
-     */
 
     (function (BASENAME) {
       var BASE = window[BASENAME];
       if (!BASE) { BASE = window[BASENAME] = {} }
-      //
-      //  Create a callback from an associative array
-      //
       var CALLBACK = function (data) {
         var cb = new Function("return arguments.callee.execute.apply(arguments.callee,arguments)");
         for (var id in CALLBACK.prototype) {
@@ -216,9 +158,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       var ISCALLBACK = function (f) {
         return (typeof (f) === "function" && f.isCallback);
       }
-      //
-      //  Evaluate a string in global context
-      //
       var EVAL = function (code) { return eval.call(window, code) }
       EVAL("var __TeSt_VaR__ = 1"); // check if it works in global context
       if (window.__TeSt_VaR__) {
@@ -250,9 +189,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         }
       }
-      //
-      //  Create a callback from various types of data
-      //
       var USING = function (args, i) {
         if (arguments.length > 1) {
           if (arguments.length === 2 && !(typeof arguments[0] === 'function') &&
@@ -282,18 +218,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
         throw Error("Can't make callback from given data");
       };
 
-      //
-      //  Wait for a given time to elapse and then perform the callback
-      //
       var DELAY = function (time, callback) {
         callback = USING(callback);
         callback.timeout = setTimeout(callback, time);
         return callback;
       };
 
-      //
-      //  Callback used by AFTER, QUEUE, and SIGNAL to check if calls have completed
-      //
       var WAITFOR = function (callback, signal) {
         callback = USING(callback);
         if (!callback.called) { WAITSIGNAL(callback, signal); signal.pending++ }
@@ -319,12 +249,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         else { callback.signal = callback.signal.concat(signals) }
       };
 
-      //
-      //  Create a callback that is called when a collection of other callbacks have
-      //  all been executed.  If the callback gets called immediately (i.e., the
-      //  others are all already called), check if it returns another callback
-      //  and return that instead.
-      //
       var AFTER = function (callback) {
         callback = USING(callback);
         callback.pending = 0;
@@ -336,21 +260,11 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return callback;
       };
 
-      //
-      //  An array of prioritized hooks that are executed sequentially
-      //  with a given set of data.
-      //
       var HOOKS = MathJax.Object.Subclass({
-        //
-        //  Initialize the array and the auto-reset status
-        //
         Init: function (reset) {
           this.hooks = [];
           this.reset = reset;
         },
-        //
-        //  Add a callback to the list, in priority order (default priority is 10)
-        //
         Add: function (hook, priority) {
           if (priority == null) { priority = 10 }
           if (!ISCALLBACK(hook)) { hook = USING(hook) }
@@ -366,10 +280,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         },
         //
-        //  Execute the list of callbacks, resetting them if requested.
-        //  If any return callbacks, return a callback that will be 
-        //  executed when they all have completed.
-        //
         Execute: function () {
           var callbacks = [{}];
           for (var i = 0, m = this.hooks.length; i < m; i++) {
@@ -383,10 +293,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
       });
 
-      //
-      //  Run an array of callbacks passing them the given data.
-      //  (Legacy function, since this has been replaced by the HOOKS object).
-      //
       var EXECUTEHOOKS = function (hooks, data, reset) {
         if (!hooks) { return null }
         if (!(hooks instanceof Array)) { hooks = [hooks] }
@@ -396,24 +302,14 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return handler.Execute.apply(handler, data);
       };
 
-      //
-      //  Command queue that performs commands in order, waiting when
-      //  necessary for commands to complete asynchronousely
-      //
       var QUEUE = BASE.Object.Subclass({
-        //
-        //  Create the queue and push any commands that are specified
         //
         Init: function () {
           this.pending = 0; this.running = 0;
           this.queue = [];
           this.Push.apply(this, arguments);
         },
-        //
-        //  Add commands to the queue and run them. Adding a callback object
-        //  (rather than a callback specification) queues a wait for that callback.
-        //  Return the final callback for synchronization purposes.
-        //
+
         Push: function () {
           var callback;
           for (var i = 0, m = arguments.length; i < m; i++) {
@@ -424,9 +320,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           if (!this.running && !this.pending) { this.Process() }
           return callback;
         },
-        //
-        //  Process the command queue if we aren't waiting on another command
-        //
         Process: function (queue) {
           while (!this.running && !this.pending && this.queue.length) {
             var callback = this.queue[0];
@@ -436,23 +329,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
             if (ISCALLBACK(result) && !result.called) { WAITFOR(result, this) }
           }
         },
-        //
-        //  Suspend/Resume command processing on this queue
-        //
         Suspend: function () { this.running++ },
         Resume: function () { if (this.running) { this.running-- } },
-        //
-        //  Used by WAITFOR to restart the queue when an action completes
-        //
         call: function () { this.Process.apply(this, arguments) },
         wait: function (callback) { return callback }
       });
 
-      //
-      //  Create a named signal that listeners can attach to, to be signaled by
-      //  postings made to the signal.  Posts are queued if they occur while one
-      //  is already in process.
-      //
       var SIGNAL = QUEUE.Subclass({
         Init: function (name) {
           QUEUE.prototype.Init.call(this);
@@ -460,9 +342,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           this.posted = [];              // the messages posted so far
           this.listeners = HOOKS(true);  // those with interest in this signal
         },
-        //
-        // Post a message to the signal listeners, with callback for when complete
-        //
         Post: function (message, callback, forget) {
           callback = USING(callback);
           if (this.posting || this.pending) {
@@ -478,9 +357,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
           return callback;
         },
-        //
-        //  Clear the post history (so new listeners won't get old messages)
-        //
         Clear: function (callback) {
           callback = USING(callback);
           if (this.posting || this.pending) {
@@ -491,15 +367,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
           return callback;
         },
-        //
-        //  Call the callback (all replies are in) and process the command queue
-        //
         call: function () { this.callback(this); this.Process() },
-
-        //
-        //  A listener calls this to register intrest in the signal (so it will be called
-        //  when posts occur).  If ignorePast is true, it will not be sent the post history.
-        //
         Interest: function (callback, ignorePast, priority) {
           callback = USING(callback);
           this.listeners.Add(callback, priority);
@@ -513,15 +381,9 @@ if (document.getElementById && document.childNodes && document.createElement) {
           return callback;
         },
         //
-        //  A listener calls this to remove itself from a signal
-        //
         NoInterest: function (callback) {
           this.listeners.Remove(callback);
         },
-
-        //
-        //  Hook a callback to a particular message on this signal
-        //
         MessageHook: function (msg, callback, priority) {
           callback = USING(callback);
           if (!this.hooks) { this.hooks = {}; this.Interest(["ExecuteHooks", this]) }
@@ -530,9 +392,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           for (var i = 0, m = this.posted.length; i < m; i++) { if (this.posted[i] == msg) { callback.reset(); callback(this.posted[i]) } }
           return callback;
         },
-        //
-        //  Execute the message hooks for the given message
-        //
         ExecuteHooks: function (msg, more) {
           var type = ((msg instanceof Array) ? msg[0] : msg);
           if (!this.hooks[type]) { return null }
@@ -547,9 +406,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         });
 
-      //
-      //  The main entry-points
-      //
       BASE.Callback = BASE.CallBack = USING;
       BASE.Callback.Delay = DELAY;
       BASE.Callback.After = AFTER;
@@ -560,8 +416,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
     })("MathJax");
 
 
-    /**********************************************************/
-
     (function (BASENAME) {
       var BASE = window[BASENAME];
       if (!BASE) { BASE = window[BASENAME] = {} }
@@ -570,9 +424,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         typeof navigator.vendorSub === "undefined");
       var sheets = 0; // used by Safari2
 
-      //
-      //  Update sheets count and look up the head object
-      //  
       var HEAD = function (head) {
         if (document.styleSheets && document.styleSheets.length > sheets) { sheets = document.styleSheets.length }
         if (!head) {
@@ -581,11 +432,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
         return head;
       };
-
-      //
-      //  Remove scripts that are completed so they don't clutter up the HEAD.
-      //  This runs via setTimeout since IE7 can't remove the script while it is running.
-      //
       var SCRIPTS = [];  // stores scripts to be removed after a delay
       var REMOVESCRIPTS = function () {
         for (var i = 0, m = SCRIPTS.length; i < m; i++) { BASE.Ajax.head.removeChild(SCRIPTS[i]) }
@@ -607,15 +453,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
         rootPattern: new RegExp("^\\[" + BASENAME + "\\]"),
 
-        //
-        //  Return a complete URL to a file (replacing the root pattern)
-        //
         fileURL: function (file) { return file.replace(this.rootPattern, this.config.root) },
-
-        //
-        //  Load a file if it hasn't been already.
-        //  Make sure the file URL is "safe"?
-        //
         Require: function (file, callback) {
           callback = BASE.Callback(callback); var type;
           if (file instanceof Object) { for (var i in file) { }; type = i.toUpperCase(); file = file[i] }
@@ -631,10 +469,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           return callback;
         },
 
-        //
-        //  Load a file regardless of where it is and whether it has
-        //  already been loaded.
-        //
         Load: function (file, callback) {
           callback = BASE.Callback(callback); var type;
           if (file instanceof Object) { for (var i in file) { }; type = i.toUpperCase(); file = file[i] }
@@ -650,10 +484,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           return callback;
         },
 
-        //
-        //  Register a load hook for a particular file (it will be called when
-        //  loadComplete() is called for that file)
-        //
         LoadHook: function (file, callback, priority) {
           callback = BASE.Callback(callback);
           if (file instanceof Object) { for (var i in file) { file = file[i] } }
@@ -667,9 +497,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
           this.loadHooks[file].Add(callback, priority);
         },
 
-        //
-        //  Used when files are combined in a preloading configuration file
-        //
+
         Preloading: function () {
           for (var i = 0, m = arguments.length; i < m; i++) {
             var file = this.fileURL(arguments[i]);
@@ -677,14 +505,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         },
 
-        //
-        //  Code used to load the various types of files
-        //  (JS for JavaScript, CSS for style sheets)
-        //
         loader: {
-          //
-          //  Create a SCRIPT tag to load the file
-          //
           JS: function (file, callback) {
             var script = document.createElement("script");
             var timeout = BASE.Callback(["loadTimeout", this, file]);
@@ -700,9 +521,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             script.src = file;
             this.head.appendChild(script);
           },
-          //
-          //  Create a LINK tag to load the style sheet
-          //
           CSS: function (file, callback) {
             var link = document.createElement("link");
             link.rel = "stylesheet"; link.type = "text/css"; link.href = file;
@@ -716,15 +534,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         },
 
-        //
-        //  Timing code for checking when style sheets are available.
-        //
         timer: {
-          //
-          //  Create the timing callback and start the timing loop.
-          //  We use a delay because some browsers need it to allow the styles
-          //  to be processed.
-          //
           create: function (callback, node) {
             callback = BASE.Callback(callback);
             if (node.nodeName === "STYLE" && node.styleSheet &&
@@ -740,9 +550,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             }
             return callback;
           },
-          //
-          //  Start the timer for the given callback checker
-          //
           start: function (AJAX, check, delay, timeout) {
             check = BASE.Callback(check);
             check.execute = this.execute; check.time = this.time;
@@ -750,29 +557,17 @@ if (document.getElementById && document.childNodes && document.createElement) {
             check.delay = check.total = 0;
             if (delay) { setTimeout(check, delay) } else { check() }
           },
-          //
-          //  Increment the time total, increase the delay
-          //  and test if we are past the timeout time.
-          //  
           time: function (callback) {
             this.total += this.delay;
             this.delay = Math.floor(this.delay * 1.05 + 5);
             if (this.total >= this.timeout) { callback(this.STATUS.ERROR); return 1 }
             return 0;
           },
-          //
-          //  For JS file loads, call the proper routine according to status
-          //
           file: function (file, status) {
             if (status < 0) { BASE.Ajax.loadTimeout(file) } else { BASE.Ajax.loadComplete(file) }
           },
           //
-          //  Call the hook with the required data
-          //
           execute: function () { this.hook.call(this.object, this, this.data[0], this.data[1]) },
-          //
-          //  Safari2 doesn't set the link's stylesheet, so we need to look in the
-          //  document.styleSheets array for the new sheet when it is created
           //
           checkSafari2: function (check, length, callback) {
             if (check.time(callback)) return;
@@ -780,20 +575,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
               document.styleSheets[length].cssRules &&
               document.styleSheets[length].cssRules.length) { callback(check.STATUS.OK) } else { setTimeout(check, check.delay) }
           },
-          //
-          //  Look for the stylesheets rules and check when they are defined
-          //  and no longer of length zero.  (This assumes there actually ARE
-          //  some rules in the stylesheet.)
-          //  
           checkLength: function (check, node, callback) {
             if (check.time(callback)) return;
             var isStyle = 0; var sheet = (node.sheet || node.styleSheet);
             try { if ((sheet.cssRules || sheet.rules || []).length > 0) { isStyle = 1 } } catch (err) {
               if (err.message.match(/protected variable|restricted URI/)) { isStyle = 1 }
               else if (err.message.match(/Security error/)) {
-                // Firefox3 gives "Security error" for missing files, so
-                //   can't distinguish that from OK files on remote servers.
-                //   or OK files in different directory from local files.
                 isStyle = 1; // just say it is OK (can't really tell)
               }
             }
@@ -806,11 +593,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
         },
 
-        //
-        //  JavaScript code must call this when they are completely initialized
-        //  (this allows them to perform asynchronous actions before indicating
-        //  that they are complete).
-        //
         loadComplete: function (file) {
           file = this.fileURL(file);
           var loading = this.loading[file];
@@ -832,10 +614,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           return this.loadHooks[file].Execute(loading.status);
         },
 
-        //
-        //  If a file fails to load within the timeout period (or the onerror handler
-        //  is called), this routine runs to signal the error condition.
-        //  
         loadTimeout: function (file) {
           if (this.loading[file].timeout) { clearTimeout(this.loading[file].timeout) }
           this.loading[file].status = this.STATUS.ERROR;
@@ -843,19 +621,11 @@ if (document.getElementById && document.childNodes && document.createElement) {
           this.loadComplete(file);
         },
 
-        //
-        //  The default error hook for file load failures
-        //
         loadError: function (file) {
           BASE.Message.Set("File failed to load: " + file, null, 2000);
           BASE.Hub.signal.Post(["file load error", file]);
         },
 
-        //
-        //  Defines a style sheet from a hash of style declarations (key:value pairs
-        //  where the key is the style selector and the value is a hash of CSS attributes 
-        //  and values).
-        //
         Styles: function (styles, callback) {
           var styleString = this.StyleString(styles);
           if (styleString === "") {
@@ -874,10 +644,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           }
           return callback;
         },
-
-        //
-        //  Create a stylesheet string from a style declaration object
-        //
         StyleString: function (styles) {
           if (typeof (styles) === 'string') { return styles }
           var string = "", id, style;
@@ -909,22 +675,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     })("MathJax");
 
-    /**********************************************************/
-
     MathJax.HTML = {
-      //
-      //  Create an HTML element with given attributes and content.
-      //  The def parameter is an (optional) object containing key:value pairs
-      //  of the attributes and their values, and contents is an (optional)
-      //  array of strings to be inserted as text, or arrays of the form
-      //  [type,def,contents] that describes an HTML element to be inserted
-      //  into the current element.  Thus the contents can describe a complete
-      //  HTML snippet of arbitrary complexity.  E.g.:
-      //  
-      //    MathJax.HTML.Element("span",{id:"mySpan",style{"font-style":"italic"}},[
-      //        "(See the ",["a",{href:"http://www.mathjax.org"},["MathJax home page"]],
-      //        " for more details.)"]);
-      // 
       Element: function (type, def, contents) {
         var obj = document.createElement(type);
         if (def) {
@@ -993,10 +744,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           document.cookie = cookie + "; path=/";
         },
 
-        //
-        //  Get the contents of a named cookie and incorporate
-        //  it into the given object (or return a fresh one)
-        //
         Get: function (name, obj) {
           if (!obj) { obj = {} }
           var pattern = new RegExp("(?:^|;\\s*)" + this.prefix + "\\." + name + "=([^;]*)(?:;|$)");
@@ -1017,8 +764,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     };
 
-
-    /**********************************************************/
 
     MathJax.Message = {
       ready: false,  // used to tell when the styles are available
@@ -1057,11 +802,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       Init: function (styles) {
         if (styles) { this.ready = true }
         if (!document.body || !this.ready) { return false }
-        //
-        //  ASCIIMathML replaces the entire page with a copy of itself (@#!#%@!!)
-        //  so check that this.div is still part of the page, otherwise look up
-        //  the copy and use that.
-        //
         if (this.div && this.div.parentNode == null) {
           this.div = document.getElementById("MathJax_Message");
           if (this.div) { this.text = this.div.firstChild }
@@ -1188,8 +928,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     };
 
-    /**********************************************************/
-
     MathJax.Hub = {
       config: {
         root: "",
@@ -1208,8 +946,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         showProcessingMessages: true, // display "Processing math: nn%" messages or not
         messageStyle: "normal",       // set to "none" or "simple" (for "Loading..." and "Processing...")
         delayStartupUntil: "none",    // set to "onload" to delay setup until the onload handler runs
-        // set to "configured" to delay startup until MathJax.Hub.Configured() is called
-        // set to a Callback to wait for before continuing with the startup
         skipStartupTypeset: false,    // set to true to skip PreProcess and Process during startup
         "v1.0-compatible": true,  // set to false to prevent message about configuration change
         elements: [],             // array of elements to process when none is given explicitly
@@ -1217,7 +953,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
         showMathMenu: false,      // attach math context menu to typeset math?
         showMathMenuMSIE: false,  // separtely determine if MSIE should have math menu
-        //  (since the code for that is a bit delicate)
 
         menuSettings: {
           zoom: "None",        //  when to do MathZoom
@@ -1236,7 +971,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         },
 
         errorSettings: {
-          message: ["[Math Processing Error]"], // HTML snippet structure for message to use
+          message: ["[Math Processing Error3]"], // HTML snippet structure for message to use
           style: { color: "#CC0000", "font-style": "italic" }  // style for message
         }
       },
@@ -1477,19 +1212,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
         var jax, STATE = MathJax.ElementJax.STATE;
         var script, prev, m = state.scripts.length;
         try {
-          //
-          //  Loop through the scripts
-          //
           while (state.i < m) {
             script = state.scripts[state.i]; if (!script) { state.i++; continue }
-            //
-            //  Remove previous error marker, if any
-            //
             prev = script.previousSibling;
             if (prev && prev.className === "MathJax_Error") { prev.parentNode.removeChild(prev) }
-            //
-            //  Check if already processed or needs processing
-            //
             if (!script.MathJax || script.MathJax.state === STATE.PROCESSED) { state.i++; continue };
             if (!script.MathJax.elementJax || script.MathJax.state === STATE.UPDATE) {
               this.checkScriptSiblings(script);                 // remove preJax/postJax etc.
@@ -1511,25 +1237,16 @@ if (document.getElementById && document.childNodes && document.createElement) {
             if (now - state.start > this.processUpdateTime && state.i < state.scripts.length) { state.start = now; this.RestartAfter(MathJax.Callback.Delay(1)) }
           }
         } catch (err) { return this.processError(err, state, "Input") }
-        //
-        //  Put up final message, reset the state and return
-        //
+
         if (state.scripts.length && this.config.showProcessingMessages) { MathJax.Message.Set("Processing math: 100%", 0) }
         state.start = new Date().getTime(); state.i = state.j = 0;
         return null;
       },
       saveScript: function (jax, state, script, STATE) {
-        //
-        //  Check that output jax exists
-        //
         if (!this.outputJax[jax.mimeType]) {
           script.MathJax.state = STATE.UPDATE;
           throw Error("No output jax registered for " + jax.mimeType);
         }
-        //
-        //  Record the output jax
-        //  and put this script in the queue for that jax
-        //
         jax.outputJax = this.outputJax[jax.mimeType][0].id;
         if (!state.jax[jax.outputJax]) {
           if (state.jaxIDs.length === 0) {
@@ -1543,17 +1260,9 @@ if (document.getElementById && document.childNodes && document.createElement) {
           state.jaxIDs.push(jax.outputJax); // save the ID of the jax
         }
         if (state.jaxIDs.length > 1) { state.jax[jax.outputJax].push(script) }
-        //
-        //  Mark script as needing output
-        //
         script.MathJax.state = STATE.OUTPUT;
       },
 
-      //
-      //  Pre- and post-process scripts by jax
-      //    (to get scaling factors, hide/show output, and so on)
-      //  Since this can cause the jax to load, we need to trap restarts
-      //
       prepareOutput: function (state, method) {
         while (state.j < state.jaxIDs.length) {
           var id = state.jaxIDs[state.j], JAX = MathJax.OutputJax[id];
@@ -1581,36 +1290,17 @@ if (document.getElementById && document.childNodes && document.createElement) {
       processOutput: function (state) {
         var result, STATE = MathJax.ElementJax.STATE, script, m = state.scripts.length;
         try {
-          //
-          //  Loop through the scripts
-          //
           while (state.i < m) {
-            //
-            //  Check that there is an element jax
-            //
             script = state.scripts[state.i]; if (!script || !script.MathJax) { state.i++; continue }
             var jax = script.MathJax.elementJax; if (!jax) { state.i++; continue }
-            //
-            //  Call the output Jax's Process method (which will be its Translate()
-            //  method once loaded).  Mark it as complete and remove the preview.
-            //
             result = MathJax.OutputJax[jax.outputJax].Process(script, state);
             script.MathJax.state = STATE.PROCESSED; state.i++;
             if (script.MathJax.preview) { script.MathJax.preview.innerHTML = "" }
-            //
-            //  Signal that new math is available
-            //
             this.signal.Post(["New Math", jax.inputID]); // FIXME: wait for this?  (i.e., restart if returns uncalled callback)
-            //
-            //  Update the processing message, if needed
-            //
             var now = new Date().getTime();
             if (now - state.start > this.processUpdateTime && state.i < state.scripts.length) { state.start = now; this.RestartAfter(MathJax.Callback.Delay(this.processUpdateDelay)) }
           }
         } catch (err) { return this.processError(err, state, "Output") }
-        //
-        //  Put up the typesetting-complete message
-        //
         if (state.scripts.length && this.config.showProcessingMessages) {
           MathJax.Message.Set("Typesetting math: 100%", 0);
           MathJax.Message.Clear(0);
@@ -1638,12 +1328,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
         var error = MathJax.HTML.Element("span", { className: "MathJax_Error" }, this.config.errorSettings.message);
         error.jaxID = "Error";
         if (MathJax.Extension.MathEvents) {
-          error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
-          error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
+          // error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
+          // error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
         } else {
           MathJax.Ajax.Require("[MathJax]/extensions/MathEvents.js", function () {
-            error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
-            error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
+            // error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
+            // error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
           });
         }
         script.parentNode.insertBefore(error, script);
@@ -1690,30 +1380,15 @@ if (document.getElementById && document.childNodes && document.createElement) {
     };
     MathJax.Hub.Insert(MathJax.Hub.config.styles, MathJax.Message.styles);
     MathJax.Hub.Insert(MathJax.Hub.config.styles, { ".MathJax_Error": MathJax.Hub.config.errorSettings.style });
-
-    //
-    //  Storage area for extensions and preprocessors
-    //
     MathJax.Extension = {};
-
-    //
-    //  Hub Startup code
-    //
     MathJax.Hub.Configured = MathJax.Callback({}); // called when configuration is complete
     MathJax.Hub.Startup = {
       script: "", // the startup script from the SCRIPT call that loads MathJax.js
       queue: MathJax.Callback.Queue(),           // Queue used for startup actions
       signal: MathJax.Callback.Signal("Startup"), // Signal used for startup events
       params: {},
-
-      //
-      //  Load the configuration files
-      //
       Config: function () {
         this.queue.Push(["Post", this.signal, "Begin Config"]);
-        //
-        //  Check for user cookie configuration
-        //
         var user = MathJax.HTML.Cookie.Get("user");
         if (user.URL || user.Config) {
           if (confirm(
@@ -1725,9 +1400,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             if (user.Config) { this.queue.Push(new Function(user.Config)) }
           } else { MathJax.HTML.Cookie.Set("user", {}) }
         }
-        //
-        //  Run the config files, if any are given in the parameter list
-        //
         if (this.params.config) {
           var files = this.params.config.split(/,/);
           for (var i = 0, m = files.length; i < m; i++) {
@@ -1735,13 +1407,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
             this.queue.Push(["Require", MathJax.Ajax, this.URL("config", files[i])]);
           }
         }
-        //
-        //  Run the deprecated configuration script, if any (ignoring return value)
-        //  Wait for the startup delay signal
-        //  Run the mathjax-config blocks
-        //  Handle the default configuration (v1.0 compatible)
-        //  Load the files in the configuration's config array
-        //
+
         if (this.script.match(/\S/)) { this.queue.Push(this.script + ";\n1;") }
         this.queue.Push(
           ["ConfigDelay", this],
@@ -1751,18 +1417,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
           ["Post", this.signal, "End Config"]
         );
       },
-      //
-      //  Return the delay callback
-      //
       ConfigDelay: function () {
         var delay = this.params.delayStartupUntil || MathJax.Hub.config.delayStartupUntil;
         if (delay === "onload") { return this.onload }
         if (delay === "configured") { return MathJax.Hub.Configured }
         return delay;
       },
-      //
-      //  Run the scipts of type=text/x-mathajx-config
-      //
       ConfigBlocks: function () {
         var scripts = document.getElementsByTagName("script");
         var last = null, queue = MathJax.Callback.Queue();
@@ -1775,19 +1435,12 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
         return last;
       },
-      //
-      //  Check for v1.0 no-configuration and put up a warning message.
-      //
       ConfigDefault: function () {
         var CONFIG = MathJax.Hub.config;
         if (CONFIG["v1.0-compatible"] && (CONFIG.jax || []).length === 0 &&
           !this.params.config && (CONFIG.config || []).length === 0) { return MathJax.Ajax.Require(this.URL("extensions", "v1.0-warning.js")) }
       },
 
-      //
-      //  Read cookie and set up menu defaults
-      //  (adjust the jax to accommodate renderer preferences)
-      //
       Cookie: function () {
         return this.queue.Push(
           ["Post", this.signal, "Begin Cookie"],
@@ -1808,9 +1461,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           ["Post", this.signal, "End Cookie"]
         );
       },
-      //
-      //  Setup stylesheets and extra styles
-      //
       Styles: function () {
         return this.queue.Push(
           ["Post", this.signal, "Begin Styles"],
@@ -1819,9 +1469,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           ["Post", this.signal, "End Styles"]
         );
       },
-      //
-      //  Load the input and output jax
-      //
       Jax: function () {
         var config = MathJax.Hub.config, jax = MathJax.Hub.outputJax;
         //  Save the order of the output jax since they are loading asynchronously
@@ -1835,9 +1482,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
           ["Post", this.signal, "End Jax"]
         );
       },
-      //
-      //  Load the extensions
-      //
+
       Extensions: function () {
         var queue = MathJax.Callback.Queue();
         return queue.Push(
@@ -1847,17 +1492,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
         );
       },
 
-      //
-      //  Initialize the Message system
-      //
       Message: function () {
         MathJax.Message.Init(true);
       },
 
-      //
-      //  Set the math menu renderer, if it isn't already
-      //  (this must come after the jax are loaded)
-      //
       Menu: function () {
         var menu = MathJax.Hub.config.menuSettings, jax = MathJax.Hub.outputJax, registered;
         for (var id in jax) {
@@ -1870,20 +1508,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
           menu.renderer = registered[0].id;
         }
       },
-
-      //
-      //  Set the location to the designated hash position
-      //
       Hash: function () {
         if (MathJax.Hub.config.positionToHash && document.location.hash) { setTimeout("document.location = document.location.hash", 1) }
       },
 
-      //
-      //  Load the Menu and Zoom code, if it hasn't already been loaded.
-      //  This is called after the initial typeset, so should no longer be
-      //  competing with other page loads, but will make these available
-      //  if needed later on.
-      //
       MenuZoom: function () {
         if (!MathJax.Extension.MathMenu) { }
         if (!MathJax.Extension.MathZoom) {
@@ -1894,9 +1522,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
       },
 
-      //
-      //  Setup the onload callback
-      //
       onLoad: function (when) {
         var onload = this.onload =
           MathJax.Callback(function () { MathJax.Hub.Startup.signal.Post("onLoad") });
@@ -1910,9 +1535,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return onload;
       },
 
-      //
-      //  Perform the initial typesetting (or skip if configuration says to)
-      //
       Typeset: function (element, callback) {
         if (MathJax.Hub.config.skipStartupTypeset) { return function () { } }
         return this.queue.Push(
@@ -1922,18 +1544,11 @@ if (document.getElementById && document.childNodes && document.createElement) {
         );
       },
 
-      //
-      //  Create a URL in the MathJax hierarchy
-      //
       URL: function (dir, name) {
         if (!name.match(/^([a-z]+:\/\/|\[|\/)/)) { name = "[MathJax]/" + dir + "/" + name }
         return name;
       },
 
-      //
-      //  Load an array of files, waiting for all of them
-      //  to be loaded before going on
-      //
       loadArray: function (files, dir, name, synchronous) {
         if (files) {
           if (!(files instanceof Array)) { files = [files] }
@@ -1953,9 +1568,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     };
 
-
-    /**********************************************************/
-
     (function (BASENAME) {
       var BASE = window[BASENAME], ROOT = "[" + BASENAME + "]";
       var HUB = BASE.Hub, AJAX = BASE.Ajax, CALLBACK = BASE.Callback;
@@ -1964,18 +1576,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
         JAXFILE: "jax.js",
         require: null, // array of files to load before jax.js is complete
         config: {},
-        //
-        //  Make a subclass and return an instance of it.
-        //  (FIXME: should we replace config with a copy of the constructor's
-        //   config?  Otherwise all subclasses share the same config structure.)
-        //
         Init: function (def, cdef) {
           if (arguments.length === 0) { return this }
           return (this.constructor.Subclass(def, cdef))();
         },
-        //
-        //  Augment by merging with class definition (not replacing)
-        //
         Augment: function (def, cdef) {
           var cObject = this.constructor, ndef = {};
           if (def != null) {
@@ -2037,8 +1641,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           extensionDir: ROOT + "/extensions"
         });
 
-      /***********************************/
-
       BASE.InputJax = JAX.Subclass({
         elementJax: "mml",  // the element jax to load for this input jax
         copyTranslate: true,
@@ -2082,8 +1684,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           extensionDir: JAX.extensionDir
         });
 
-      /***********************************/
-
       BASE.OutputJax = JAX.Subclass({
         copyTranslate: true,
         preProcess: function (state) {
@@ -2115,8 +1715,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           fontDir: ROOT + (BASE.isPacked ? "" : "/..") + "/fonts",
           imageDir: ROOT + (BASE.isPacked ? "" : "/..") + "/images"
         });
-
-      /***********************************/
 
       BASE.ElementJax = JAX.Subclass({
         // make a subclass, not an instance
@@ -2211,15 +1809,8 @@ if (document.getElementById && document.childNodes && document.createElement) {
         });
       BASE.ElementJax.prototype.STATE = BASE.ElementJax.STATE;
 
-      //
-      //  Some "Fake" jax used to allow menu access for "Math Processing Error" messages
-      //
-      BASE.OutputJax.Error = {
-        id: "Error", version: "2.0", config: {},
-        ContextMenu: function () { return BASE.Extension.MathEvents.Event.ContextMenu.apply(BASE.Extension.MathEvents.Event, arguments) },
-        Mousedown: function () { return BASE.Extension.MathEvents.Event.AltContextMenu.apply(BASE.Extension.MathEvents.Event, arguments) },
-        getJaxFromMath: function () { return { inputJax: "Error", outputJax: "Error", originalText: "Math Processing Error" } }
-      };
+
+      BASE.OutputJax.Error = {};
       BASE.InputJax.Error = {
         id: "Error", version: "2.0", config: {},
         sourceMenuTitle: "Error Message"
@@ -2227,7 +1818,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
     })("MathJax");
 
-    /**********************************************************/
 
     (function (BASENAME) {
       var BASE = window[BASENAME];
@@ -2300,9 +1890,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
       };
 
-      //
-      //  Initial browser-specific info (e.g., touch up version or name)
-      //
       HUB.Browser.Select({
         Safari: function (browser) {
           var v = parseInt((String(browser.version).split("."))[0]);
@@ -2390,4 +1977,3 @@ if (document.getElementById && document.childNodes && document.createElement) {
   }
 }
 
-/**********************************************************/

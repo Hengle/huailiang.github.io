@@ -1,72 +1,3 @@
-/*************************************************************
- *
- *  MathJax/extensions/TeX/noErrors.js
- *  
- *  Prevents the TeX error messages from being displayed and shows the
- *  original TeX code instead.  You can configure whether the dollar signs
- *  are shown or not for in-line math, and whether to put all the TeX on
- *  one line or use multiple-lines.
- *  
- *  To configure this extension, use
- *  
- *      MathJax.Hub.Config({
- *        TeX: {
- *          noErrors: {
- *            inlineDelimiters: ["",""],   // or ["$","$"] or ["\\(","\\)"]
- *            multiLine: true,             // false for TeX on all one line
- *            style: {
- *              "font-size":   "90%",
- *              "text-align":  "left",
- *              "color":       "black",
- *              "padding":     "1px 3px",
- *              "border":      "1px solid"
- *                // add any additional CSS styles that you want
- *                //  (be sure there is no extra comma at the end of the last item)
- *            }
- *          }
- *        }
- *      });
- *  
- *  Display-style math is always shown in multi-line format, and without
- *  delimiters, as it will already be set off in its own centered
- *  paragraph, like standard display mathematics.
- *  
- *  The default settings place the invalid TeX in a multi-line box with a
- *  black border.  If you want it to look as though the TeX is just part of
- *  the paragraph, use
- *
- *      MathJax.Hub.Config({
- *        TeX: {
- *          noErrors: {
- *            inlineDelimiters: ["$","$"],   // or ["",""] or ["\\(","\\)"]
- *            multiLine: false,
- *            style: {
- *              "font-size": "normal",
- *              "border": ""
- *            }
- *          }
- *        }
- *      });
- *  
- *  You may also wish to set the font family, as the default is "serif"
- *  
- *  ---------------------------------------------------------------------
- *  
- *  Copyright (c) 2009-2012 Design Science, Inc.
- * 
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 (function (HUB,HTML) {
   var VERSION = "2.0";
   
@@ -97,11 +28,6 @@
     var FORMAT = MathJax.InputJax.TeX.formatError;
     
     MathJax.InputJax.TeX.Augment({
-      //
-      //  Make error messages be the original TeX code
-      //  Mark them as errors and multi-line or not, and for
-      //  multi-line TeX, make spaces non-breakable (to get formatting right)
-      //
       formatError: function (err,math,displaystyle,script) {
         if (CONFIG.disabled) {return FORMAT.apply(this,arguments)}
         var message = err.message.replace(/\n.*/,"");
@@ -115,10 +41,6 @@
     });
   });
   
-  /*******************************************************************
-   *
-   *   Fix HTML-CSS output
-   */
 
   HUB.Register.StartupHook("HTML-CSS Jax Config",function () {
     HUB.Config({
@@ -138,11 +60,7 @@
     
     var MATH   = MML.math.prototype.toHTML,
         MERROR = MML.merror.prototype.toHTML;
-        
-    //
-    // Override math toHTML routine so that error messages
-    //   don't have the clipping and other unneeded overhead
-    //
+
     MML.math.Augment({
       toHTML: function (span,node) {
         var data = this.data[0];

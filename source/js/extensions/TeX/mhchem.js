@@ -9,12 +9,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
   var TEX = MathJax.InputJax.TeX,
     MACROS = TEX.Definitions.macros;
 
-  /*
-   *  This is the main class for handing the \ce and related commands.
-   *  Its main method is Parse() which takes the argument to \ce and
-   *  returns the corresponding TeX string.
-   */
-
   var CE = MathJax.Object.Subclass({
     string: "",   // the \ce string being parsed
     i: 0,         // the current position in the string

@@ -9,12 +9,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
   var TEX = MathJax.InputJax.TeX,
     TEXDEF = TEX.Definitions;
 
-  /****************************************************/
-
-  //
-  //  A namespace for localizing macros and environments
-  //  (\begingroup and \endgroup create and destroy these)
-  //
   var NSFRAME = MathJax.Object.Subclass({
     macros: null,         // the local macro definitions
     environments: null,   // the local environments

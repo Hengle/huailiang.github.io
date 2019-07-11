@@ -1,5 +1,3 @@
-
-
 MathJax.Extension["TeX/HTML"] = {
   version: "2.0"
 };

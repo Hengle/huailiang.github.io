@@ -1,11 +1,5 @@
-
-
 MathJax.Extension["TeX/enclose"] = {
   version: "2.0",
-
-  //
-  //  The attributes allowed in \enclose{notation}[attributes]{math}
-  //
   ALLOWED: {
     arrow: 1,
     color: 1, mathcolor: 1,
@@ -20,16 +14,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
     MML = MathJax.ElementJax.mml,
     ALLOW = MathJax.Extension["TeX/enclose"].ALLOWED;
 
-  //
-  //  Set up macro
-  //
   TEX.Definitions.macros.enclose = 'Enclose';
 
   TEX.Parse.Augment({
-    //
-    //  Implement \enclose{notation}[attr]{math}
-    //    (create <menclose notation="notation">math</menclose>)
-    //
     Enclose: function (name) {
       var notation = this.GetArgument(name),
         attr = this.GetBrackets(name),
