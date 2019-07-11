@@ -1,5 +1,3 @@
-
-
 MathJax.Extension["TeX/verb"] = {
   version: "2.0"
 };
@@ -14,9 +12,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
 
   TEX.Parse.Augment({
 
-    /*
-     *  Implement \verb|...|
-     */
     Verb: function (name) {
       var c = this.GetNext(); var start = ++this.i;
       if (c == "") { TEX.Error(name + " requires an argument") }

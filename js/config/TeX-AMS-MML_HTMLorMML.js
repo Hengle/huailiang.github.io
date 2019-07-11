@@ -1,5 +1,3 @@
-
-
 MathJax.Hub.Config({
   config: ["default.js"],
   extensions: ["tex2jax.js", "mml2jax.js", "MathEvents.js", "MathZoom.js", "toMathML.js", "TeX/noErrors.js", "TeX/noUndefined.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],

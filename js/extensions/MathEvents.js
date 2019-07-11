@@ -55,16 +55,15 @@
     RIGHTBUTTON: 2,          // the event.button value for right button
     MENUKEY: "altKey",       // the event value for alternate context menu
 
-    Mousedown: function (event) { return EVENT.Handler(event, "Mousedown", this) },
-    Mouseup: function (event) { return EVENT.Handler(event, "Mouseup", this) },
-    Mousemove: function (event) { return EVENT.Handler(event, "Mousemove", this) },
-    Mouseover: function (event) { return EVENT.Handler(event, "Mouseover", this) },
-    Mouseout: function (event) { return EVENT.Handler(event, "Mouseout", this) },
-    Click: function (event) { return EVENT.Handler(event, "Click", this) },
-    DblClick: function (event) { return EVENT.Handler(event, "DblClick", this) },
-    Menu: function (event) { return EVENT.Handler(event, "ContextMenu", this) },
+    Mousedown: function (event) { return Event.Handler(event, "Mousedown", this) },
+    Mouseup: function (event) { return Event.Handler(event, "Mouseup", this) },
+    Mousemove: function (event) { return Event.Handler(event, "Mousemove", this) },
+    Mouseover: function (event) { return Event.Handler(event, "Mouseover", this) },
+    Mouseout: function (event) { return Event.Handler(event, "Mouseout", this) },
+    Click: function (event) { return Event.Handler(event, "Click", this) },
+    DblClick: function (event) { return Event.Handler(event, "DblClick", this) },
+    Menu: function (event) { return Event.Handler(event, "ContextMenu", this) },
     Handler: function (event, type, math) {
-      if (AJAX.loadingMathMenu) { return EVENT.False(event) }
       var jax = OUTPUT[math.jaxID];
       if (!event) { event = window.event }
       event.isContextMenu = (type === "ContextMenu");
@@ -110,8 +109,8 @@
         if (from && to && (from.isMathJax != to.isMathJax ||
           HUB.getJaxFor(from) !== HUB.getJaxFor(to))) {
           var jax = this.getJaxFromMath(math);
-          if (jax.hover) { HOVER.ReHover(jax) } else { HOVER.HoverTimer(jax, math) }
-          return EVENT.False(event);
+          if (jax.hover) { Hover.ReHover(jax) } else { Hover.HoverTimer(jax, math) }
+          return Event.False(event);
         }
       }
     },
@@ -122,18 +121,18 @@
         if (from && to && (from.isMathJax != to.isMathJax ||
           HUB.getJaxFor(from) !== HUB.getJaxFor(to))) {
           var jax = this.getJaxFromMath(math);
-          if (jax.hover) { HOVER.UnHover(jax) } else { HOVER.ClearHoverTimer() }
-          return EVENT.False(event);
+          if (jax.hover) { Hover.UnHover(jax) } else { Hover.ClearHoverTimer() }
+          return Event.False(event);
         }
       }
     },
     Mousemove: function (event, math) {
       if (SETTINGS.discoverable || SETTINGS.zoom === "Hover") {
         var jax = this.getJaxFromMath(math); if (jax.hover) return;
-        if (HOVER.lastX == event.clientX && HOVER.lastY == event.clientY) return;
-        HOVER.lastX = event.clientX; HOVER.lastY = event.clientY;
-        HOVER.HoverTimer(jax, math);
-        return EVENT.False(event);
+        if (Hover.lastX == event.clientX && Hover.lastY == event.clientY) return;
+        Hover.lastX = event.clientX; Hover.lastY = event.clientY;
+        Hover.HoverTimer(jax, math);
+        return Event.False(event);
       }
     },
 
@@ -233,7 +232,7 @@
     ClearHover: function (jax) {
       if (jax.hover.remove) { clearTimeout(jax.hover.remove) }
       if (jax.hover.timer) { clearTimeout(jax.hover.timer) }
-      HOVER.ClearHoverTimer();
+      Hover.ClearHoverTimer();
       delete jax.hover;
     },
     Px: function (m) {
@@ -264,13 +263,13 @@
         clearTimeout(TOUCH.timeout);
         delete TOUCH.timeout; TOUCH.last = 0;
         event.preventDefault();
-        return EVENT.Handler((event.touches[0] || event.touch), "DblClick", this);
+        return Event.Handler((event.touches[0] || event.touch), "DblClick", this);
       }
     },
 
     menu: function (event, math) {
       delete TOUCH.timeout; TOUCH.last = 0;
-      return EVENT.Handler((event.touches[0] || event.touch), "ContextMenu", math);
+      return Event.Handler((event.touches[0] || event.touch), "ContextMenu", math);
     }
 
   };
@@ -287,7 +286,7 @@
       ME.msieBorderWidthBug = (document.compatMode === "BackCompat");  // borders are inside offsetWidth/Height
       ME.msieEventBug = browser.isIE9;           // must get event from window even though event is passed
       ME.msieAlignBug = (!isIE8 || mode < 8);    // inline-block spans don't rest on baseline
-      if (mode < 9) { EVENT.LEFTBUTTON = 1 }       // IE < 9 has wrong event.button values
+      if (mode < 9) { Event.LEFTBUTTON = 1 }       // IE < 9 has wrong event.button values
     },
     Safari: function (browser) {
       ME.safariContextMenuBug = true;  // selection can be started by contextmenu event

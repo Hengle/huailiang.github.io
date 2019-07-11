@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://huailiang.github.io/">
-    	<img src="https://huailiang.github.io/img/author.jpg" width="240" height="200">
+    	<img src="https://huailiang.github.io/img/author.jpg" width="120" height="110">
     </a>
 </p>
 
