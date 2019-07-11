@@ -1,5 +1,3 @@
-
-
 MathJax.Extension.tex2jax = {
   version: "2.0",
   config: {
@@ -13,37 +11,20 @@ MathJax.Extension.tex2jax = {
       ['\\[', '\\]']            //  be sure that you don't have an extra comma at the end)
     ],
 
-    balanceBraces: true,       // determines whether tex2jax requires braces to be
-    // balanced within math delimiters (allows for nested
-    // dollar signs).  Set to false to get pre-v2.0 compatibility.
-
+    balanceBraces: true,       
     skipTags: ["script", "noscript", "style", "textarea", "pre", "code"],
-    // The names of the tags whose contents will not be
-    // scanned for math delimiters
 
-    ignoreClass: "tex2jax_ignore",    // the class name of elements whose contents should
-    // NOT be processed by tex2jax.  Note that this
-    // is a regular expression, so be sure to quote any
-    // regexp special characters
+    ignoreClass: "tex2jax_ignore",    
 
-    processClass: "tex2jax_process",  // the class name of elements whose contents SHOULD
-    // be processed when they appear inside ones that
-    // are ignored.  Note that this is a regular expression,
-    // so be sure to quote any regexp special characters
+    processClass: "tex2jax_process",  
 
-    processEscapes: false,     // set to true to allow \$ to produce a dollar without
-    //   starting in-line math mode
+    processEscapes: false,    
 
-    processEnvironments: true, // set to true to process \begin{xxx}...\end{xxx} outside
-    //   of math mode, false to prevent that
+    processEnvironments: true, 
 
-    processRefs: true,         // set to true to process \ref{...} outside of math mode
+    processRefs: true,   
 
-
-    preview: "TeX"             // set to "none" to not insert MathJax_Preview spans
-    //   or set to an array specifying an HTML snippet
-    //   to use the same preview for every equation.
-
+    preview: "TeX"            
   },
 
   PreProcess: function (element) {

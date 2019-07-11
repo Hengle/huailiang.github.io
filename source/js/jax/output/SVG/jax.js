@@ -1,29 +1,3 @@
-/*************************************************************
- *
- *  MathJax/jax/output/SVG/jax.js
- *
- *  Implements the SVG OutputJax that displays mathematics using
- *  SVG (or VML in IE) to position the characters from math fonts
- *  in their proper locations.
- *  
- *  ---------------------------------------------------------------------
- *  
- *  Copyright (c) 2011-2012 Design Science, Inc.
- * 
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
-
 (function (AJAX,HUB,HTML,SVG) {
   var MML;
 
@@ -99,8 +73,6 @@
       this.Mouseover   = HOVER.Mouseover;
       this.Mouseout    = HOVER.Mouseout;
       this.Mousemove   = HOVER.Mousemove;
-
-      // Make hidden div for doing tests and storing global SVG <defs>
       this.hiddenDiv = HTML.Element("div",{
         style:{visibility:"hidden", overflow:"hidden", position:"absolute", top:0,
                height:"1px", width: "auto", padding:0, border:0, margin:0,
@@ -110,39 +82,22 @@
       if (!document.body.firstChild) {document.body.appendChild(this.hiddenDiv)}
         else {document.body.insertBefore(this.hiddenDiv,document.body.firstChild)}
       this.hiddenDiv = HTML.addElement(this.hiddenDiv,"div",{id:"MathJax_SVG_Hidden"});
-
-      // Determine pixels-per-inch and em-size
       var div = HTML.addElement(this.hiddenDiv,"div",{style:{width:"5in"}});
       this.pxPerInch = div.offsetWidth/5; this.hiddenDiv.removeChild(div);
-      
-      // Used for measuring text sizes
       this.textSVG = this.Element("svg");
-      
-      // Global defs for font glyphs
       DEFS = this.addElement(this.addElement(this.hiddenDiv.parentNode,"svg"),"defs",{id:"MathJax_SVG_glyphs"});
       GLYPHS = {};
-
-       // Used in preTranslate to get scaling factors
       this.ExSpan = HTML.Element("span",
         {style:{position:"absolute","font-size-adjust":"none"}},
         [["span",{className:"MathJax_SVG_ExBox"}]]
       );
 
-      // Used in preTranslate to get linebreak width
       this.linebreakSpan = HTML.Element("span",null,
         [["hr",{style: {width:"auto", size:1, padding:0, border:0, margin:0}}]]);
-
-     // Set up styles
       return AJAX.Styles(this.config.styles,["InitializeSVG",this]);
     },
     
-    //
-    //  Handle initialization that requires styles to be set up
-    //
     InitializeSVG: function () {
-      //
-      //  Get the default sizes (need styles in place to do this)
-      //
       document.body.appendChild(this.ExSpan);
       document.body.appendChild(this.linebreakSpan);
       this.defaultEx    = this.ExSpan.firstChild.offsetHeight/60;
@@ -162,20 +117,11 @@
         if (width === "") {width = "100%"}
       } else {maxwidth = 100000} // a big width, so no implicit line breaks
       //
-      //  Loop through the scripts
-      //
       for (i = 0; i < m; i++) {
         script = scripts[i]; if (!script.parentNode) continue;
-        //
-        //  Remove any existing output
-        //
         prev = script.previousSibling;
         if (prev && String(prev.className).match(/^MathJax(_SVG)?(_Display)?$/))
           {prev.parentNode.removeChild(prev)}
-        //
-        //  Add the span, and a div if in display mode,
-        //  then set the role and mark it as being processed
-        //
         jax = script.MathJax.elementJax;
         jax.SVG = {display: (jax.root.Get("display") === "block")}
         span = div = HTML.Element("span",{
@@ -193,23 +139,12 @@
           div = HTML.Element("div",{className:"MathJax_SVG_Display"});
           div.appendChild(span);
         }
-        //
-        //  Mark math for screen readers
-        //    (screen readers don't know about role="math" yet, so use "textbox" instead)
-        //
         div.setAttribute("role","textbox"); div.setAttribute("aria-readonly","true");
         div.className += " MathJax_SVG_Processing";
         script.parentNode.insertBefore(div,script);
-        //
-        //  Add the test span for determining scales and linebreak widths
-        //
         script.parentNode.insertBefore(this.ExSpan.cloneNode(true),script);
         div.parentNode.insertBefore(this.linebreakSpan.cloneNode(true),div);
       }
-      //
-      //  Determine the scaling factors for each script
-      //  (this only requires one reflow rather than a reflow for each equation)
-      //
       for (i = 0; i < m; i++) {
         script = scripts[i]; if (!script.parentNode) continue;
         test = script.previousSibling; div = test.previousSibling;
@@ -228,11 +163,7 @@
         jax.SVG.ex = ex; jax.SVG.cwidth = cwidth;
         jax.SVG.em = em = ex / SVG.TeX.x_height * 1000; // scale ex to x_height
         jax.SVG.lineWidth = (linebreak ? this.length2em(width,1,maxwidth/em) : 1000000);
-      }
-      //
-      //  Remove the test spans used for determining scales and linebreak widths
-      //
-      for (i = 0; i < m; i++) {
+      }      for (i = 0; i < m; i++) {
         script = scripts[i]; if (!script.parentNode) continue;
         test = scripts[i].previousSibling; jax = scripts[i].MathJax.elementJax;
         span = test.previousSibling;
@@ -240,9 +171,6 @@
         span.parentNode.removeChild(span);
         test.parentNode.removeChild(test);
       }
-      //
-      //  Set state variables used for displaying equations in chunks
-      //
       state.SVGeqn = state.SVGlast = 0;
       state.SVGchunk = this.config.EqnChunk;
       state.SVGdelay = false;
@@ -250,29 +178,15 @@
 
     Translate: function (script,state) {
       if (!script.parentNode) return;
-
-      //
-      //  If we are supposed to do a chunk delay, do it
-      //  
       if (state.SVGdelay) {
         state.SVGdelay = false;
         HUB.RestartAfter(MathJax.Callback.Delay(this.config.EqnChunkDelay));
       }
-
-      //
-      //  Get the data about the math
-      //
       var jax = script.MathJax.elementJax, math = jax.root,
           span = document.getElementById(jax.inputID+"-Frame"),
           div = (jax.SVG.display ? span.parentNode : span);
-      //
-      //  Set the font metrics
-      //
       this.em = MML.mbase.prototype.em = jax.SVG.em; this.ex = jax.SVG.ex;
       this.linebreakWidth = jax.SVG.lineWidth * 1000; this.cwidth = jax.SVG.cwidth;
-      //
-      //  Typeset the math
-      //
       this.mathDiv = div;
       span.appendChild(this.textSVG);
       this.initSVG(math,span);
@@ -282,26 +196,14 @@
         throw err;
       }
       span.removeChild(this.textSVG);
-      //
-      //  Put it in place, and remove the processing marker
-      //
-      if (jax.SVG.isHidden) {script.parentNode.insertBefore(div,script)}
+       if (jax.SVG.isHidden) {script.parentNode.insertBefore(div,script)}
       div.className = div.className.split(/ /)[0];
-      //
-      //  Check if we are hiding the math until more is processed
-      //
       if (this.hideProcessedMath) {
-        //
-        //  Hide the math and don't let its preview be removed
-        //
         div.className += " MathJax_SVG_Processed";
         if (script.MathJax.preview) {
           jax.SVG.preview = script.MathJax.preview;
           delete script.MathJax.preview;
         }
-        //
-        //  Check if we should show this chunk of equations
-        //
         state.SVGeqn++;
         if (state.SVGeqn >= state.SVGlast + state.SVGchunk) {
           this.postTranslate(state);
@@ -314,20 +216,11 @@
     postTranslate: function (state) {
       var scripts = state.jax[this.id];
       if (!this.hideProcessedMath) return;
-      //
-      //  Reveal this chunk of math
-      //
       for (var i = state.SVGlast, m = state.SVGeqn; i < m; i++) {
         var script = scripts[i];
         if (script) {
-          //
-          //  Remove the processed marker
-          //
-          script.previousSibling.className = script.previousSibling.className.split(/ /)[0];
+           script.previousSibling.className = script.previousSibling.className.split(/ /)[0];
           var data = script.MathJax.elementJax.SVG;
-          //
-          //  Remove the preview, if any
-          //
           if (data.preview) {
             data.preview.innerHTML = "";
             script.MathJax.preview = data.preview;
@@ -335,9 +228,6 @@
           }
         }
       }
-      //
-      //  Save our place so we know what is revealed
-      //
       state.SVGlast = state.SVGeqn;
     },
 
@@ -356,14 +246,7 @@
     },
     
     Zoom: function (jax,span,math,Mw,Mh) {
-      //
-      //  Re-render at larger size
-      //
       span.className = "MathJax_SVG";
-
-      //
-      //  get em size (taken from this.preTranslate)
-      //
       var emex = span.appendChild(this.ExSpan.cloneNode(true));
       var ex = emex.firstChild.offsetHeight/60;
       this.em = MML.mbase.prototype.em = ex / SVG.TeX.x_height * 1000;
@@ -705,9 +588,6 @@
       negativeveryverythickmathspace: -7/18
     },
 
-    //
-    //  Units are em/1000 so quad is 1em
-    //
     TeX: {
       x_height:         430.554,
       quad:            1000,
@@ -987,8 +867,6 @@
         this.SVGdata.w = svg.w, this.SVGdata.x = svg.x;
         if (svg.X != null) {this.SVGdata.X = svg.X}
         if (this["class"]) {svg.removeable = false; SVG.Element(svg.element,{"class":this["class"]})}
-        // FIXME:  if an element is split by linebreaking, the ID will be the same on both parts
-        // FIXME:  if an element has an id, its zoomed copy will have the same ID
         if (this.id) {svg.removeable = false; SVG.Element(svg.element,{"id":this.id})}
         if (this.href) {
 	  var a = SVG.Element("a");
@@ -1071,23 +949,13 @@
 	values.background = (this.mathbackground || this.background ||
                              (this.styles||{}).background || MML.COLOR.TRANSPARENT);
         if (bleft + pleft) {
-          //
-          //  Make a box and move the contents of svg to it,
-          //    then add it back into svg, but offset by the left amount
-          //
-          var dup = BBOX(); for (id in svg) {if (svg.hasOwnProperty(id)) {dup[id] = svg[id]}}
+            var dup = BBOX(); for (id in svg) {if (svg.hasOwnProperty(id)) {dup[id] = svg[id]}}
           dup.x = 0; dup.y = 0;
           svg.element = SVG.Element("g"); svg.removeable = true;
           svg.Add(dup,bleft+pleft,0);
         }
-        //
-        //  Adjust size by padding and dashed borders (left is taken care of above)
-        //
         if (padding) {svg.w += padding.right; svg.h += padding.top; svg.d += padding.bottom}
         if (borders) {svg.w += borders.right; svg.h += borders.top; svg.d += borders.bottom}
-        //
-        //  Add background color
-        //
 	if (values.background !== MML.COLOR.TRANSPARENT) {
           if (svg.element.nodeName !== "g" && svg.element.nodeName !== "svg") {
             var g = SVG.Element("g"); g.appendChild(svg.element);
@@ -1095,9 +963,6 @@
           }
           svg.Add(BBOX.RECT(svg.h,svg.d,svg.w,{fill:values.background,stroke:"none"}),0,0,false,true)
         }
-        //
-        //  Add borders
-        //
         if (borders) {
           var dd = 5; // fuzz factor to avoid anti-alias problems at edges
           var sides = {
@@ -1243,9 +1108,6 @@
         this.SVGgetStyles();
         var svg = this.svg = this.SVG(); this.SVGhandleSpace(svg);
         if (this.data.length == 0) {svg.Clean(); this.SVGsaveData(svg); return svg}
-        //
-        //  Get the variant, and check for operator size
-        //
         var scale = this.SVGgetScale(), variant = this.SVGgetVariant();
 	var values = this.getValues("largeop","displaystyle");
 	if (values.largeop)
@@ -1262,10 +1124,7 @@
           if (over && this === over.CoreMO() && parent.Get("accent")) {mapchars = SVG.FONTDATA.REMAPACCENT}
           else if (under && this === under.CoreMO() && parent.Get("accentunder")) {mapchars = SVG.FONTDATA.REMAPACCENTUNDER}
         }
-        //
-        //  Typeset contents
-        //
-	for (var i = 0, m = this.data.length; i < m; i++) {
+ 	for (var i = 0, m = this.data.length; i < m; i++) {
           if (this.data[i]) {
             var text = this.data[i].toSVG(variant,scale,this.SVGremap,mapchars), x = svg.w;
             if (x === 0 && -text.l > 10*text.w) {x += -text.l} // initial combining character doesn't combine
@@ -1275,10 +1134,7 @@
         }
         svg.Clean();
 	if (this.data.join("").length !== 1) {delete svg.skew}
-        //
-        //  Handle large operator centering
-        //
-	if (values.largeop) {
+  	if (values.largeop) {
 	  svg.y = (svg.h - svg.d)/2/scale - SVG.TeX.axis_height;
 	  if (svg.r > svg.w) {svg.ic = svg.r - svg.w; svg.w = svg.r}
 	}
@@ -1813,11 +1669,7 @@
           this.SVGgetStyles();
 	  MML.mbase.prototype.displayAlign = HUB.config.displayAlign;
 	  MML.mbase.prototype.displayIndent = HUB.config.displayIndent;
-          //
-          //  Put content in a <g> with defaults and matrix that flips y axis.
-          //  Put that in an <svg> with xlink defined.
-          //
-          var box = BBOX.G({
+           var box = BBOX.G({
             stroke:"black", fill:"black", "stroke-thickness":0,
             transform: "matrix(1 0 0 -1 0 0)"
           }).With({removeable: false});
@@ -1838,8 +1690,6 @@
           svg.element.setAttribute("viewBox",(-l)+" "+(-svg.H)+" "+(l+svg.w+r)+" "+(svg.H+svg.D));
           svg.element.style.margin="1px 0px"; // 1px above and below to prevent lines from touching
           //
-          //  If there is extra height or depth, hide that
-          //
           if (svg.H > svg.h || svg.D > svg.d) {
             var frame = HTML.Element(
               "span",{style: {display:"inline-block", "white-space":"nowrap", padding:"1px 0px"}, isMathJax:true},[[
@@ -1850,13 +1700,7 @@
             style.verticalAlign = ""; style.position = "absolute";
             style.bottom = SVG.Ex(svg.d-svg.D); style.left = 0;
           }
-          //
-          //  Add it to the MathJax span
-          //
           span.appendChild(svg.element); svg.element = null;
-          //
-          //  Handle indentalign and indentshift for single-line displays
-          //
           if (!this.isMultiline && this.Get("display") === "block") {
             var values = this.getValues("indentalignfirst","indentshiftfirst","indentalign","indentshift");
             if (values.indentalignfirst !== MML.INDENTALIGN.INDENTALIGN) {values.indentalign = values.indentalignfirst}
@@ -1893,16 +1737,6 @@
 	return svg;
       }
     });
-
-    //
-    //  Loading isn't complete until the element jax is modified,
-    //  but can't call loadComplete within the callback for "mml Jax Ready"
-    //  (it would call SVG's Require routine, asking for the mml jax again)
-    //  so wait until after the mml jax has finished processing.
-    //  
-    //  We also need to wait for the onload handler to run, since the loadComplete
-    //  will call Config and Startup, which need to modify the body.
-    //
     HUB.Register.StartupHook("onLoad",function () {
       setTimeout(MathJax.Callback(["loadComplete",SVG,"jax.js"]),0);
     });
@@ -1914,10 +1748,6 @@
   });
   
   if (!document.createElementNS) {
-    //
-    //  Try to handle SVG in IE8 and below, but fail
-    //  (but don't crash on loading the file, so no delay for loadComplete)
-    //
     if (!document.namespaces.svg) {document.namespaces.add("svg",SVGNS)}
     SVG.Augment({
       Element: function (type,def) {

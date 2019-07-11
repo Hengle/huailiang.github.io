@@ -304,7 +304,6 @@
           return item;
         }
       }
-      //  \mathrel{\rlap{\notChar}}
       mml = MML.mpadded(MML.mtext("\u29F8")).With({width:0});
       mml = MML.TeXAtom(mml).With({texClass:MML.TEXCLASS.REL});
       return [mml,item];
@@ -338,9 +337,6 @@
   
 
   var TEXDEF = {
-    //
-    //  Add new definitions without overriding user-defined ones
-    //
     Add: function (src,dst,nouser) {
       if (!dst) {dst = this}
       for (var id in src) {if (src.hasOwnProperty(id)) {
@@ -355,8 +351,6 @@
   var STARTUP = function () {
     MML = MathJax.ElementJax.mml;
     HUB.Insert(TEXDEF,{
-  
-      // patterns for letters and numbers
       letter:  /[a-z]/i,
       digit:   /[0-9.]/,
       number:  /^(?:[0-9]+(?:\{,\}[0-9]{3})*(?:\.[0-9]*)*|\.[0-9]+)/,
@@ -385,7 +379,6 @@
       },
     
       mathchar0mi: {
-	// Lower-case greek
 	alpha:        '03B1',
 	beta:         '03B2',
 	gamma:        '03B3',
@@ -967,10 +960,7 @@
       p_height: 1.2 / .85   // cmex10 height plus depth over .85
 
     });
-    
-    //
-    //  Add macros defined in the configuration
-    //
+
     if (this.config.Macros) {
       var MACROS = this.config.Macros;
       for (var id in MACROS) {if (MACROS.hasOwnProperty(id)) {
@@ -980,12 +970,6 @@
       }}
     }
   };
-  
-  /************************************************************************/
-  /*
-   *   The TeX Parser
-   */
-
   var PARSE = MathJax.Object.Subclass({
     Init: function (string,env) {
       this.string = string; this.i = 0; this.macroCount = 0;
@@ -1011,14 +995,6 @@
     },
     mmlToken: function (token) {return token}, // used by boldsymbol extension
     
-    /************************************************************************/
-    /*
-     *   Handle various token classes
-     */
-
-    /*
-     *  Lookup a control-sequence and process it
-     */
     ControlSequence: function (c) {
       var name = this.GetCS(), macro = this.csFindMacro(name);
       if (macro) {
@@ -1031,64 +1007,36 @@
         else if (TEXDEF.delimiter["\\"+name] != null) {this.csDelimiter(name,TEXDEF.delimiter["\\"+name])}
         else                                          {this.csUndefined(c+name)}
     },
-    //
-    //  Look up a macro in the macros list
-    //  (overridden in begingroup extension)
-    //
     csFindMacro: function (name) {return TEXDEF.macros[name]},
-    //
-    //  Handle normal mathchar (as an mi)
-    //
     csMathchar0mi: function (name,mchar) {
       var def = {mathvariant: MML.VARIANT.ITALIC};
       if (mchar instanceof Array) {def = mchar[1]; mchar = mchar[0]}
       this.Push(this.mmlToken(MML.mi(MML.entity("#x"+mchar)).With(def)));
     },
-    //
-    //  Handle normal mathchar (as an mo)
-    //
     csMathchar0mo: function (name,mchar) {
       var def = {stretchy: false};
       if (mchar instanceof Array) {def = mchar[1]; def.stretchy = false; mchar = mchar[0]}
       this.Push(this.mmlToken(MML.mo(MML.entity("#x"+mchar)).With(def)));
     },
-    //
-    //  Handle mathchar in current family
-    //
     csMathchar7: function (name,mchar) {
       var def = {mathvariant: MML.VARIANT.NORMAL};
       if (mchar instanceof Array) {def = mchar[1]; mchar = mchar[0]}
       if (this.stack.env.font) {def.mathvariant = this.stack.env.font}
       this.Push(this.mmlToken(MML.mi(MML.entity("#x"+mchar)).With(def)));
     },
-    //
-    //  Handle delimiter
-    //
     csDelimiter: function (name,delim) {
       var def = {};
       if (delim instanceof Array) {def = delim[1]; delim = delim[0]}
       if (delim.length === 4) {delim = MML.entity('#x'+delim)} else {delim = MML.chars(delim)}
       this.Push(this.mmlToken(MML.mo(delim).With({fence: false, stretchy: false}).With(def)));
     },
-    //
-    //  Handle undefined control sequence
-    //  (overridden in noUndefined extension)
-    //
     csUndefined: function (name) {
       TEX.Error("Undefined control sequence "+name);
     },
-
-    /*
-     *  Handle a variable (a single letter)
-     */
     Variable: function (c) {
       var def = {}; if (this.stack.env.font) {def.mathvariant = this.stack.env.font}
       this.Push(this.mmlToken(MML.mi(MML.chars(c)).With(def)));
     },
-
-    /*
-     *  Determine the extent of a number (pattern may need work)
-     */
     Number: function (c) {
       var mml, n = this.string.slice(this.i-1).match(TEXDEF.number);
       if (n) {mml = MML.mn(n[0].replace(/[{}]/g,"")); this.i += n[0].length - 1}
@@ -1096,22 +1044,10 @@
       if (this.stack.env.font) {mml.mathvariant = this.stack.env.font}
       this.Push(this.mmlToken(mml));
     },
-    
-    /*
-     *  Handle { and }
-     */
     Open: function (c) {this.Push(STACKITEM.open())},
     Close: function (c) {this.Push(STACKITEM.close())},
-    
-    /*
-     *  Handle tilde and spaces
-     */
     Tilde: function (c) {this.Push(MML.mtext(MML.chars(NBSP)))},
     Space: function (c) {},
-    
-    /*
-     *  Handle ^, _, and '
-     */
     Superscript: function (c) {
       if (this.GetNext().match(/\d/)) // don't treat numbers as a unit
         {this.string = this.string.substr(0,this.i+1)+" "+this.string.substr(this.i+1)}
@@ -1175,23 +1111,13 @@
       return mo;
     },
     
-    /*
-     *  Handle comments
-     */
     Comment: function (c) {
       while (this.i < this.string.length && this.string.charAt(this.i) != "\n") {this.i++}
     },
-    
-    /*
-     *  Handle hash marks outside of definitions
-     */
     Hash: function (c) {
       TEX.Error("You can't use 'macro parameter character #' in math mode");
     },
-    
-    /*
-     *  Handle other characters (as <mo> elements)
-     */
+
     Other: function (c) {
       var def = {stretchy: false}, mo;
       if (this.stack.env.font) {def.mathvariant = this.stack.env.font}
@@ -1204,13 +1130,7 @@
       }
       if (mo.autoDefault("texClass",true) == "") {mo = MML.TeXAtom(mo)}
       this.Push(this.mmlToken(mo));
-    },
-    
-    /************************************************************************/
-    /*
-     *   Macros
-     */
-    
+    },    
     SetFont: function (name,font) {this.stack.env.font = font},
     SetStyle: function (name,texStyle,style,level) {
       this.stack.env.style = texStyle; this.stack.env.level = level;
@@ -1615,11 +1535,6 @@
       }
     },
     
-   /************************************************************************/
-   /*
-    *   LaTeX environments
-    */
-
     Begin: function (name) {
       var env = this.GetArgument(name);
       if (env.match(/[^a-z*]/i)) {TEX.Error('Invalid environment name "'+env+'"')}
@@ -1681,14 +1596,6 @@
       return array;
     },
     
-    /************************************************************************/
-    /*
-     *   String handling routines
-     */
-
-    /*
-     *  Convert delimiter to character
-     */
     convertDelimiter: function (c) {
       if (c) {c = TEXDEF.delimiter[c]}
       if (c == null) {return null}
@@ -1696,42 +1603,22 @@
       if (c.length === 4) {c = String.fromCharCode(parseInt(c,16))}
       return c;
     },
-
-    /*
-     *  Trim spaces from a string
-     */
     trimSpaces: function (text) {
       if (typeof(text) != 'string') {return text}
       return text.replace(/^\s+|\s+$/g,'');
     },
-
-    /*
-     *   Check if the next character is a space
-     */
     nextIsSpace: function () {
       return this.string.charAt(this.i).match(/[ \n\r\t]/);
     },
-    
-    /*
-     *  Get the next non-space character
-     */
     GetNext: function () {
       while (this.nextIsSpace()) {this.i++}
       return this.string.charAt(this.i);
     },
-  
-    /*
-     *  Get and return a control-sequence name
-     */
     GetCS: function () {
       var CS = this.string.slice(this.i).match(/^([a-z]+|.) ?/i);
       if (CS) {this.i += CS[1].length; return CS[1]} else {this.i++; return " "}
     },
 
-    /*
-     *  Get and return a TeX argument (either a single character or control sequence,
-     *  or the contents of the next set of braces).
-     */
     GetArgument: function (name,noneOK) {
       switch (this.GetNext()) {
        case "":
@@ -1760,9 +1647,6 @@
       return this.string.charAt(this.i++);
     },
     
-    /*
-     *  Get an optional LaTeX argument in brackets
-     */
     GetBrackets: function (name,def) {
       if (this.GetNext() != '[') {return def};
       var j = ++this.i, parens = 0;
@@ -1780,10 +1664,6 @@
       }
       TEX.Error("Couldn't find closing ']' for argument to "+name);
     },
-  
-    /*
-     *  Get the name of a delimiter (check it in the delimiter list).
-     */
     GetDelimiter: function (name) {
       while (this.nextIsSpace()) {this.i++}
       var c = this.string.charAt(this.i);
@@ -1793,10 +1673,6 @@
       }
       TEX.Error("Missing or unrecognized delimiter for "+name);
     },
-
-    /*
-     *  Get a dimension (including its units).
-     */
     GetDimen: function (name) {
       var dimen;
       if (this.nextIsSpace()) {this.i++}
@@ -1814,10 +1690,6 @@
       }
       TEX.Error("Missing dimension or its units for "+name);
     },
-    
-    /*
-     *  Get everything up to the given control sequence (token)
-     */
     GetUpTo: function (name,token) {
       while (this.nextIsSpace()) {this.i++}
       var j = this.i, k, c, parens = 0;
@@ -1836,17 +1708,9 @@
       TEX.Error("Couldn't find "+token+" for "+name);
     },
 
-    /*
-     *  Parse various substrings
-     */
     ParseArg: function (name) {return TEX.Parse(this.GetArgument(name),this.stack.env).mml()},
     ParseUpTo: function (name,token) {return TEX.Parse(this.GetUpTo(name,token),this.stack.env).mml()},
     
-    /*
-     *  Break up a string into text and math blocks
-     *  @@@ FIXME:  skip over braced groups?  @@@
-     *  @@@ FIXME:  pass environment to TEX.Parse? @@@
-     */
     InternalMath: function (text,level) {
       var def = {displaystyle: false}; if (level != null) {def.scriptlevel = level}
       if (this.stack.env.font) {def.mathvariant = this.stack.env.font}
@@ -1890,10 +1754,6 @@
       text = text.replace(/^\s+/,NBSP).replace(/\s+$/,NBSP);
       return MML.mtext(MML.chars(text)).With(def);
     },
-
-    /*
-     *  Replace macro paramters with their values
-     */
     SubstituteArgs: function (args,string) {
       var text = ''; var newstring = ''; var c; var i = 0;
       while (i < string.length) {
@@ -1912,10 +1772,6 @@
       return this.AddArgs(newstring,text);
     },
     
-    /*
-     *  Make sure that macros are followed by a space if their names
-     *  could accidentally be continued into the following text.
-     */
     AddArgs: function (s1,s2) {
       if (s2.match(/^[a-z]/i) && s1.match(/(^|[^\\])(\\\\)*\\[a-z]+$/i)) {s1 += ' '}
       if (s1.length + s2.length > TEX.config.MAXBUFFER)
@@ -1925,7 +1781,6 @@
     
   });
   
-  /************************************************************************/
 
   TEX.Augment({
     Stack: STACK, Parse: PARSE, Definitions: TEXDEF, Startup: STARTUP,
@@ -1940,10 +1795,6 @@
     prefilterHooks: MathJax.Callback.Hooks(true),    // hooks to run before processing TeX
     postfilterHooks: MathJax.Callback.Hooks(true),   // hooks to run after processing TeX
     
-    //
-    //  Check if AMSmath extension must be loaded and push
-    //    it on the extensions array, if needed
-    //
     Config: function () {
       this.SUPER(arguments).Config.apply(this,arguments);
       if (this.config.equationNumbers.autoNumber !== "none") {
@@ -1951,10 +1802,6 @@
         this.config.extensions.push("AMSmath.js");
       }
     },
-
-    //
-    //  Convert TeX to ElementJax
-    //
     Translate: function (script) {
       var mml, isError = false, math = MathJax.HTML.getScript(script);
       var display = (script.type.replace(/\n/g," ").match(/(;|\s|\n)mode\s*=\s*display(;|\s|\n|$)/) != null);
@@ -1962,7 +1809,6 @@
       this.prefilterHooks.Execute(data); math = data.math;
       try {
         mml = TEX.Parse(math).mml();
-//        mml = MML.semantics(mml,MML.annotation(math).With({encoding:"application:x-tex"}));
       } catch(err) {
         if (!err.texError) {throw err}
         mml = this.formatError(err,math,display,script);
@@ -1986,26 +1832,15 @@
       HUB.signal.Post(["TeX Jax - parse error",message,math,display,script]);
       return MML.merror(message);
     },
-
-    //
-    //  Produce an error and stop processing this equation
-    //
     Error: function (message) {
       throw HUB.Insert(Error(message),{texError: true});
     },
     
-    //
-    //  Add a user-defined macro to the macro list
-    //
     Macro: function (name,def,argn) {
       TEXDEF.macros[name] = ['Macro'].concat([].slice.call(arguments,1));
       TEXDEF.macros[name].isUser = true;
     },
     
-    //
-    //  Combine adjacent <mo> elements that are relations
-    //    (since MathML treats the spacing very differently)
-    //
     combineRelations: function (mml) {
       var i, m, m1, m2;
       for (i = 0, m = mml.data.length; i < m; i++) {
@@ -2030,10 +1865,6 @@
       }
     }
   });
-
-  //
-  //  Add the default filters
-  //
   TEX.prefilterHooks.Add(function (data) {
     data.math = TEX.prefilterMath(data.math,data.display,data.script);
   });

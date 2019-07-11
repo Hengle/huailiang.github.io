@@ -1,5 +1,3 @@
-
-
 (function (HUB, HTML, AJAX, HTMLCSS, nMML) {
   var VERSION = "2.0";
 

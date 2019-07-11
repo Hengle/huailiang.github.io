@@ -1,4 +1,3 @@
-
 MathJax.Hub.Register.LoadHook("[MathJax]/jax/element/mml/jax.js", function () {
   var VERSION = "2.0";
 

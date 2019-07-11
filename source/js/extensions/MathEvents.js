@@ -1,4 +1,3 @@
-
 (function (HUB, HTML, AJAX, CALLBACK, OUTPUT, INPUT) {
   var VERSION = "2.0";
 
