@@ -21,9 +21,6 @@
     Config: function () {
       this.SUPER(arguments).Config.call(this);
       if (this.settings.scale) { this.config.scale = this.settings.scale }
-      //
-      //  Insert styling to take account of displayAlign and displayIndent
-      //
       if (HUB.config.displayAlign !== "center") {
         var align = HUB.config.displayAlign, indent = HUB.config.displayIndent;
         var def = { "text-align": align + "!important" }; def["margin-" + align] = indent + "!important";
@@ -62,9 +59,6 @@
       //  Set up styles
       return AJAX.Styles(this.config.styles);
     },
-    //
-    //  Set up MathPlayer for IE on the first time through.
-    //
     InitializeMML: function () {
       this.initialized = true;
       if (isMSIE) {
@@ -99,9 +93,6 @@
             "typeset mathematics.");
         }
       } else {
-        //
-        //  Get the default sizes (need styles in place to do this)
-        //
         document.body.appendChild(this.EmExSpan);
         this.defaultEx = this.EmExSpan.firstChild.offsetWidth / 60;
         this.defaultMEx = this.EmExSpan.lastChild.offsetWidth / 60;
@@ -138,10 +129,6 @@
         //
         if (!isMSIE) { script.parentNode.insertBefore(this.EmExSpan.cloneNode(true), script) }
       }
-      //
-      //  Determine the scaling factors for each script
-      //  (this only requires one reflow rather than a reflow for each equation)
-      //
       for (i = 0; i < m; i++) {
         script = scripts[i]; if (!script.parentNode) continue;
         jax = script.MathJax.elementJax;
@@ -167,9 +154,7 @@
       }
     },
 
-    //
-    //  Add a SPAN to use as a container, and render the math into it
-    //  
+
     Translate: function (script) {
       if (!script.parentNode) return;
       //
@@ -232,12 +217,6 @@
     //
     MMLnamespace: "http://www.w3.org/1998/Math/MathML",
 
-    //
-    //  For MSIE, we must overlay the MathPlayer object to trap the events
-    //  (since they can't be cancelled when the events are on the <math> tag
-    //  itself).  The events we DON'T want are transferred to the math element,
-    //  and the others are handled directly.
-    //
     MSIEoverlay: function (span) {
       var math = span.firstChild;
       if (math.nodeName.toLowerCase() === "span") { math = math.firstChild }
@@ -412,10 +391,6 @@
     });
 
     MML.msubsup.Augment({
-      //
-      //  Use proper version of msub, msup, or msubsup, depending on
-      //  which items are present
-      //
       toNativeMML: function (parent) {
         var type = this.type;
         if (this.data[this.sup] == null) { type = "msub" }
@@ -429,10 +404,6 @@
     });
 
     MML.munderover.Augment({
-      //
-      //  Use proper version of munder, mover, or munderover, depending on
-      //  which items are present
-      //
       toNativeMML: function (parent) {
         var type = this.type;
         if (this.data[this.under] == null) { type = "mover" }
@@ -543,12 +514,6 @@
           else { tag.appendChild(this.NativeMMLelement("mrow")) }
         }
         parent.appendChild(math);
-        //
-        //  Firefox can't seem to get the width of <math> elements right, so
-        //  use an <mrow> to get the actual width and set the style on the 
-        //  parent element to match.  Even if we set the <math> width properly,
-        //  it doesn't seem to propagate up to the <span> correctly.
-        //
         if (nMML.widthBug) { parent.style.width = math.firstChild.scrollWidth + "px" }
       }
     });
@@ -585,9 +550,6 @@
     });
 
     MML.xml.Augment({
-      //
-      //  Insert the XML verbatim
-      //
       toNativeMML: function (parent) {
         for (var i = 0, m = this.data.length; i < m; i++) { parent.appendChild(this.data[i].cloneNode(true)) }
       }
@@ -595,26 +557,12 @@
 
     HUB.Register.StartupHook("TeX mathchoice Ready", function () {
       MML.TeXmathchoice.Augment({
-        //
-        //  Get the MathML for the selected choice
-        //
         toNativeMML: function (parent) { this.Core().toNativeMML(parent) }
       });
     });
-
-    //
-    //  Loading isn't complete until the element jax is modified,
-    //  but can't call loadComplete within the callback for "mml Jax Ready"
-    //  (it would call NativeMML's Require routine, asking for the mml jax again)
-    //  so wait until after the mml jax has finished processing.
-    //
     setTimeout(MathJax.Callback(["loadComplete", nMML, "jax.js"]), 0);
   });
 
-
-  //
-  //  Determine browser characteristics
-  //
   HUB.Browser.Select({
     MSIE: function (browser) {
       var mode = (document.documentMode || 0);

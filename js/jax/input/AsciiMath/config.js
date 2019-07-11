@@ -1,4 +1,3 @@
-
 MathJax.InputJax.AsciiMath = MathJax.InputJax({
   id: "AsciiMath",
   version: "2.0",

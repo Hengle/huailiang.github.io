@@ -25,13 +25,8 @@ MathJax.OutputJax["HTML-CSS"] = MathJax.OutputJax({
     //   respond to other events)
 
     linebreaks: {
-      automatic: false,   // when false, only process linebreak="newline",
-      // when true, insert line breaks automatically in long expressions.
-
-      width: "container" // maximum width of a line for automatic line breaks (e.g. "30em").
-      // use "container" to compute size from containing element,
-      // use "nn% container" for a portion of the container,
-      // use "nn%" for a portion of the window size
+      automatic: false,   
+      width: "container" 
     },
 
     styles: {
@@ -70,9 +65,6 @@ if (!MathJax.Hub.config.delayJaxRegistration) { MathJax.OutputJax["HTML-CSS"].Re
 MathJax.Hub.Register.StartupHook("End Config", [function (HUB, HTMLCSS) {
   var CONFIG = HUB.Insert({
 
-    //
-    //  The minimum versions that HTML-CSS supports
-    //
     minBrowserVersion: {
       Firefox: 3.0,
       Opera: 9.52,
@@ -82,19 +74,11 @@ MathJax.Hub.Register.StartupHook("End Config", [function (HUB, HTMLCSS) {
       Konqueror: 4.0
     },
 
-    //
-    //  For unsupported browsers, put back these delimiters for the preview
-    //
     inlineMathDelimiters: ['$', '$'],    // or ["",""] or ["\\(","\\)"]
     displayMathDelimiters: ['$$', '$$'],  // or ["",""] or ["\\[","\\]"]
-    //
-    //  For displayed math, insert <BR> for \n?
-    //
+
     multilineDisplay: true,
 
-    //
-    //  The function to call to display the math for unsupported browsers
-    //
     minBrowserTranslate: function (script) {
       var MJ = HUB.getJaxFor(script), text = ["[Math]"], delim;
       var span = document.createElement("span", { className: "MathJax_Preview" });

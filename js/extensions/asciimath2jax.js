@@ -1,4 +1,3 @@
-
 MathJax.Extension.asciimath2jax = {
   version: "2.0",
   config: {

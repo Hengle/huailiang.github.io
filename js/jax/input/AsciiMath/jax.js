@@ -1,13 +1,6 @@
-
-
 (function (ASCIIMATH) {
 
-  var MML;  // Filled in later
-
-  //
-  //  Make a documentFragment work-alike that uses MML objects
-  //  rather than DOM objects.
-  //
+  var MML;  
   var DOCFRAG = MathJax.Object.Subclass({
     firstChild: null,
     lastChild: null,
@@ -113,10 +106,6 @@
     });
   };
 
-  //
-  //  Set up to isolate ASCIIMathML.js
-  //
-
   var window = {};  // hide the true window
 
   //
@@ -132,57 +121,7 @@
 
   var navigator = { appName: "MathJax" };  // hide the true navigator object
 
-  var i; // avoid global variable used in code below
-
-  /******************************************************************
-   *
-   *   The following section is ASCIIMathML.js Version 1.4.7
-   *   (c) Peter Jipsen, used with permission.
-   *   
-   *   Some sections are commented out to save space in the
-   *   minified version (but that is not strictly necessary).
-   *   A few items are commented out and marked with DPVC comments
-   *   in order to keep the minifier from complaining about the
-   *   coding practices in ASCIIMathML.js
-   *   
-   *   Two sections are modified to include changes from version 2.0.1 of
-   *   ASCIIMathML.js and are marked with comments to that effect.  This
-   *   makes this version effectively the same as version 2.0.1, but 
-   *   without the overhead of the LaTeX-processing code.
-   *
-   ******************************************************************/
-
-  /*
-  ASCIIMathML.js
-  ==============
-  This file contains JavaScript functions to convert ASCII math notation
-  to Presentation MathML. The conversion is done while the (X)HTML page 
-  loads, and should work with Firefox/Mozilla/Netscape 7+ and Internet 
-  Explorer 6+MathPlayer (http://www.dessci.com/en/products/mathplayer/).
-  Just add the next line to your (X)HTML page with this file in the same folder:
-  <script type="text/javascript" src="ASCIIMathML.js"></script>
-  This is a convenient and inexpensive solution for authoring MathML.
-  
-  Version 1.4.7 Aug 30, 2005, (c) Peter Jipsen http://www.chapman.edu/~jipsen
-  Latest version at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML.js
-  For changes see http://www.chapman.edu/~jipsen/mathml/asciimathchanges.txt
-  If you use it on a webpage, please send the URL to jipsen@chapman.edu
-  
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or (at
-  your option) any later version.
-  
-  This program is distributed in the hope that it will be useful, 
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License (at http://www.gnu.org/copyleft/gpl.html) 
-  for more details.
-  */
-
-  //var checkForMathML = true;   // check if browser can display MathML
-  //var notifyIfNoMathML = true; // display note if no MathML capability
-  //var alertIfNoMathML = true;  // show alert box if no MathML capability
+  var i; 
   var mathcolor = "red";       // change it to "" (to inherit) or any other color
   var mathfontfamily = "serif"; // change to "" to inherit (works in IE) 
   // or another family (e.g. "arial")
@@ -196,53 +135,12 @@
   //var separatetokens;// has been removed (email me if this is a problem)
   var isIE = document.createElementNS == null;
 
-  /* 
-   * if (document.getElementById==null) 
-   *   alert("This webpage requires a recent browser such as\
-   * \nMozilla/Netscape 7+ or Internet Explorer 6+MathPlayer")
-   */
-
-  // all further global variables start with "AM"
 
   function AMcreateElementXHTML(t) {
     if (isIE) return document.createElement(t);
     else return document.createElementNS("http://www.w3.org/1999/xhtml", t);
   }
 
-  /* 
-   * function AMnoMathMLNote() {
-   *   var nd = AMcreateElementXHTML("h3");
-   *   nd.setAttribute("align","center")
-   *   nd.appendChild(AMcreateElementXHTML("p"));
-   *   nd.appendChild(document.createTextNode("To view the "));
-   *   var an = AMcreateElementXHTML("a");
-   *   an.appendChild(document.createTextNode("ASCIIMathML"));
-   *   an.setAttribute("href","http://www.chapman.edu/~jipsen/asciimath.html");
-   *   nd.appendChild(an);
-   *   nd.appendChild(document.createTextNode(" notation use Internet Explorer 6+"));  
-   *   an = AMcreateElementXHTML("a");
-   *   an.appendChild(document.createTextNode("MathPlayer"));
-   *   an.setAttribute("href","http://www.dessci.com/en/products/mathplayer/download.htm");
-   *   nd.appendChild(an);
-   *   nd.appendChild(document.createTextNode(" or Netscape/Mozilla/Firefox"));
-   *   nd.appendChild(AMcreateElementXHTML("p"));
-   *   return nd;
-   * }
-   * 
-   * function AMisMathMLavailable() {
-   *   if (navigator.appName.slice(0,8)=="Netscape") 
-   *     if (navigator.appVersion.slice(0,1)>="5") return null;
-   *     else return AMnoMathMLNote();
-   *   else if (navigator.appName.slice(0,9)=="Microsoft")
-   *     try {
-   *         var ActiveX = new ActiveXObject("MathPlayer.Factory.1");
-   *         return null;
-   *     } catch (e) {
-   *         return AMnoMathMLNote();
-   *     }
-   *   else return AMnoMathMLNote();
-   * }
-   */
 
   // character lists for Mozilla/Netscape fonts
   var AMcal = [0xEF35, 0x212C, 0xEF36, 0xEF37, 0x2130, 0x2131, 0xEF38, 0x210B, 0x2110, 0xEF39, 0xEF3A, 0x2112, 0x2133, 0xEF3B, 0xEF3C, 0xEF3D, 0xEF3E, 0x211B, 0xEF3F, 0xEF40, 0xEF41, 0xEF42, 0xEF43, 0xEF44, 0xEF45, 0xEF46];
@@ -944,176 +842,7 @@
     return node;
   }
 
-  /* 
-   * function AMstrarr2docFrag(arr, linebreaks) {
-   *   var newFrag=document.createDocumentFragment();
-   *   var expr = false;
-   *   for (var i=0; i<arr.length; i++) {
-   *     if (expr) newFrag.appendChild(AMparseMath(arr[i]));
-   *     else {
-   *       var arri = (linebreaks ? arr[i].split("\n\n") : [arr[i]]);
-   *       newFrag.appendChild(AMcreateElementXHTML("span").
-   *       appendChild(document.createTextNode(arri[0])));
-   *       for (var j=1; j<arri.length; j++) {
-   *         newFrag.appendChild(AMcreateElementXHTML("p"));
-   *         newFrag.appendChild(AMcreateElementXHTML("span").
-   *         appendChild(document.createTextNode(arri[j])));
-   *       }
-   *     }
-   *     expr = !expr;
-   *   }
-   *   return newFrag;
-   * }
-   * 
-   * function AMprocessNodeR(n, linebreaks) {
-   *   var mtch, str, arr, frg, i;
-   *   if (n.childNodes.length == 0) {
-   *    if ((n.nodeType!=8 || linebreaks) &&
-   *     n.parentNode.nodeName!="form" && n.parentNode.nodeName!="FORM" &&
-   *     n.parentNode.nodeName!="textarea" && n.parentNode.nodeName!="TEXTAREA" &&
-   *     n.parentNode.nodeName!="pre" && n.parentNode.nodeName!="PRE") {
-   *     str = n.nodeValue;
-   *     if (!(str == null)) {
-   *       str = str.replace(/\r\n\r\n/g,"\n\n");
-   *       if (doubleblankmathdelimiter) {
-   *         str = str.replace(/\x20\x20\./g," "+AMdelimiter1+".");
-   *         str = str.replace(/\x20\x20,/g," "+AMdelimiter1+",");
-   *         str = str.replace(/\x20\x20/g," "+AMdelimiter1+" ");
-   *       }
-   *       str = str.replace(/\x20+/g," ");
-   *       str = str.replace(/\s*\r\n/g," ");
-   *       mtch = false;
-   *       str = str.replace(new RegExp(AMescape2, "g"),
-   *               function(st){mtch=true;return "AMescape2"});
-   *       str = str.replace(new RegExp(AMescape1, "g"),
-   *               function(st){mtch=true;return "AMescape1"});
-   *       str = str.replace(new RegExp(AMdelimiter2regexp, "g"),AMdelimiter1);
-   *       arr = str.split(AMdelimiter1);
-   *       for (i=0; i<arr.length; i++)
-   *         arr[i]=arr[i].replace(/AMescape2/g,AMdelimiter2).
-   *                       replace(/AMescape1/g,AMdelimiter1);
-   *       if (arr.length>1 || mtch) {
-   *         if (checkForMathML) {
-   *           checkForMathML = false;
-   *           var nd = AMisMathMLavailable();
-   *           AMnoMathML = nd != null;
-   *           if (AMnoMathML && notifyIfNoMathML) 
-   *             if (alertIfNoMathML)
-   *               alert("To view the ASCIIMathML notation use Internet Explorer 6 +\nMathPlayer (free from www.dessci.com)\n\
-   *                 or Firefox/Mozilla/Netscape");
-   *             else AMbody.insertBefore(nd,AMbody.childNodes[0]);
-   *         }
-   *         if (!AMnoMathML) {
-   *           frg = AMstrarr2docFrag(arr,n.nodeType==8);
-   *           var len = frg.childNodes.length;
-   *           n.parentNode.replaceChild(frg,n);
-   *           return len-1;
-   *         } else return 0;
-   *       }
-   *     }
-   *    } else return 0;
-   *   } else if (n.nodeName!="math") {
-   *     for (i=0; i<n.childNodes.length; i++)
-   *       i += AMprocessNodeR(n.childNodes[i], linebreaks);
-   *   }
-   *   return 0;
-   * }
-   * 
-   * function AMprocessNode(n, linebreaks, spanclassAM) {
-   *   var frag,st;
-   *   if (spanclassAM!=null) {
-   *     frag = document.getElementsByTagName("span")
-   *     for (var i=0;i<frag.length;i++)
-   *       if (frag[i].className == "AM")
-   *         AMprocessNodeR(frag[i],linebreaks);
-   *   } else {
-   *     try {
-   *       st = n.innerHTML;
-   *     } catch(err) {}
-   *     if (st==null || 
-   *         st.indexOf(AMdelimiter1)!=-1 || st.indexOf(AMdelimiter2)!=-1) 
-   *       AMprocessNodeR(n,linebreaks);
-   *   }
-   *   if (isIE) { //needed to match size and font of formula to surrounding text
-   *     frag = document.getElementsByTagName('math');
-   *     for (var i=0;i<frag.length;i++) frag[i].update()
-   *   }
-   * }
-   * 
-   * var AMbody;
-   * var AMnoMathML = false, AMtranslated = false;
-   * 
-   * function translate(spanclassAM) {
-   *   if (!AMtranslated) { // run this only once
-   *     AMtranslated = true;
-   *     AMinitSymbols();
-   *     AMbody = document.getElementsByTagName("body")[0];
-   *     AMprocessNode(AMbody, false, spanclassAM);
-   *   }
-   * }
-   * 
-   * if (isIE) { // avoid adding MathPlayer info explicitly to each webpage
-   *   document.write("<object id=\"mathplayer\"\
-   *   classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
-   *   document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
-   * }
-   * 
-   * // GO1.1 Generic onload by Brothercake 
-   * // http://www.brothercake.com/
-   * //onload function (replaces the onload="translate()" in the <body> tag)
-   * function generic()
-   * {
-   *   translate();
-   * };
-   * //setup onload function
-   * if(typeof window.addEventListener != 'undefined')
-   * {
-   *   //.. gecko, safari, konqueror and standard
-   *   window.addEventListener('load', generic, false);
-   * }
-   * else if(typeof document.addEventListener != 'undefined')
-   * {
-   *   //.. opera 7
-   *   document.addEventListener('load', generic, false);
-   * }
-   * else if(typeof window.attachEvent != 'undefined')
-   * {
-   *   //.. win/ie
-   *   window.attachEvent('onload', generic);
-   * }
-   * //** remove this condition to degrade older browsers
-   * else
-   * {
-   *   //.. mac/ie5 and anything else that gets this far
-   *   //if there's an existing onload function
-   *   if(typeof window.onload == 'function')
-   *   {
-   *     //store it
-   *     var existing = onload;
-   *     //add new onload handler
-   *     window.onload = function()
-   *     {
-   *       //call existing onload function
-   *       existing();
-   *       //call generic onload function
-   *       generic();
-   *     };
-   *   }
-   *   else
-   *   {
-   *     //setup onload function
-   *     window.onload = generic;
-   *   }
-   * }
-   */
-
-  /******************************************************************
-   *
-   *   The previous section is ASCIIMathML.js Version 1.4.7
-   *   (c) Peter Jipsen, used with permission.
-   *
-   ******************************************************************/
-
+  
   showasciiformulaonhover = false;
   mathfontfamily = "";
   mathcolor = "";
@@ -1217,16 +946,12 @@
   //
   //  Make minimizer think these have been used
   var junk = [
-    window, navigator //,
-    //  checkForMathML, notifyIfNoMathML, alertIfNoMathML, AMdelimiter1, AMescape1,
-    //  AMdelimiter2, AMescape2, AMdelimiter2regexp, doubleblankmathdelimiter
+    window, navigator 
   ];
   junk = null;
 
 })(MathJax.InputJax.AsciiMath);
 
-
-/************************************************************************/
 
 (function (ASCIIMATH) {
   var MML;

@@ -1,4 +1,3 @@
-
 MathJax.Extension.mml2jax = {
   version: "2.0",
   config: {

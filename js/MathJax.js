@@ -11,7 +11,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
       var BASE = window[BASENAME];
       if (!BASE) { BASE = window[BASENAME] = {} }
 
-      var PROTO = [];  // a static object used to indicate when a prototype is being created
+      var PROTO = [];
       var OBJECT = function (def) {
         var obj = def.constructor; if (!obj) { obj = new Function("") }
         for (var id in def) { if (id !== 'constructor' && def.hasOwnProperty(id)) { obj[id] = def[id] } }
@@ -23,14 +23,11 @@ if (document.getElementById && document.childNodes && document.createElement) {
 
       var BUGTEST = CONSTRUCTOR(); BUGTEST.prototype = { bug_test: 1 };
       if (!BUGTEST.prototype.bug_test) {
-        CONSTRUCTOR = function () {
-          return function () { return arguments.callee.Init.call(this, arguments) };
-        };
+        CONSTRUCTOR = function () { return function () { return arguments.callee.Init.call(this, arguments) }; };
       };
 
       BASE.Object = OBJECT({
         constructor: CONSTRUCTOR(),
-
         Subclass: function (def, classdef) {
           var obj = CONSTRUCTOR();
           obj.SUPER = this; obj.Init = this.Init;
@@ -54,7 +51,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           var id;
           if (def != null) {
             for (id in def) { if (def.hasOwnProperty(id)) { this.protoFunction(id, def[id]) } }
-            // MSIE doesn't list toString even if it is not native so handle it separately
             if (def.toString !== this.prototype.toString && def.toString !== {}.toString) { this.protoFunction('toString', def.toString) }
           }
           if (classdef != null) {
@@ -80,21 +76,16 @@ if (document.getElementById && document.childNodes && document.createElement) {
         has: function (property) { return this.prototype.has.call(this, property) },
         isa: function (obj) {
           var constructor = this;
-          while (constructor) {
-            if (constructor === obj) { return true } else { constructor = constructor.SUPER }
-          }
+          while (constructor) { if (constructor === obj) { return true } else { constructor = constructor.SUPER } }
           return false;
         },
 
-
         SimpleSUPER: OBJECT({
           constructor: function (def) { return this.SimpleSUPER.define(def) },
-
           define: function (src) {
             var dst = {};
             if (src != null) {
               for (var id in src) { if (src.hasOwnProperty(id)) { dst[id] = this.wrap(id, src[id]) } }
-              // MSIE doesn't list toString even if it is not native so handle it separately
               if (src.toString !== this.prototype.toString && src.toString !== {}.toString) { dst.toString = this.wrap('toString', src.toString) }
             }
             return dst;
@@ -118,9 +109,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
             return result;
           }.toString().replace(/^\s*function\s*\(\)\s*\{\s*/i, "").replace(/\s*\}\s*$/i, ""),
 
-          toString: function () {
-            return this.original.toString.apply(this.original, arguments);
-          }
+          toString: function () { return this.original.toString.apply(this.original, arguments); }
         })
       });
 
@@ -161,11 +150,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
       var EVAL = function (code) { return eval.call(window, code) }
       EVAL("var __TeSt_VaR__ = 1"); // check if it works in global context
       if (window.__TeSt_VaR__) {
-        try { delete window.__TeSt_VaR__; } // NOTE IE9 throws when in IE7 mode
+        try { delete window.__TeSt_VaR__; }
         catch (error) { window.__TeSt_VaR__ = null; }
       } else {
         if (window.execScript) {
-          // IE
           EVAL = function (code) {
             BASE.__code = code;
             code = "try {" + BASENAME + ".__result = eval(" + BASENAME + ".__code)} catch(err) {" + BASENAME + ".__result = err}";
@@ -175,7 +163,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             return result;
           }
         } else {
-          // Safari2
           EVAL = function (code) {
             BASE.__code = code;
             code = "try {" + BASENAME + ".__result = eval(" + BASENAME + ".__code)} catch(err) {" + BASENAME + ".__result = err}";
@@ -279,7 +266,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             if (this.hooks[i] === hook) { this.hooks.splice(i, 1); return }
           }
         },
-        //
         Execute: function () {
           var callbacks = [{}];
           for (var i = 0, m = this.hooks.length; i < m; i++) {
@@ -432,34 +418,28 @@ if (document.getElementById && document.childNodes && document.createElement) {
         }
         return head;
       };
-      var SCRIPTS = [];  // stores scripts to be removed after a delay
+      var SCRIPTS = [];
       var REMOVESCRIPTS = function () {
         for (var i = 0, m = SCRIPTS.length; i < m; i++) { BASE.Ajax.head.removeChild(SCRIPTS[i]) }
         SCRIPTS = [];
       };
 
       BASE.Ajax = {
-        loaded: {},         // files already loaded
-        loading: {},        // files currently in process of loading
-        loadHooks: {},      // hooks to call when files are loaded
-        timeout: 15 * 1000,   // timeout for loading of files (15 seconds)
-        styleDelay: 1,      // delay to use before styles are available
-        config: { root: "" }, // URL of root directory to load from
-
-        STATUS: {
-          OK: 1,         // file is loading or did load OK
-          ERROR: -1      // file timed out during load
-        },
+        loaded: {},
+        loading: {},
+        loadHooks: {},
+        timeout: 120 * 1000,
+        styleDelay: 1,
+        config: { root: "" },
+        STATUS: { OK: 1, ERROR: -1 },
 
         rootPattern: new RegExp("^\\[" + BASENAME + "\\]"),
-
         fileURL: function (file) { return file.replace(this.rootPattern, this.config.root) },
         Require: function (file, callback) {
           callback = BASE.Callback(callback); var type;
           if (file instanceof Object) { for (var i in file) { }; type = i.toUpperCase(); file = file[i] }
           else { type = file.split(/\./).pop().toUpperCase() }
           file = this.fileURL(file);
-          // FIXME: check that URL is OK
           if (this.loaded[file]) {
             callback(this.loaded[file]);
           } else {
@@ -539,10 +519,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
             callback = BASE.Callback(callback);
             if (node.nodeName === "STYLE" && node.styleSheet &&
               typeof (node.styleSheet.cssText) !== 'undefined') {
-              callback(this.STATUS.OK); // MSIE processes style immediately, but doesn't set its styleSheet!
+              callback(this.STATUS.OK);
             } else if (window.chrome && typeof (window.sessionStorage) !== "undefined" &&
               node.nodeName === "STYLE") {
-              callback(this.STATUS.OK); // Same for Chrome 5 (beta), Grrr.
+              callback(this.STATUS.OK);
             } else if (isSafari2) {
               this.timer.start(this, [this.timer.checkSafari2, sheets++, callback], this.styleDelay);
             } else {
@@ -566,7 +546,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
           file: function (file, status) {
             if (status < 0) { BASE.Ajax.loadTimeout(file) } else { BASE.Ajax.loadComplete(file) }
           },
-          //
           execute: function () { this.hook.call(this.object, this, this.data[0], this.data[1]) },
           //
           checkSafari2: function (check, length, callback) {
@@ -585,7 +564,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
               }
             }
             if (isStyle) {
-              // Opera 9.6 requires this setTimeout
               setTimeout(BASE.Callback([callback, check.STATUS.OK]), 0);
             } else {
               setTimeout(check, check.delay);
@@ -702,10 +680,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       addElement: function (span, type, def, contents) { return span.appendChild(this.Element(type, def, contents)) },
       TextNode: function (text) { return document.createTextNode(text) },
       addText: function (span, text) { return span.appendChild(this.TextNode(text)) },
-
-      //
-      //  Set and get the text of a script
-      //
       setScript: function (script, text) {
         if (this.setScriptBug) { script.text = text } else {
           while (script.firstChild) { script.removeChild(script.firstChild) }
@@ -717,16 +691,9 @@ if (document.getElementById && document.childNodes && document.createElement) {
         return text.replace(/^\s+/, "").replace(/\s+$/, "");
       },
 
-      //
-      //  Manage cookies
-      //
       Cookie: {
         prefix: "mjx",
         expires: 365,
-
-        //
-        //  Save an object as a named cookie
-        //
         Set: function (name, def) {
           var keys = [];
           if (def) {
@@ -761,16 +728,14 @@ if (document.getElementById && document.childNodes && document.createElement) {
           return obj;
         }
       }
-
     };
 
-
     MathJax.Message = {
-      ready: false,  // used to tell when the styles are available
+      ready: false,
       log: [{}], current: null,
       textNodeBug: (navigator.vendor === "Apple Computer, Inc." &&
         typeof navigator.vendorSub === "undefined") ||
-        (window.hasOwnProperty && window.hasOwnProperty("konqueror")), // Konqueror displays some gibberish with text.nodeValue = "..."
+        (window.hasOwnProperty && window.hasOwnProperty("konqueror")),
 
       styles: {
         "#MathJax_Message": {
@@ -909,7 +874,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       },
 
       Remove: function () {
-        // FIXME:  do a fade out or something else interesting?
         this.text.nodeValue = "";
         this.div.style.display = "none";
       },
@@ -931,60 +895,53 @@ if (document.getElementById && document.childNodes && document.createElement) {
     MathJax.Hub = {
       config: {
         root: "",
-        config: [],      // list of configuration files to load
-        styleSheets: [], // list of CSS files to load
-        styles: {        // styles to generate in-line
-          ".MathJax_Preview": { color: "#888" }
-        },
-        jax: [],         // list of input and output jax to load
-        extensions: [],  // list of extensions to load
-        preJax: null,    // pattern to remove from before math script tag
-        postJax: null,   // pattern to remove from after math script tag
-        displayAlign: 'center',       // how to align displayed equations (left, center, right)
-        displayIndent: '0',           // indentation for displayed equations (when not centered)
-        preRemoveClass: 'MathJax_Preview', // class of objects to remove preceeding math script
-        showProcessingMessages: true, // display "Processing math: nn%" messages or not
-        messageStyle: "normal",       // set to "none" or "simple" (for "Loading..." and "Processing...")
-        delayStartupUntil: "none",    // set to "onload" to delay setup until the onload handler runs
-        skipStartupTypeset: false,    // set to true to skip PreProcess and Process during startup
-        "v1.0-compatible": true,  // set to false to prevent message about configuration change
-        elements: [],             // array of elements to process when none is given explicitly
-        positionToHash: true,     // after initial typeset pass, position to #hash location?
-
-        showMathMenu: false,      // attach math context menu to typeset math?
-        showMathMenuMSIE: false,  // separtely determine if MSIE should have math menu
+        config: [],
+        styleSheets: [],
+        styles: { ".MathJax_Preview": { color: "#888" } },
+        jax: [],
+        extensions: [],
+        preJax: null,
+        postJax: null,
+        displayAlign: 'center',
+        displayIndent: '0',
+        preRemoveClass: 'MathJax_Preview',
+        showProcessingMessages: true,
+        messageStyle: "normal",
+        delayStartupUntil: "none",
+        skipStartupTypeset: false,
+        "v1.0-compatible": true,
+        elements: [],
+        positionToHash: true,
+        showMathMenu: false,
+        showMathMenuMSIE: false,
 
         menuSettings: {
-          zoom: "None",        //  when to do MathZoom
-          CTRL: false,         //    require CTRL for MathZoom?
-          ALT: false,          //    require Alt or Option?
-          CMD: false,          //    require CMD?
-          Shift: false,        //    require Shift?
-          discoverable: false, //  make math menu discoverable on hover?
-          zscale: "200%",      //  the scaling factor for MathZoom
-          renderer: "",        //  set when Jax are loaded
-          font: "Auto",        //  what font HTML-CSS should use
-          context: "MathJax",  //  or "Browser" for pass-through to browser menu
-          mpContext: false,    //  true means pass menu events to MathPlayer in IE
-          mpMouse: false,      //  true means pass mouse events to MathPlayer in IE
-          texHints: true       //  include class names for TeXAtom elements
+          zoom: "None",
+          CTRL: false,
+          ALT: false,
+          CMD: false,
+          Shift: false,
+          discoverable: false,
+          zscale: "200%",
+          renderer: "",
+          font: "Auto",
+          context: "MathJax",
+          mpContext: false,
+          mpMouse: false,
+          texHints: true
         },
-
         errorSettings: {
-          message: ["[Math Processing Error3]"], // HTML snippet structure for message to use
-          style: { color: "#CC0000", "font-style": "italic" }  // style for message
+          message: ["[Math Processing Error3]"],
+          style: { color: "#CC0000", "font-style": "italic" }
         }
       },
 
-      preProcessors: MathJax.Callback.Hooks(true), // list of callbacks for preprocessing (initialized by extensions)
-      inputJax: {},          // mime-type mapped to input jax (by registration)
-      outputJax: { order: {} }, // mime-type mapped to output jax list (by registration)
-
-      processUpdateTime: 250, // time between screen updates when processing math (milliseconds)
-      processUpdateDelay: 10, // pause between screen updates to allow other processing (milliseconds)
-
-      signal: MathJax.Callback.Signal("Hub"), // Signal used for Hub events
-
+      preProcessors: MathJax.Callback.Hooks(true),
+      inputJax: {},
+      outputJax: { order: {} },
+      processUpdateTime: 250,
+      processUpdateDelay: 10,
+      signal: MathJax.Callback.Signal("Hub"),
       Config: function (def) {
         this.Insert(this.config, def);
         if (this.config.Augment) { this.Augment(this.config.Augment) }
@@ -1117,7 +1074,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         for (var i = 0, m = ec.elements.length; i < m; i++) {
           if (ec.elements[i]) {
             var state = {
-              scripts: [],                  // filled in by prepareScripts
+              scripts: [],
               start: new Date().getTime(),  // timer for processing messages
               i: 0, j: 0,                   // current script, current jax
               jax: {},                      // scripts grouped by output jax
@@ -1230,9 +1187,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             } else if (script.MathJax.state === STATE.OUTPUT) {
               this.saveScript(script.MathJax.elementJax, state, script, STATE); // add script to state
             }
-            //
-            //  Go on to the next script, and check if we need to update the processing message
-            //
             state.i++; var now = new Date().getTime();
             if (now - state.start > this.processUpdateTime && state.i < state.scripts.length) { state.start = now; this.RestartAfter(MathJax.Callback.Delay(1)) }
           }
@@ -1250,7 +1204,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         jax.outputJax = this.outputJax[jax.mimeType][0].id;
         if (!state.jax[jax.outputJax]) {
           if (state.jaxIDs.length === 0) {
-            // use original array until we know there are more (rather than two copies)
             state.jax[jax.outputJax] = state.scripts;
           } else {
             if (state.jaxIDs.length === 1) // get the script so far for the existing jax
@@ -1270,7 +1223,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
             try {
               var result = JAX[method](state);
               if (typeof result === 'function') {
-                if (result.called) continue;  // go back and try again
+                if (result.called) continue;
                 this.RestartAfter(result);
               }
             } catch (err) {
@@ -1327,15 +1280,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       formatError: function (script, err) {
         var error = MathJax.HTML.Element("span", { className: "MathJax_Error" }, this.config.errorSettings.message);
         error.jaxID = "Error";
-        if (MathJax.Extension.MathEvents) {
-          // error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
-          // error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
-        } else {
-          MathJax.Ajax.Require("[MathJax]/extensions/MathEvents.js", function () {
-            // error.oncontextmenu = MathJax.Extension.MathEvents.Event.Menu;
-            // error.onmousedown = MathJax.Extension.MathEvents.Event.Mousedown;
-          });
-        }
         script.parentNode.insertBefore(error, script);
         if (script.MathJax.preview) { script.MathJax.preview.innerHTML = "" }
         this.lastError = err;
@@ -1349,7 +1293,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         if (callback == null && (element instanceof Array || typeof element === 'function')) { try { MathJax.Callback(element); callback = element; element = null } catch (e) { } }
         if (element == null) { element = this.config.elements || [] }
         if (!(element instanceof Array)) { element = [element] }
-        element = [].concat(element); // make a copy so the original isn't changed
+        element = [].concat(element);
         for (var i = 0, m = element.length; i < m; i++) { if (typeof (element[i]) === 'string') { element[i] = document.getElementById(element[i]) } }
         if (element.length == 0) { element.push(document.body) }
         if (!callback) { callback = {} }
@@ -1366,7 +1310,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       Insert: function (dst, src) {
         for (var id in src) {
           if (src.hasOwnProperty(id)) {
-            // allow for concatenation of arrays?
             if (typeof src[id] === 'object' && !(src[id] instanceof Array) &&
               (typeof dst[id] === 'object' || typeof dst[id] === 'function')) {
               this.Insert(dst[id], src[id]);
@@ -1381,10 +1324,10 @@ if (document.getElementById && document.childNodes && document.createElement) {
     MathJax.Hub.Insert(MathJax.Hub.config.styles, MathJax.Message.styles);
     MathJax.Hub.Insert(MathJax.Hub.config.styles, { ".MathJax_Error": MathJax.Hub.config.errorSettings.style });
     MathJax.Extension = {};
-    MathJax.Hub.Configured = MathJax.Callback({}); // called when configuration is complete
+    MathJax.Hub.Configured = MathJax.Callback({});
     MathJax.Hub.Startup = {
-      script: "", // the startup script from the SCRIPT call that loads MathJax.js
-      queue: MathJax.Callback.Queue(),           // Queue used for startup actions
+      script: "",
+      queue: MathJax.Callback.Queue(),
       signal: MathJax.Callback.Signal("Startup"), // Signal used for startup events
       params: {},
       Config: function () {
@@ -1471,7 +1414,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
       },
       Jax: function () {
         var config = MathJax.Hub.config, jax = MathJax.Hub.outputJax;
-        //  Save the order of the output jax since they are loading asynchronously
         for (var i = 0, m = config.jax.length, k = 0; i < m; i++) {
           if (config.jax[i].substr(0, 7) === "output/") { jax.order[config.jax[i].substr(7)] = k; k++ }
         }
@@ -1588,7 +1530,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
                 if (typeof def[id] === "function") { cObject.protoFunction(id, def[id]) } else { ndef[id] = def[id] }
               }
             }
-            // MSIE doesn't list toString even if it is not native so handle it separately
             if (def.toString !== cObject.prototype.toString && def.toString !== {}.toString) { cObject.protoFunction('toString', def.toString) }
           }
           HUB.Insert(cObject.prototype, ndef);
@@ -1614,8 +1555,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
               ["Post", HUB.Startup.signal, this.id + " Jax Config"],
               ["Config", this],
               ["Post", HUB.Startup.signal, this.id + " Jax Require"],
-              // Config may set the required and extensions array,
-              //  so use functions to delay making the reference until needed
               [function (THIS) { return MathJax.Hub.Startup.loadArray(THIS.require, this.directory) }, this],
               [function (config, id) { return MathJax.Hub.Startup.loadArray(config.extensions, "extensions/" + id) }, this.config || {}, this.id],
               ["Post", HUB.Startup.signal, this.id + " Jax Startup"],
@@ -1646,7 +1585,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         copyTranslate: true,
         Process: function (script, state) {
           var queue = CALLBACK.Queue(), file;
-          // Load any needed element jax
           var jax = this.elementJax; if (!(jax instanceof Array)) { jax = [jax] }
           for (var i = 0, m = jax.length; i < m; i++) {
             file = BASE.ElementJax.directory + "/" + jax[i] + "/" + this.JAXFILE;
@@ -1655,7 +1593,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
             this.require.push(file);  // so Startup will wait for it to be loaded
             queue.Push(AJAX.Require(file));
           }
-          // Load the input jax
           file = this.directory + "/" + this.JAXFILE;
           var load = queue.Push(AJAX.Require(file));
           if (!load.called) {
@@ -1664,7 +1601,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
               throw Error(file + " failed to load properly");
             }
           }
-          // Load the associated output jax
           jax = HUB.outputJax["jax/" + jax[0]];
           if (jax) { queue.Push(AJAX.Require(jax[0].directory + "/" + this.JAXFILE)) }
           return queue.Push({});
@@ -1698,10 +1634,8 @@ if (document.getElementById && document.childNodes && document.createElement) {
         Register: function (mimetype) {
           var jax = HUB.outputJax;
           if (!jax[mimetype]) { jax[mimetype] = [] }
-          //  If the output jax is earlier in the original configuration list, put it first here
           if (jax[mimetype].length && (this.id === HUB.config.menuSettings.renderer ||
             (jax.order[this.id] || 0) < (jax.order[jax[mimetype][0].id] || 0))) { jax[mimetype].unshift(this) } else { jax[mimetype].push(this) }
-          //  Make sure the element jax is loaded before Startup is called
           if (!this.require) { this.require = [] }
           else if (!(this.require instanceof Array)) { this.require = [this.require] };
           this.require.push(BASE.ElementJax.directory + "/" + (mimetype.split(/\//)[1]) + "/" + this.JAXFILE);
@@ -1717,7 +1651,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         });
 
       BASE.ElementJax = JAX.Subclass({
-        // make a subclass, not an instance
         Init: function (def, cdef) { return this.constructor.Subclass(def, cdef) },
 
         inputJax: null,
@@ -1956,7 +1889,6 @@ if (document.getElementById && document.childNodes && document.createElement) {
         ["Styles", STARTUP],
         ["Message", STARTUP],
         function () {
-          // Do Jax and Extensions in parallel, but wait for them all to complete
           var queue = BASE.Callback.Queue(
             STARTUP.Jax(),
             STARTUP.Extensions()
@@ -1965,7 +1897,7 @@ if (document.getElementById && document.childNodes && document.createElement) {
         },
         ["Menu", STARTUP],
         STARTUP.onLoad(),
-        function () { MathJax.isReady = true }, // indicates that MathJax is ready to process math
+        function () { MathJax.isReady = true },
         ["Typeset", STARTUP],
         ["Hash", STARTUP],
         ["MenuZoom", STARTUP],
