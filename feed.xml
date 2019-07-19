@@ -5,12 +5,12 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 18 Jul 2019 21:00:57 +0800</pubDate>
-    <lastBuildDate>Thu, 18 Jul 2019 21:00:57 +0800</lastBuildDate>
+    <pubDate>Sat, 20 Jul 2019 02:12:05 +0800</pubDate>
+    <lastBuildDate>Sat, 20 Jul 2019 02:12:05 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
-        <title>VR探索</title>
+        <title>AR探索</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;程序通过OpenCV实现对Marker的识别和定位，然后通过OpenGL将虚拟物体叠加到摄像头图像下，实现增强现实。这里以参考《深入理解OpenCV》这本书第二章节的例子，实现基于标记的的虚拟现实实现。看到网上很多的例子都是基于固定渲染管线来画虚拟物体的， 而且很多地方都经不起推敲。 本例使用现代OpenGL实现的整个绘制过程。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -313,6 +313,14 @@ glBindVertexArray(0);
 
 &lt;p&gt;考虑一个简单场景中有个点，他周围的各个方向上的环境光照就是上面的cubemap呈现的，假如我想知道这个点各个方向的光照情况，那么就必须在cubemap对应的各个方向进行采样。对于一个大的场景来说，每个位置点的环境光都有可能不同，如果把每个点的环境光贴图储存起来，并且每次获取光照都从相应的贴图里面采样，可想而知这样的方法是非常昂贵的。&lt;/p&gt;
 
+&lt;p&gt;利用球谐函数就可以很好的解决这个问题，球谐函数的主要作用就是用简单的系数表示复杂的球面函数。球谐光照实际上就是将周围的环境光采样成几个系数，然后渲染的时候用这几个系数来对光照进行还原，这种过程可以看做是对周围环境光的简化，从而简化计算过程。&lt;/p&gt;
+
+&lt;p&gt;球谐函数的表达式定义如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\int f(x) \,{\rm dx} = \sum_{l=0}^n \sum_{m={-l}}^l c_l^m y_l^m, \quad c_l^m = \int_S f(s)y_l^m(s) \,{\rm ds}&lt;/script&gt;
+
+&lt;p&gt;而 &lt;script type=&quot;math/tex&quot;&gt;y_l^m&lt;/script&gt; 是一个阶数(l,m)和角度（法线n）相关的定量，称作球谐基，&lt;script type=&quot;math/tex&quot;&gt;c_l^m&lt;/script&gt; 是对应球谐基方向上的系数。  其中 &lt;script type=&quot;math/tex&quot;&gt;y_l^m&lt;/script&gt; 定义如下：&lt;/p&gt;
+
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 Y_l^m=
 \begin{cases}
@@ -341,7 +349,7 @@ K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex19.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;前3阶的球谐基函数如下：&lt;/p&gt;
+&lt;p&gt;实际上render过程中， 我们只近似取前几阶来构建球谐函数。前3阶的球谐基函数如下：&lt;/p&gt;
 
 &lt;h4 id=&quot;l0&quot;&gt;l=0:&lt;/h4&gt;
 
@@ -367,15 +375,20 @@ K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;Y_2^2 = \frac{1}{4}\sqrt{\frac{15}{\pi}}\frac{x^2-z^2}{r^2}\ \tag{m = 2}&lt;/script&gt;
 
-&lt;p&gt;由于球谐基函数阶数是无限的，所以只能取前面几组基来近似，一般在光照中大都取3阶，也即9个球谐系数。&lt;/p&gt;
+&lt;p&gt;由于球谐基函数阶数是无限的，所以只能取前面几组基来近似，一般在光照中大都取3阶，也即9个球谐系数。对于每个球谐波，我们将其值绘制在球体表面上，然后绘制在极性中。通过改变前一个球体的半径简单地获得极坐标图。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex20.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;center&gt;
+    &lt;img src=&quot;/img/in-post/post-engine/tex20.jpg&quot; /&gt;
+&lt;/center&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;这里面每个曲面都是用球坐标系表示的，球谐基都是定义在球坐标系上的函数，r（也就是离中心的距离）表示的就是这个球谐基在这个方向分量的重要程度。我是用类比傅里叶变换的方法来理解的，其实球谐函数本身就是拉普拉斯变换在球坐标系下的表示，这里的每个球谐基可以类比成傅里叶变换中频域的各个离散的频率，各个球谐基乘以对应的系数就可以还原出原来的球面函数。一个复杂的波形可以用简单的谐波和相应系数表示，同样的，一个复杂的球面上的函数也可以用简单的球谐基和相应的系数表示。&lt;/p&gt;
 
 &lt;h2 id=&quot;section-1&quot;&gt;采样&lt;/h2&gt;
 
-&lt;p&gt;在球面上均匀采样的映射的表达式, 并不是均匀的变化球面参数$\theta$ 和 $\phi$， 或者说如果我们直接给 [公式] 赋两个标准随机变量的话：&lt;/p&gt;
+&lt;p&gt;在球面上均匀采样的映射的表达式, 并不是均匀的变化球面参数&lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; 和 &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt;， 或者说如果我们直接给 [公式] 赋两个标准随机变量的话：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \left\{
@@ -395,7 +408,13 @@ K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
 
 &lt;p&gt;基于此， 我们在自己的&lt;a href=&quot;https://github.com/huailiang/OpenGLEngine&quot;&gt;引擎&lt;/a&gt;中我们采用了基于正太分布的采样（中间稠密， 两边稀疏），来近似实现均匀采样。但还不是严格的球面均匀采样的。&lt;/p&gt;
 
-&lt;p&gt;若要严格的均匀采样，可以参考这篇&lt;a href=&quot;http://corysimon.github.io/articles/uniformdistn-on-sphere/&quot;&gt;论文&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;若要严格的均匀采样，可以参考这篇&lt;a href=&quot;http://corysimon.github.io/articles/uniformdistn-on-sphere/&quot;&gt;论文&lt;/a&gt;。 在引擎中， 我们使用了tools/sample.sh 生成SAMPLE_NUM=1000000个采样点，采样点使用正太分布的随机数，DEGREE=3 四阶(m = DEGREE+1)的球谐面来生成对应球谐基的因子。&lt;/p&gt;
+
+&lt;p&gt;使用球鞋函数还原的间接光照效果如下图所示:&lt;/p&gt;
+
+&lt;center class=&quot;half&quot;&gt;
+    &lt;img src=&quot;/img/in-post/post-engine/tex23.jpg&quot; height=&quot;250&quot; /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;img src=&quot;/img/in-post/post-engine/tex25.jpg&quot; height=&quot;250&quot; /&gt;
+&lt;/center&gt;
 
 &lt;h2 id=&quot;section-2&quot;&gt;球谐投影与重建&lt;/h2&gt;
 
@@ -499,6 +518,24 @@ K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
 &lt;/div&gt;
 
 &lt;p&gt;通过unity的接口LightProbes.GetInterpolatedProbe即可以拿到场景某处的这组9&lt;em&gt;3的L0-L2的基底系数，他是一个结构体SphericalHarmonicsL2，访问它的3&lt;/em&gt;9的数组可以把他封装成7个rgba的color。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;题后闲聊&lt;/h2&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;话题一：&lt;/h4&gt;
+
+&lt;p&gt;在5月12日Unity主办的Unite Shanghai2019开发者大会上，腾讯天美工作室技术副总监郭智先生以《使命召唤手游，引擎技术升级与演化》为主题分享了《使命召唤手游》在技术方面的开发历程和经验。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex27.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;分享提到游戏中间接光用cubemamp做GI Specular，用SH probe做GI diffuse。 不过让我产生疑问的是， 既然使用了SH 球谐面了， 就没必要在去生成cubemap了。 因为使用SH函数，完全就可以还原物体周围的环境辐射图了。 而且他这个cubemap肯定不包含近景的间接光信息， 否则的话实时生成间接光就太耗了， 可能是是只有远景的间接光信息， 在一个场景里只会对应这样一个cubemap。 这完全就我自己猜测的，具体的原因只有他本人知道了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex26.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-7&quot;&gt;话题二：&lt;/h4&gt;
+
+&lt;p&gt;球谐函数不仅在图形领域有着广泛的应用， 在其他领域也有颇多的应用，比如说人脸识别。为实现任意视点下三维人脸模型绘制,针对极其稀疏和分散的人脸数据,提出基于球谐函数的人脸模型表面光场构建方法。该方法首先利用球谐函数为线性组合表示表面光场对应的辐射度函数,然后使用添加稳定能量项的无约束最小二乘法,实现对人脸模型表面光场的鲁棒性拟合,最后采用仿真技术对任意视点下的人脸模型进行渲染。在极其稀疏的6个视点下的人脸图像上实验,结果验证了该方法的有效性。与插值法比较,验证了该方法更具鲁棒性。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex28.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Thu, 04 Jul 2019 11:00:00 +0800</pubDate>

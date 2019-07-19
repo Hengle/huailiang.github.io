@@ -88,6 +88,14 @@ MathJax.Hub.Config({
 
 <p>考虑一个简单场景中有个点，他周围的各个方向上的环境光照就是上面的cubemap呈现的，假如我想知道这个点各个方向的光照情况，那么就必须在cubemap对应的各个方向进行采样。对于一个大的场景来说，每个位置点的环境光都有可能不同，如果把每个点的环境光贴图储存起来，并且每次获取光照都从相应的贴图里面采样，可想而知这样的方法是非常昂贵的。</p>
 
+<p>利用球谐函数就可以很好的解决这个问题，球谐函数的主要作用就是用简单的系数表示复杂的球面函数。球谐光照实际上就是将周围的环境光采样成几个系数，然后渲染的时候用这几个系数来对光照进行还原，这种过程可以看做是对周围环境光的简化，从而简化计算过程。</p>
+
+<p>球谐函数的表达式定义如下：</p>
+
+<script type="math/tex; mode=display">\int f(x) \,{\rm dx} = \sum_{l=0}^n \sum_{m={-l}}^l c_l^m y_l^m, \quad c_l^m = \int_S f(s)y_l^m(s) \,{\rm ds}</script>
+
+<p>而 <script type="math/tex">y_l^m</script> 是一个阶数(l,m)和角度（法线n）相关的定量，称作球谐基，<script type="math/tex">c_l^m</script> 是对应球谐基方向上的系数。  其中 <script type="math/tex">y_l^m</script> 定义如下：</p>
+
 <script type="math/tex; mode=display">% <![CDATA[
 Y_l^m=
 \begin{cases}
@@ -116,7 +124,7 @@ K_l^0P_l^0(cos\theta)& \text{(m=0)}
 
 <p><img src="/img/in-post/post-engine/tex19.jpg" alt="" /></p>
 
-<p>前3阶的球谐基函数如下：</p>
+<p>实际上render过程中， 我们只近似取前几阶来构建球谐函数。前3阶的球谐基函数如下：</p>
 
 <h4 id="l0">l=0:</h4>
 
@@ -142,15 +150,20 @@ K_l^0P_l^0(cos\theta)& \text{(m=0)}
 
 <script type="math/tex; mode=display">Y_2^2 = \frac{1}{4}\sqrt{\frac{15}{\pi}}\frac{x^2-z^2}{r^2}\ \tag{m = 2}</script>
 
-<p>由于球谐基函数阶数是无限的，所以只能取前面几组基来近似，一般在光照中大都取3阶，也即9个球谐系数。</p>
+<p>由于球谐基函数阶数是无限的，所以只能取前面几组基来近似，一般在光照中大都取3阶，也即9个球谐系数。对于每个球谐波，我们将其值绘制在球体表面上，然后绘制在极性中。通过改变前一个球体的半径简单地获得极坐标图。</p>
 
-<p><img src="/img/in-post/post-engine/tex20.png" alt="" /></p>
+<center>
+    <img src="/img/in-post/post-engine/tex20.jpg" />
+</center>
+<blockquote>
+  <p><br /><br /></p>
+</blockquote>
 
 <p>这里面每个曲面都是用球坐标系表示的，球谐基都是定义在球坐标系上的函数，r（也就是离中心的距离）表示的就是这个球谐基在这个方向分量的重要程度。我是用类比傅里叶变换的方法来理解的，其实球谐函数本身就是拉普拉斯变换在球坐标系下的表示，这里的每个球谐基可以类比成傅里叶变换中频域的各个离散的频率，各个球谐基乘以对应的系数就可以还原出原来的球面函数。一个复杂的波形可以用简单的谐波和相应系数表示，同样的，一个复杂的球面上的函数也可以用简单的球谐基和相应的系数表示。</p>
 
 <h2 id="section-1">采样</h2>
 
-<p>在球面上均匀采样的映射的表达式, 并不是均匀的变化球面参数$\theta$ 和 $\phi$， 或者说如果我们直接给 [公式] 赋两个标准随机变量的话：</p>
+<p>在球面上均匀采样的映射的表达式, 并不是均匀的变化球面参数<script type="math/tex">\theta</script> 和 <script type="math/tex">\phi</script>， 或者说如果我们直接给 [公式] 赋两个标准随机变量的话：</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \left\{
@@ -170,7 +183,13 @@ K_l^0P_l^0(cos\theta)& \text{(m=0)}
 
 <p>基于此， 我们在自己的<a href="https://github.com/huailiang/OpenGLEngine">引擎</a>中我们采用了基于正太分布的采样（中间稠密， 两边稀疏），来近似实现均匀采样。但还不是严格的球面均匀采样的。</p>
 
-<p>若要严格的均匀采样，可以参考这篇<a href="http://corysimon.github.io/articles/uniformdistn-on-sphere/">论文</a>。</p>
+<p>若要严格的均匀采样，可以参考这篇<a href="http://corysimon.github.io/articles/uniformdistn-on-sphere/">论文</a>。 在引擎中， 我们使用了tools/sample.sh 生成SAMPLE_NUM=1000000个采样点，采样点使用正太分布的随机数，DEGREE=3 四阶(m = DEGREE+1)的球谐面来生成对应球谐基的因子。</p>
+
+<p>使用球鞋函数还原的间接光照效果如下图所示:</p>
+
+<center class="half">
+    <img src="/img/in-post/post-engine/tex23.jpg" height="250" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/in-post/post-engine/tex25.jpg" height="250" />
+</center>
 
 <h2 id="section-2">球谐投影与重建</h2>
 
@@ -274,6 +293,24 @@ K_l^0P_l^0(cos\theta)& \text{(m=0)}
 </div>
 
 <p>通过unity的接口LightProbes.GetInterpolatedProbe即可以拿到场景某处的这组9<em>3的L0-L2的基底系数，他是一个结构体SphericalHarmonicsL2，访问它的3</em>9的数组可以把他封装成7个rgba的color。</p>
+
+<h2 id="section-5">题后闲聊</h2>
+
+<h4 id="section-6">话题一：</h4>
+
+<p>在5月12日Unity主办的Unite Shanghai2019开发者大会上，腾讯天美工作室技术副总监郭智先生以《使命召唤手游，引擎技术升级与演化》为主题分享了《使命召唤手游》在技术方面的开发历程和经验。</p>
+
+<p><img src="/img/in-post/post-engine/tex27.jpg" alt="" /></p>
+
+<p>分享提到游戏中间接光用cubemamp做GI Specular，用SH probe做GI diffuse。 不过让我产生疑问的是， 既然使用了SH 球谐面了， 就没必要在去生成cubemap了。 因为使用SH函数，完全就可以还原物体周围的环境辐射图了。 而且他这个cubemap肯定不包含近景的间接光信息， 否则的话实时生成间接光就太耗了， 可能是是只有远景的间接光信息， 在一个场景里只会对应这样一个cubemap。 这完全就我自己猜测的，具体的原因只有他本人知道了。</p>
+
+<p><img src="/img/in-post/post-engine/tex26.jpg" alt="" /></p>
+
+<h4 id="section-7">话题二：</h4>
+
+<p>球谐函数不仅在图形领域有着广泛的应用， 在其他领域也有颇多的应用，比如说人脸识别。为实现任意视点下三维人脸模型绘制,针对极其稀疏和分散的人脸数据,提出基于球谐函数的人脸模型表面光场构建方法。该方法首先利用球谐函数为线性组合表示表面光场对应的辐射度函数,然后使用添加稳定能量项的无约束最小二乘法,实现对人脸模型表面光场的鲁棒性拟合,最后采用仿真技术对任意视点下的人脸模型进行渲染。在极其稀疏的6个视点下的人脸图像上实验,结果验证了该方法的有效性。与插值法比较,验证了该方法更具鲁棒性。</p>
+
+<p><img src="/img/in-post/post-engine/tex28.jpeg" alt="" /></p>
 
 
     </div>
