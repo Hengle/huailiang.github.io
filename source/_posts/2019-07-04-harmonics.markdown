@@ -302,8 +302,22 @@ half4 unity_SHC;
 
 ![](/img/in-post/post-engine/tex28.jpeg)
 
+
+## 学习资料
+*  [Spherical Harmonic Lighting Program][i6]
+*  [Spherical Harmonics][i7]  
+*  [Precomputed Radiance Transfer:Theory and Practice][i8]
+*  [Spherical Harmonics Lighting][i4]
+*  [Generating uniformly distributed numbers on a sphere][i3]
+*  [Analytic Spherical Harmonic Coefficients for Polygonal Area Lights][i10]
+
 [i1]: https://github.com/huailiang/OpenGLEngine
 [i2]: https://zhuanlan.zhihu.com/p/49746076
 [i3]: http://corysimon.github.io/articles/uniformdistn-on-sphere/
 [i4]: http://docs.enthought.com/mayavi/mayavi/auto/example_spherical_harmonics.html
 [i5]: http://vip.hbsti.ac.cn/article/read.aspx?id=673092394
+[i6]: http://www.yasrt.org/shlighting/
+[i7]: http://www.paulsprojects.net/opengl/sh/sh.html
+[i8]: https://www.researchgate.net/publication/234765403_Precomputed_radiance_transfer
+[i9]: https://lianera.github.io/lianera.github.io/post/2016/sh-lighting-exp/
+[i10]: http://cseweb.ucsd.edu/~viscomp/projects/ash/
