@@ -5,8 +5,8 @@
     <description>关于前端与设计、黑客与画家 | 怀亮，Web &amp; Mobile Lover，Software Engineer，Game Designer | 这里是 @Huailiang怀亮 的个人博客，与你一起发现更大的世界。</description>
     <link>https://huailiang.github.io/</link>
     <atom:link href="https://huailiang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 20 Jul 2019 02:12:05 +0800</pubDate>
-    <lastBuildDate>Sat, 20 Jul 2019 02:12:05 +0800</lastBuildDate>
+    <pubDate>Sun, 21 Jul 2019 17:23:49 +0800</pubDate>
+    <lastBuildDate>Sun, 21 Jul 2019 17:23:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.5</generator>
     
       <item>
@@ -536,6 +536,16 @@ K_l^0P_l^0(cos\theta)&amp; \text{(m=0)}
 &lt;p&gt;球谐函数不仅在图形领域有着广泛的应用， 在其他领域也有颇多的应用，比如说人脸识别。为实现任意视点下三维人脸模型绘制,针对极其稀疏和分散的人脸数据,提出基于球谐函数的人脸模型表面光场构建方法。该方法首先利用球谐函数为线性组合表示表面光场对应的辐射度函数,然后使用添加稳定能量项的无约束最小二乘法,实现对人脸模型表面光场的鲁棒性拟合,最后采用仿真技术对任意视点下的人脸模型进行渲染。在极其稀疏的6个视点下的人脸图像上实验,结果验证了该方法的有效性。与插值法比较,验证了该方法更具鲁棒性。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/post-engine/tex28.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;学习资料&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.yasrt.org/shlighting/&quot;&gt;Spherical Harmonic Lighting Program&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.paulsprojects.net/opengl/sh/sh.html&quot;&gt;Spherical Harmonics&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/publication/234765403_Precomputed_radiance_transfer&quot;&gt;Precomputed Radiance Transfer:Theory and Practice&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://docs.enthought.com/mayavi/mayavi/auto/example_spherical_harmonics.html&quot;&gt;Spherical Harmonics Lighting&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://corysimon.github.io/articles/uniformdistn-on-sphere/&quot;&gt;Generating uniformly distributed numbers on a sphere&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://cseweb.ucsd.edu/~viscomp/projects/ash/&quot;&gt;Analytic Spherical Harmonic Coefficients for Polygonal Area Lights&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
         <pubDate>Thu, 04 Jul 2019 11:00:00 +0800</pubDate>
